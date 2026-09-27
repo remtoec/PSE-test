@@ -37,7 +37,8 @@ These are single measurements, not guarantees. No wait estimate is shown to part
 | Missing translation credentials | Pass: complete direct-only result, `translation_failed=true`, no agreement |
 | Source text in Modal logs | Pass: 0 occurrences; logs have ids, counts, timings, codes only |
 | Weights baked into image, offline at runtime | Pass: `HF_HUB_OFFLINE=1`, loaded from `/model` |
-| Scale to zero after 600 s | See below |
+| Scale to zero after 600 s | Pass: `modal container list` empty 11 min after last request |
+| Cold submission from the live site (browser, 4 short stories, direct only) | Pass: results in 19.4 s; draft cleared only after render |
 | `<img onerror>` story text | Pass: rendered literally, not executed |
 | Reload mid-writing → resume | Pass: same step, round, phase and text restored |
 | Backend down on submit | Pass: error with cooldown retry; draft retained with `step=review` |
