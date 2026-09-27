@@ -67,9 +67,22 @@ def payload(batch):
         ],
         "temperature": 0,
         "max_tokens": MAX_TOKENS,
-        "response_format": {"type": "json_object"},
+        "response_format": {"type": "json_schema", "json_schema": SCHEMA},
     }
 
+
+# Enforced by Workers AI JSON mode; json_object alone let the model omit "uncertain".
+SCHEMA = {
+    "type": "object",
+    "properties": {"translations": {"type": "array", "items": {
+        "type": "object",
+        "properties": {"id": {"type": "string"}, "english": {"type": "string"}, "uncertain": {"type": "boolean"}},
+        "required": ["id", "english", "uncertain"],
+        "additionalProperties": False,
+    }}},
+    "required": ["translations"],
+    "additionalProperties": False,
+}
 
 _THINK = re.compile(r"^\s*<think>.*?</think>", re.S)
 
