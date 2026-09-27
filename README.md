@@ -1,11 +1,17 @@
 # PSE-HK · 圖畫故事
 
-A small, mobile-first Picture Story Exercise (PSE) for a Hong Kong reading group. Participants look at four pictures, write a short story about each in Cantonese, Chinese, English or a mix, and get an **experimental** automated analysis of achievement, affiliation/intimacy and power imagery in their stories.
+A small, mobile-first Picture Story Exercise (PSE) for a Hong Kong reading group. Participants look at four pictures, write a short story about each in Cantonese, Chinese, English or a mix, and get an **experimental** automated analysis of achievement, affiliation and power imagery in their stories.
 
 The analysis is exploratory. It is not a personality test. The coding model was trained mostly on German stories, and nobody has shown that it works for Cantonese.
 
 - Site: https://pse-hk.aesopb15254.workers.dev
 - Backend: https://remtoec--pse-hk-scorer-web.modal.run
+
+## Bookclub use
+
+Members do the exercise at home before the meeting and decide for themselves whether to share anything at the event. Everyone in the default mode sees the same four pictures, which is what makes the discussion work: same pictures, different wants, conflicts and endings. The results page mentions that sharing is optional; discussion prompts belong on the facilitator's slides, not on the site.
+
+Doing it at home also spreads the load. The backend scores one story set at a time (`max_containers=1`), so a whole room submitting at once would mostly see "busy, retry" (`429`) for a while.
 
 ## Scope
 
@@ -57,17 +63,19 @@ A motive counts at most once per sentence. Counts are raw, never per 1,000 words
 
 `web/stimuli.json` records the id, the source PSE id, the file, the author, the source URL, the exact licence and a modification notice for every picture. Each licence was checked on its source page on 2026-09-27, against the database's own sources table (https://osf.io/umqdb/).
 
-| id | PSE id | Licence |
-|---|---|---|
-| p1 | newpic18 | CC0 (Pexels) |
-| p2 | newpic09 | Public domain (U.S. Navy) |
-| p3 | newpic10 | No known copyright restrictions (Flickr Commons) |
-| p4 | newpic12 | CC BY 2.0 |
-| p5 | newpic01 | Public domain (US, no notice) |
-| p6 | newpic11 | Public domain (U.S. government) |
-| p7 | newpic22 | CC0 (Pexels, 2015) |
-| p8 | newpic29 | CC0 (Pexels, 2015) |
-| p9 | newpic31 | CC BY-SA 2.0 |
+| id | PSE id | Licence | Picture pull aff / ach / pow (n stories) | Bookclub set |
+|---|---|---|---|---|
+| p1 | newpic18 | CC0 (Pexels) | 3.25 / 0.00 / 1.25 (4) | |
+| p2 | newpic09 | Public domain (U.S. Navy) | 0.77 / 1.82 / 2.11 (198) | 4th |
+| p3 | newpic10 | No known copyright restrictions (Flickr Commons) | 1.71 / 0.68 / 0.92 (196) | |
+| p4 | newpic12 | CC BY 2.0 | 0.55 / 0.82 / 1.27 (196) | 3rd |
+| p5 | newpic01 | Public domain (US, no notice) | 0.49 / 0.85 / 0.82 (202) | |
+| p6 | newpic11 | Public domain (U.S. government) | 0.40 / 0.10 / 2.30 (10) | |
+| p7 | newpic22 | CC0 (Pexels, 2015) | 0.46 / 1.53 / 0.51 (200) | 1st |
+| p8 | newpic29 | CC0 (Pexels, 2015) | 2.75 / 0.00 / 1.12 (8) | |
+| p9 | newpic31 | CC BY-SA 2.0 | 2.45 / 0.55 / 0.55 (11) | 2nd |
+
+Picture pull is the mean number of motive images per story in the German norm sample (`picture_pull_norm_table.xlsx`, osf.io/pqckn). The bookclub set sums to aff 4.2 / ach 4.7 / pow 4.4. It is the second most balanced four-picture combination; the most balanced (p2, p5, p7, p8) was passed over because p5 pulls weakly overall and p8's norms rest on 8 stories. The order puts one achievement, one affiliation and one power picture first and the mixed picture last. To change the set, edit `BOOKCLUB_SET` in `web/app.js`; any pool id works without a backend change.
 
 The classic pictures (ship captain, couple by river, trapeze artists, women in laboratory, nightclub scene, boxer) are on OSF, but the database itself lists their copyright as "unknown/unclear". They are **not** shipped. Adding them is the owner's call and needs confirmation of the rights first. To add any picture, put the file in `web/stimuli/`, add its record to `stimuli.json` and its id to `PICTURE_IDS` in `backend/scoring.py`, then redeploy both. `tests/test_scoring.py` checks that the two lists match.
 
@@ -101,7 +109,7 @@ The frontend and backend must be deployed together whenever the picture pool cha
 
 ## Data
 
-Drafts stay in the participant's browser (`pse-hk:draft:v1`). Skipped picture ids are stored under `pse-hk:skipped:v1`. On submit, the stories go to Modal for coding and to Cloudflare Workers AI for translation. Nothing is stored server-side, and logs contain only ids, counts, timings and error codes. See `docs/launch-checks.md`.
+Drafts stay in the participant's browser (`pse-hk:draft:v1`). Skipped picture ids (random mode only) are stored under `pse-hk:skipped:v1`. The reflection questions on the results page are static text: nothing the participant thinks about their own goals is typed, stored or sent. On submit, the stories go to Modal for coding and to Cloudflare Workers AI for translation. Nothing is stored server-side, and logs contain only ids, counts, timings and error codes. See `docs/launch-checks.md`.
 
 ## Known limitations
 
@@ -109,6 +117,7 @@ Drafts stay in the participant's browser (`pse-hk:draft:v1`). Skipped picture id
 - **Direct Cantonese coding under-detects.** In real runs so far, most disagreements are "no motive" on the direct path against a motive on the translated path. Colloquial Cantonese (佢哋, 傾返計, 氹返佢) is far from AMC's training data.
 - **Translation drift.** Prompt v3 fixed most of the misreadings seen with v1 (dev checks went from 21–23 to 30 of 33), but only for colloquial words in its glossary. Unknown idioms are still translated literally, and a subject omitted midway through a sentence can still be attached to the wrong person. Details are in `docs/spike-results.md`.
 - **Small samples.** A run is about 15–25 sentences, so a difference of 2–3 sentences can change which motive leads.
+- **Norms are German and uneven.** The picture pulls come from German participants, and p9's figures rest on only 11 stories.
 - **Naive sentence splitting.** "Mr. Chan" or "3.5" is split early.
 
 ## References
@@ -116,6 +125,7 @@ Drafts stay in the participant's browser (`pse-hk:draft:v1`). Skipped picture id
 - Schönbrodt, F. D., Hagemeyer, B., Brandstätter, V., et al. (2021). Measuring implicit motives with the Picture Story Exercise (PSE): Databases of expert-coded German stories, pictures, and updated picture norms. *Journal of Personality Assessment, 103*(3), 392–405. https://doi.org/10.1080/00223891.2020.1726936
 - PSE picture database and norms (OSF): https://osf.io/pqckn/ · sources and licences: https://osf.io/umqdb/
 - Automated Motive Coder (AMC): model https://huggingface.co/automatedMotiveCoder/setfit · paper (ICWSM 2025 workshop proceedings): https://workshop-proceedings.icwsm.org/pdf/2025_31.pdf
+- McAdams, D. P. (2015). *The art and science of personality development*. Guilford Press.
 - Winter, D. G. (1994). *Manual for scoring motive imagery in running text*. University of Michigan.
 - Tunstall, L., et al. (2022). Efficient few-shot learning without prompts (SetFit). arXiv:2209.11055
 - Wang, L., et al. (2024). Multilingual E5 text embeddings. arXiv:2402.05672
