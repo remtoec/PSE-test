@@ -1,0 +1,14 @@
+# Exact versions verified by scripts/spike_amc.py (see docs/spike-results.md).
+# torch CPU wheel: install from https://download.pytorch.org/whl/cpu
+torch==2.3.1
+setfit==1.0.3
+sentence-transformers==3.3.1
+transformers==4.46.3
+tokenizers==0.20.3
+scikit-learn==1.6.1
+# setfit 1.0.3 imports huggingface_hub.DatasetFilter, removed in 0.24
+huggingface-hub==0.23.5
+datasets==2.21.0
+numpy==1.26.4
+fastapi==0.141.1
+httpx==0.28.1
