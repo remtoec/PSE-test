@@ -1,0 +1,58 @@
+{
+  "note": "Fixed order. Licences verified individually on 2026-09-27. Images resized to 1200px and recompressed for web use (modification).",
+  "collection": "PSE picture database, Schönbrodt et al. (2019), https://osf.io/pqckn/",
+  "pictures": [
+    {
+      "id": "p1",
+      "pse_id": "newpic18",
+      "file": "stimuli/p1.jpg",
+      "width": 1200,
+      "height": 795,
+      "title": "Woman Sitting on Bench Outdoors",
+      "author": "Pixabay (Pexels contributor)",
+      "source_url": "https://www.pexels.com/photo/bench-nature-love-people-50592/",
+      "license": "CC0 1.0 (as recorded on the Pexels photo page, published 2016)",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "modified": true
+    },
+    {
+      "id": "p2",
+      "pse_id": "newpic09",
+      "file": "stimuli/p2.jpg",
+      "width": 1200,
+      "height": 838,
+      "title": "Seaman Denise Williams and Marine Sgt. Amanda Joseph arm wrestling aboard USS Makin Island (2011)",
+      "author": "U.S. Navy photo by Mass Communication Specialist 2nd Class Alan Gragg",
+      "source_url": "https://commons.wikimedia.org/wiki/File:US_Navy_111211-N-DX615-040_Seaman_Denise_Williams_and_Marine_Sgt._Amanda_Joseph,_participate_in_an_arm_wrestling_competition_aboard_the_amphibious.jpg",
+      "license": "Public domain (work of the U.S. federal government); the PSE database lists a Pixabay CC0 copy that is no longer online",
+      "license_url": "https://commons.wikimedia.org/wiki/Template:PD-USGov-Military-Navy",
+      "modified": true
+    },
+    {
+      "id": "p3",
+      "pse_id": "newpic10",
+      "file": "stimuli/p3.jpg",
+      "width": 1200,
+      "height": 928,
+      "title": "Exercising on the Beach (1935)",
+      "author": "Photographer unknown; National Science and Media Museum",
+      "source_url": "https://www.flickr.com/photos/nationalmediamuseum/3084038091",
+      "license": "No known copyright restrictions (Flickr Commons)",
+      "license_url": "https://www.flickr.com/commons/usage/",
+      "modified": true
+    },
+    {
+      "id": "p4",
+      "pse_id": "newpic12",
+      "file": "stimuli/p4.jpg",
+      "width": 1200,
+      "height": 800,
+      "title": "Preparing a measles vaccine in Ethiopia",
+      "author": "Pete Lewis / DFID – UK Department for International Development",
+      "source_url": "https://www.flickr.com/photos/14214150@N02/5815109845",
+      "license": "CC BY 2.0 (Flickr licence field; the photo description also cites CC BY 3.0)",
+      "license_url": "https://creativecommons.org/licenses/by/2.0/",
+      "modified": true
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>圖畫故事 · PSE-HK</title>
+<meta name="description" content="睇四張圖，寫四個故事。一個讀書會嘅小實驗。">
+<meta property="og:title" content="圖畫故事 · 讀書會小實驗">
+<meta property="og:description" content="睇四張圖，寫低你想像中嘅故事。大約 15–20 分鐘。">
+<meta name="theme-color" content="#f3ede2">
+<!-- Scoring backend. Empty on localhost = http://127.0.0.1:8000 -->
+<meta name="pse-api" content="">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+TC:wght@400;700&family=Noto+Sans+TC:wght@400;500;700&display=swap">
+<link rel="stylesheet" href="styles.css">
+<script src="app.js" defer></script>
+</head>
+<body>
+<main id="app">
+
+  <p id="storage-notice" class="notice" hidden>呢個瀏覽器唔俾暫存草稿，重新載入頁面會失去內容。請保持頁面開啟直至完成。</p>
+
+  <!-- Intro -->
+  <section id="v-intro" class="view" hidden>
+    <div class="seal" aria-hidden="true">故事</div>
+    <h1>圖畫故事</h1>
+    <p class="lede">睇四張圖片，寫低你想像中嘅故事。大約需要 15–20 分鐘，冇標準答案。你可以用廣東話、中文、英文，或者混合使用。</p>
+    <ol class="steps">
+      <li>每張圖會顯示 10 秒，然後收起。</li>
+      <li>之後有大約 4 分鐘寫故事——時間到都唔會自動提交，寫完可以早啲繼續。</li>
+      <li>四個故事寫完，你會見到一份實驗性嘅故事主題分析。</li>
+    </ol>
+    <p class="fine">呢個係一個實驗性小活動，唔係性格測驗。</p>
+    <p class="fine">草稿會暫存在呢個瀏覽器，方便你中途離開再繼續。提交後，故事會傳送到 Modal 作分析，並交由 Cloudflare Workers AI 翻譯。本工具不會建立故事資料庫。你可以隨時刪除草稿。</p>
+    <p class="fine">如果分析服務閒置咗一段時間，佢需要時間醒過來，所以分析有時會等耐少少。</p>
+    <div class="actions">
+      <button id="btn-start" class="primary">開始</button>
+      <button id="btn-resume" class="primary" hidden>繼續上次嘅故事</button>
+      <button id="btn-delete" class="quiet" hidden>刪除草稿</button>
+    </div>
+    <details class="credits"><summary>圖片來源</summary><ul id="credits-intro"></ul></details>
+  </section>
+
+  <!-- Picture viewing -->
+  <section id="v-view" class="view" hidden>
+    <p class="round-label"><span class="round-no"></span></p>
+    <figure class="stimulus">
+      <img id="stim-img" alt="">
+      <div id="img-loading" class="img-state">圖片載入中…</div>
+      <div id="img-error" class="img-state" hidden>
+        <p>圖片載入唔到。</p>
+        <button id="btn-img-retry">再試一次</button>
+      </div>
+    </figure>
+    <div class="countdown" aria-hidden="true"><div id="countdown-bar"></div></div>
+    <p class="hint">請留意圖中嘅人同發生緊嘅事。圖片會自動收起。</p>
+    <p class="credit-line" id="credit-line"></p>
+  </section>
+
+  <!-- Writing -->
+  <section id="v-write" class="view" hidden>
+    <p class="round-label"><span class="round-no"></span><span id="soft-timer" class="soft-timer" aria-live="off"></span></p>
+    <h2>寫低你嘅故事</h2>
+    <ul class="prompts">
+      <li>發生緊咩事？邊啲人喺度？</li>
+      <li>之前發生過咩事？</li>
+      <li>佢哋諗緊、感受到、想要啲咩？</li>
+      <li>之後會點？</li>
+    </ul>
+    <label for="story" class="sr-only">故事</label>
+    <textarea id="story" rows="10" spellcheck="false" autocomplete="off" placeholder="喺度寫……"></textarea>
+    <div class="meta-row"><span id="char-count"></span><span id="save-state" aria-live="polite"></span></div>
+    <p id="time-up" class="gentle" hidden>建議時間到咗。你可以繼續寫完，準備好就按「下一張」。</p>
+    <div class="actions">
+      <button id="btn-next" class="primary" disabled>下一張</button>
+    </div>
+  </section>
+
+  <!-- Review -->
+  <section id="v-review" class="view" hidden>
+    <h2>檢查你嘅故事</h2>
+    <p class="lede">提交之前仲可以修改。</p>
+    <p id="review-notice" class="notice" role="alert" hidden></p>
+    <div id="review-list"></div>
+    <div class="actions">
+      <button id="btn-submit" class="primary">提交分析</button>
+      <button id="btn-delete-2" class="quiet">刪除草稿</button>
+    </div>
+  </section>
+
+  <!-- Loading -->
+  <section id="v-loading" class="view center" hidden>
+    <div class="ink" aria-hidden="true"><span></span><span></span><span></span></div>
+    <p id="loading-msg" role="status" aria-live="polite">正在準備分析你嘅故事。呢個小工具閒置時會休眠，今次可能需要等耐少少。請暫時保持頁面開啟。</p>
+    <p class="elapsed">已經等咗 <span id="elapsed">0</span> 秒</p>
+  </section>
+
+  <!-- Error -->
+  <section id="v-error" class="view center" hidden>
+    <div class="seal seal-muted" aria-hidden="true">稍候</div>
+    <p id="error-msg" role="alert"></p>
+    <div class="actions">
+      <button id="btn-retry" class="primary">再試一次</button>
+      <button id="btn-back-review" class="quiet">返回修改</button>
+    </div>
+  </section>
+
+  <!-- Results -->
+  <section id="v-results" class="view" hidden>
+    <p class="kicker">實驗性分析 · 只反映呢幾個故事</p>
+    <h2 id="headline"></h2>
+    <p id="headline-note" class="fine"></p>
+
+    <div id="bars"></div>
+    <p class="fine">一句句子可以同時有多於一個主題，亦可以冇主題。</p>
+
+    <div id="agreement" class="agreement"></div>
+
+    <h3>逐句睇</h3>
+    <div id="cards"></div>
+
+    <h3>三個主題係咩意思？</h3>
+    <dl class="defs">
+      <dt><span class="dot ach"></span>成就</dt><dd>故事入面有人想做得好、追求卓越、克服困難或者為表現感到自豪。</dd>
+      <dt><span class="dot aff"></span>親和／親密</dt><dd>故事入面有人重視關係、友誼、關心或者想同人親近。</dd>
+      <dt><span class="dot pow"></span>權力</dt><dd>故事入面有人想影響、控制、說服或者令人印象深刻。</dd>
+    </dl>
+
+    <p class="disclaimer">呢個係實驗性嘅自動編碼，用一個主要以德文故事訓練嘅模型。佢未經驗證適用於廣東話，亦唔係性格測驗，唔可以用嚟判斷任何人嘅真實動機。</p>
+    <p id="stats" class="fine"></p>
+    <p class="fine">重新載入頁面唔會保留結果，除非你先下載。</p>
+    <div class="actions">
+      <button id="btn-download" class="primary">下載結果</button>
+      <button id="btn-restart" class="quiet">重新開始</button>
+    </div>
+    <details class="credits"><summary>圖片來源同模型</summary><ul id="credits-results"></ul><p id="model-meta" class="fine"></p></details>
+  </section>
+
+  <noscript><p class="notice">呢個活動需要 JavaScript。</p></noscript>
+</main>
+</body>
+</html>
