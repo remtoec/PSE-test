@@ -19,9 +19,9 @@ Neither is ground truth, and agreement is not a confidence score. Counts are
 raw sentence-level detections, not standardized psychological scores,
 percentiles, diagnoses or validated Cantonese norms.
 
-**Picture-pull norms are used only to choose a reasonably varied fixed
-bookclub set. They are not used to normalize, percentile, or interpret an
-individual participant's result.**
+**Picture-pull norms inform the fixed bookclub set and appear after writing
+as context about the pictures. They never normalize, percentile, or rank an
+individual participant's result.** See [the protocol review](docs/pse-protocol-review.md).
 
 The private reflection uses competence/relatedness, intrinsic/extrinsic and
 promotion/prevention. It asks for no personal-goal input and transmits no
@@ -41,11 +41,11 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 **In scope**
 
 - Four pictures per run. Each is shown for 10 s, followed by a soft 4-minute writing period.
-- **Bookclub mode (default):** everyone gets the same four pictures in the same order (`BOOKCLUB_SET` in `web/app.js`: p7, p9, p4, p2) and there is no skipping. The set was chosen so the summed picture-pull norms (Schönbrodt et al., `picture_pull_norm_table.xlsx` on osf.io/pqckn) are roughly even: aff 4.2, ach 4.7, pow 4.4.
-- **Random mode:** offered on the intro and results pages for a second try. Four pictures are drawn at random from the pool; participants may skip up to 4 per run, and a skipped picture is never drawn again on that browser.
+- **Bookclub mode (default):** new runs show boxer, couple by river, women in laboratory, and ship captain, in that order (`BOOKCLUB_SET`: c05, c07, c18, c15), without skipping. Summed German picture-pull means: aff 4.18, ach 3.42, pow 3.99. Existing drafts keep their original pictures.
+- **Random mode:** four pictures from the entire supplied archive (18 classical and 30 newer pictures). Participants may skip up to 4 per run. Skipped pictures are excluded on that browser until fewer than four eligible pictures remain, when the exclusion list resets.
 - No motive category is named before the stories are written. The results page leads with the story themes as sentence counts (dots, original-language path), what they do and don't mean, the sentence cards, the PSE method, and an optional bridge to McAdams's Motivated Agent (*The Art and Science of Personality Development*, 2015) with three static reflection questions. Both-path counts, agreement, protocol notes, credits and model metadata sit in a collapsed "想睇吓系統點樣分析？" section.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
-- The writing prompts ask what is happening, what happened before, what the characters think, feel and want, and what happens next. A writing tip asks participants to name people instead of writing 佢 and to end each sentence with 。, which helps both the translator and sentence-level coding. A story of fewer than 2 sentences gets a single nudge to add more; it is never blocked.
+- The same four writing prompts are visible on every screen size: current situation, preceding events, characters' thoughts/feelings/wants, and outcome. They guide a complete imaginative story, without requiring separate answers or polished grammar/punctuation. Returning participants may write similar or different stories. A story of fewer than 2 sentences gets a single optional nudge; it is never blocked.
 - Drafts are saved in the participant's browser, so they can leave and come back within 7 days.
 - Deviations from the standard protocol (4 minutes per story, one sitting) are recorded but not enforced: writing time per story, time away from the page, and resuming after more than 5 minutes. They appear on the results page and in the download, with a note that such stories are less standardised.
 - Sentence-level motive coding with the Automated Motive Coder (AMC) along two paths:
@@ -57,14 +57,13 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 
 - Validated scoring, norms, percentiles, or any claim about a person's "real" motives.
 - Accounts, a story database or analytics. Stories are processed and then discarded (see [Data](#data)).
-- Classic TAT/PSE pictures whose copyright is unclear (see [Pictures](#pictures)).
 
 ## How it works
 
 ```
 Browser (web/)                        Modal (backend/app.py)                 Cloudflare Workers AI
 ─────────────────                     ──────────────────────                 ─────────────────────
-fixed 4 (or random 4 of 9)
+fixed 4 (or random 4 of 48)
 view 10 s → write → (random: skip ≤ 4)
 review → POST /score  ──────────────▶ validate + split into sentences
                                       AMC on original sentences (direct)
@@ -84,23 +83,23 @@ A motive counts at most once per sentence. Counts are raw, never per 1,000 words
 
 ## Pictures
 
-`web/stimuli.json` records the id, the source PSE id, the file, the author, the source URL, the exact licence and a modification notice for every picture. Each licence was checked on its source page on 2026-09-27, against the database's own sources table (https://osf.io/umqdb/).
+The private exercise uses the supplied `assets/pqckn-osfstorage-archive`: 18 classical pictures and 30 newer pictures. `web/stimuli.json` records the archive filename, source, dimensions and workbook row for each verified pull match. All 48 are eligible for random mode. The historical nine web images/IDs remain unchanged to preserve saved drafts; the other 39 are resized without cropping and compressed for web use. Existing licence records are retained; newly imported files are identified as supplied for private use without inventing individual licence claims.
 
-| id | PSE id | Licence | Picture pull aff / ach / pow (n stories) | Bookclub set |
-|---|---|---|---|---|
-| p1 | newpic18 | CC0 (Pexels) | 3.25 / 0.00 / 1.25 (4) | |
-| p2 | newpic09 | Public domain (U.S. Navy) | 0.77 / 1.82 / 2.11 (198) | 4th |
-| p3 | newpic10 | No known copyright restrictions (Flickr Commons) | 1.71 / 0.68 / 0.92 (196) | |
-| p4 | newpic12 | CC BY 2.0 | 0.55 / 0.82 / 1.27 (196) | 3rd |
-| p5 | newpic01 | Public domain (US, no notice) | 0.49 / 0.85 / 0.82 (202) | |
-| p6 | newpic11 | Public domain (U.S. government) | 0.40 / 0.10 / 2.30 (10) | |
-| p7 | newpic22 | CC0 (Pexels, 2015) | 0.46 / 1.53 / 0.51 (200) | 1st |
-| p8 | newpic29 | CC0 (Pexels, 2015) | 2.75 / 0.00 / 1.12 (8) | |
-| p9 | newpic31 | CC BY-SA 2.0 | 2.45 / 0.55 / 0.55 (11) | 2nd |
+The default order is:
 
-Picture pull is the mean number of motive images per story in the German norm sample (`picture_pull_norm_table.xlsx`, osf.io/pqckn). The bookclub set sums to aff 4.2 / ach 4.7 / pow 4.4. It is the second most balanced four-picture combination; the most balanced (p2, p5, p7, p8) was passed over because p5 pulls weakly overall and p8's norms rest on 8 stories. The order puts one achievement, one affiliation and one power picture first and the mixed picture last. To change the set, edit `BOOKCLUB_SET` in `web/app.js`; any pool id works without a backend change.
+| ID | Classical picture | Affiliation | Achievement | Power | Norm stories |
+|---|---|---:|---:|---:|---:|
+| c05 | Boxer | 0.34 | 1.68 | 0.81 | 1,724 |
+| c07 | Couple by river | 3.03 | 0.03 | 0.34 | 1,854 |
+| c18 | Women in laboratory | 0.34 | 1.51 | 1.28 | 2,331 |
+| c15 | Ship captain | 0.47 | 0.20 | 1.56 | 2,612 |
+| | Sum of means | 4.18 | 3.42 | 3.99 | — |
 
-The classic pictures (ship captain, couple by river, trapeze artists, women in laboratory, nightclub scene, boxer) are on OSF, but the database itself lists their copyright as "unknown/unclear". They are **not** shipped. Adding them is the owner's call and needs confirmation of the rights first. To add any picture, put the file in `web/stimuli/`, add its record to `stimuli.json` and its id to `PICTURE_IDS` in `backend/scoring.py`, then redeploy both. `tests/test_scoring.py` checks that the two lists match.
+These four come from the frequently used standard six, offer varied scenes, and avoid reliance on tiny norm samples. Numerical balance is a selection aid, not proof of equal sensitivity. Pull means are German expert-coded motive imagery per story, not expected AMC counts for a Cantonese participant. Post-writing results and downloads show the actual run's picture pulls, sample sizes and limits; no adjustment is applied to the analysis.
+
+47 images have verified workbook matches. `couple sitting opposite a woman` has no verified row and is explicitly shown as unavailable. `burglars` maps to workbook `burglar`; zero-padded `newpic` filenames map to unpadded workbook IDs. The workbook has an incorrect A1-only dimension and a missing drawing reference; the importer reads it in streaming mode with dimensions reset, without altering it.
+
+To reproduce the import, run `scripts/import_picture_archive.py` with Pillow and openpyxl available. Change `BOOKCLUB_SET` in `web/app.js` to select a different default. Any pool changes must also update `PICTURE_IDS` in `backend/scoring.py` and deploy the backend before the frontend. Tests verify pool parity and default-picture acceptance.
 
 ## Workflow
 

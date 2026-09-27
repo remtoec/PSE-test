@@ -114,3 +114,25 @@ def test_picture_pool_matches_stimuli():
     pics = json.loads((Path(__file__).resolve().parents[1] / "web" / "stimuli.json").read_text(encoding="utf-8"))["pictures"]
     assert {p["id"] for p in pics} == PICTURE_IDS
     assert all((Path(__file__).resolve().parents[1] / "web" / p["file"]).is_file() for p in pics)
+
+
+def test_archive_pool_and_classical_bookclub_are_accepted():
+    import json
+    root = Path(__file__).resolve().parents[1]
+    catalog = json.loads((root / "web/stimuli.json").read_text(encoding="utf-8"))
+    pics = catalog["pictures"]
+    archive = root / "assets/pqckn-osfstorage-archive"
+    # Raw archive is an optional local input; regular CI needs only shipped assets.
+    if archive.is_dir():
+        sources = {p.relative_to(archive).as_posix()
+                   for p in archive.glob("* images/*") if p.is_file()}
+        assert {p.get("archive_file") for p in pics} == sources
+    assert len(pics) == len({p["id"] for p in pics}) == 48
+    order = ["c05", "c07", "c18", "c15"]
+    assert list(validate({"stories": [{"picture_id": pid, "text": "A story."}
+                                      for pid in order]})) == order
+    selected = [next(p for p in pics if p["id"] == pid) for pid in order]
+    assert all(p["archive_file"].startswith("classic images/") for p in selected)
+    assert all(p["pull"]["n_stories"] >= 1700 for p in selected)
+    assert {m: round(sum(p["pull"][m] for p in selected), 2)
+            for m in ("aff", "ach", "pow")} == {"aff": 4.18, "ach": 3.42, "pow": 3.99}

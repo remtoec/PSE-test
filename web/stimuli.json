@@ -1,6 +1,6 @@
 {
-  "note": "Pool: each run draws 4 at random. Licences verified individually on 2026-09-27 (p5-p9 against the OSF sources table, osf.io/umqdb, and each source page). Images resized to at most 1200px and recompressed for web use (modification).",
-  "collection": "PSE picture database, Schönbrodt et al. (2019), https://osf.io/pqckn/",
+  "note": "Private internal exercise. Bookclub uses four fixed classical pictures; random mode uses all 48 archive pictures. Legacy p1-p9 images and IDs preserved for draft compatibility. New imports resized without cropping to at most 1200px and recompressed.",
+  "collection": "PSE picture database, Schönbrodt et al. (2020/2021), https://osf.io/pqckn/",
   "pictures": [
     {
       "id": "p1",
@@ -13,7 +13,16 @@
       "source_url": "https://www.pexels.com/photo/bench-nature-love-people-50592/",
       "license": "CC0 1.0 (as recorded on the Pexels photo page, published 2016)",
       "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
-      "modified": true
+      "modified": true,
+      "archive_file": "new images/newpic18.jpg",
+      "pull": {
+        "aff": 3.25,
+        "ach": 0,
+        "pow": 1.25,
+        "n_stories": 4,
+        "norm_id": "newpic18",
+        "source_range": "'Sheet 1'!A4:P4"
+      }
     },
     {
       "id": "p2",
@@ -26,7 +35,16 @@
       "source_url": "https://commons.wikimedia.org/wiki/File:US_Navy_111211-N-DX615-040_Seaman_Denise_Williams_and_Marine_Sgt._Amanda_Joseph,_participate_in_an_arm_wrestling_competition_aboard_the_amphibious.jpg",
       "license": "Public domain (work of the U.S. federal government); the PSE database lists a Pixabay CC0 copy that is no longer online",
       "license_url": "https://commons.wikimedia.org/wiki/Template:PD-USGov-Military-Navy",
-      "modified": true
+      "modified": true,
+      "archive_file": "new images/newpic09.jpg",
+      "pull": {
+        "aff": 0.77,
+        "ach": 1.82,
+        "pow": 2.11,
+        "n_stories": 198,
+        "norm_id": "newpic9",
+        "source_range": "'Sheet 1'!A2:P2"
+      }
     },
     {
       "id": "p3",
@@ -39,7 +57,16 @@
       "source_url": "https://www.flickr.com/photos/nationalmediamuseum/3084038091",
       "license": "No known copyright restrictions (Flickr Commons)",
       "license_url": "https://www.flickr.com/commons/usage/",
-      "modified": true
+      "modified": true,
+      "archive_file": "new images/newpic10.jpg",
+      "pull": {
+        "aff": 1.71,
+        "ach": 0.68,
+        "pow": 0.92,
+        "n_stories": 196,
+        "norm_id": "newpic10",
+        "source_range": "'Sheet 1'!A24:P24"
+      }
     },
     {
       "id": "p4",
@@ -52,7 +79,16 @@
       "source_url": "https://www.flickr.com/photos/14214150@N02/5815109845",
       "license": "CC BY 2.0 (Flickr licence field; the photo description also cites CC BY 3.0)",
       "license_url": "https://creativecommons.org/licenses/by/2.0/",
-      "modified": true
+      "modified": true,
+      "archive_file": "new images/newpic12.jpg",
+      "pull": {
+        "aff": 0.55,
+        "ach": 0.82,
+        "pow": 1.27,
+        "n_stories": 196,
+        "norm_id": "newpic12",
+        "source_range": "'Sheet 1'!A36:P36"
+      }
     },
     {
       "id": "p5",
@@ -65,7 +101,16 @@
       "source_url": "https://commons.wikimedia.org/wiki/File:Shimer_College_class_discussion_1967.jpg",
       "license": "Public domain (US, published without copyright notice)",
       "license_url": "https://commons.wikimedia.org/wiki/Template:PD-US-no_notice",
-      "modified": true
+      "modified": true,
+      "archive_file": "new images/newpic01.jpg",
+      "pull": {
+        "aff": 0.49,
+        "ach": 0.85,
+        "pow": 0.82,
+        "n_stories": 202,
+        "norm_id": "newpic1",
+        "source_range": "'Sheet 1'!A48:P48"
+      }
     },
     {
       "id": "p6",
@@ -78,7 +123,16 @@
       "source_url": "https://commons.wikimedia.org/wiki/File:Dorothea_Lange_pledge_of_allegiance.jpg",
       "license": "Public domain (work of the U.S. federal government)",
       "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
-      "modified": true
+      "modified": true,
+      "archive_file": "new images/newpic11.jpg",
+      "pull": {
+        "aff": 0.4,
+        "ach": 0.1,
+        "pow": 2.3,
+        "n_stories": 10,
+        "norm_id": "newpic11",
+        "source_range": "'Sheet 1'!A32:P32"
+      }
     },
     {
       "id": "p7",
@@ -91,7 +145,16 @@
       "source_url": "https://www.pexels.com/photo/people-inside-room-12312/",
       "license": "CC0 1.0 (Pexels photo published 2015, before the Pexels licence change; listed as CC0 in the PSE database)",
       "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
-      "modified": true
+      "modified": true,
+      "archive_file": "new images/newpic22.jpg",
+      "pull": {
+        "aff": 0.46,
+        "ach": 1.53,
+        "pow": 0.51,
+        "n_stories": 200,
+        "norm_id": "newpic22",
+        "source_range": "'Sheet 1'!A39:P39"
+      }
     },
     {
       "id": "p8",
@@ -104,7 +167,16 @@
       "source_url": "https://www.pexels.com/photo/group-friends-grandpas-grandparents-8576/",
       "license": "CC0 1.0 (Pexels photo published 2015, before the Pexels licence change; listed as CC0 in the PSE database)",
       "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
-      "modified": true
+      "modified": true,
+      "archive_file": "new images/newpic29.jpg",
+      "pull": {
+        "aff": 2.75,
+        "ach": 0,
+        "pow": 1.12,
+        "n_stories": 8,
+        "norm_id": "newpic29",
+        "source_range": "'Sheet 1'!A12:P12"
+      }
     },
     {
       "id": "p9",
@@ -117,7 +189,869 @@
       "source_url": "https://www.geograph.org.uk/photo/1530594",
       "license": "CC BY-SA 2.0",
       "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
-      "modified": true
+      "modified": true,
+      "archive_file": "new images/newpic31.jpg",
+      "pull": {
+        "aff": 2.45,
+        "ach": 0.55,
+        "pow": 0.55,
+        "n_stories": 11,
+        "norm_id": "newpic31",
+        "source_range": "'Sheet 1'!A16:P16"
+      }
+    },
+    {
+      "id": "c01",
+      "pse_id": "applause",
+      "file": "stimuli/c01.jpg",
+      "title": "applause",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 789,
+      "archive_file": "classic images/applause.jpg",
+      "pull": {
+        "aff": 1.88,
+        "ach": 0.81,
+        "pow": 1.77,
+        "n_stories": 1195,
+        "norm_id": "applause",
+        "source_range": "'Sheet 1'!A5:P5"
+      }
+    },
+    {
+      "id": "c02",
+      "pse_id": "architect at desk",
+      "file": "stimuli/c02.jpg",
+      "title": "architect at desk",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 751,
+      "height": 1072,
+      "archive_file": "classic images/architect at desk.jpg",
+      "pull": {
+        "aff": 2.23,
+        "ach": 0.48,
+        "pow": 0.49,
+        "n_stories": 408,
+        "norm_id": "architect at desk",
+        "source_range": "'Sheet 1'!A28:P28"
+      }
+    },
+    {
+      "id": "c03",
+      "pse_id": "beachcombers",
+      "file": "stimuli/c03.jpg",
+      "title": "beachcombers",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 686,
+      "height": 419,
+      "archive_file": "classic images/beachcombers.PNG",
+      "pull": {
+        "aff": 0.62,
+        "ach": 0.14,
+        "pow": 3.41,
+        "n_stories": 797,
+        "norm_id": "beachcombers",
+        "source_range": "'Sheet 1'!A8:P8"
+      }
+    },
+    {
+      "id": "c04",
+      "pse_id": "bicycle race",
+      "file": "stimuli/c04.jpg",
+      "title": "bicycle race",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 983,
+      "height": 610,
+      "archive_file": "classic images/bicycle race.JPG",
+      "pull": {
+        "aff": 0.13,
+        "ach": 3.31,
+        "pow": 0.8,
+        "n_stories": 83,
+        "norm_id": "bicycle race",
+        "source_range": "'Sheet 1'!A7:P7"
+      }
+    },
+    {
+      "id": "c05",
+      "pse_id": "boxer",
+      "file": "stimuli/c05.jpg",
+      "title": "boxer",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 652,
+      "height": 878,
+      "archive_file": "classic images/boxer.jpg",
+      "pull": {
+        "aff": 0.34,
+        "ach": 1.68,
+        "pow": 0.81,
+        "n_stories": 1724,
+        "norm_id": "boxer",
+        "source_range": "'Sheet 1'!A31:P31"
+      }
+    },
+    {
+      "id": "c06",
+      "pse_id": "burglars",
+      "file": "stimuli/c06.jpg",
+      "title": "burglars",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 1127,
+      "archive_file": "classic images/burglars.jpg",
+      "pull": {
+        "aff": 2.04,
+        "ach": 0.15,
+        "pow": 1.25,
+        "n_stories": 141,
+        "norm_id": "burglar",
+        "source_range": "'Sheet 1'!A18:P18"
+      }
+    },
+    {
+      "id": "c07",
+      "pse_id": "couple by river",
+      "file": "stimuli/c07.jpg",
+      "title": "couple by river",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1020,
+      "height": 713,
+      "archive_file": "classic images/couple by river.jpg",
+      "pull": {
+        "aff": 3.03,
+        "ach": 0.03,
+        "pow": 0.34,
+        "n_stories": 1854,
+        "norm_id": "couple by river",
+        "source_range": "'Sheet 1'!A20:P20"
+      }
+    },
+    {
+      "id": "c08",
+      "pse_id": "couple sitting opposite a woman",
+      "file": "stimuli/c08.jpg",
+      "title": "couple sitting opposite a woman",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 800,
+      "height": 438,
+      "archive_file": "classic images/couple sitting opposite a woman.jpg",
+      "pull": null
+    },
+    {
+      "id": "c09",
+      "pse_id": "girfriends in cafe with male approaching",
+      "file": "stimuli/c09.jpg",
+      "title": "girfriends in cafe with male approaching",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 776,
+      "height": 601,
+      "archive_file": "classic images/girfriends in cafe with male approaching.jpg",
+      "pull": {
+        "aff": 3.26,
+        "ach": 0.02,
+        "pow": 0.69,
+        "n_stories": 81,
+        "norm_id": "girfriends in cafe with male approaching",
+        "source_range": "'Sheet 1'!A10:P10"
+      }
+    },
+    {
+      "id": "c10",
+      "pse_id": "kennedy nixon",
+      "file": "stimuli/c10.jpg",
+      "title": "kennedy nixon",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1194,
+      "height": 810,
+      "archive_file": "classic images/kennedy nixon.jpg",
+      "pull": {
+        "aff": 0.1,
+        "ach": 1.3,
+        "pow": 1.82,
+        "n_stories": 799,
+        "norm_id": "kennedy nixon",
+        "source_range": "'Sheet 1'!A27:P27"
+      }
+    },
+    {
+      "id": "c11",
+      "pse_id": "lacrosse duel",
+      "file": "stimuli/c11.jpg",
+      "title": "lacrosse duel",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 501,
+      "height": 700,
+      "archive_file": "classic images/lacrosse duel.jpg",
+      "pull": {
+        "aff": 0.2,
+        "ach": 1.95,
+        "pow": 0.3,
+        "n_stories": 97,
+        "norm_id": "lacrosse duel",
+        "source_range": "'Sheet 1'!A41:P41"
+      }
+    },
+    {
+      "id": "c12",
+      "pse_id": "men on ship",
+      "file": "stimuli/c12.jpg",
+      "title": "men on ship",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 674,
+      "height": 760,
+      "archive_file": "classic images/men on ship.jpg",
+      "pull": {
+        "aff": 0.08,
+        "ach": 0.31,
+        "pow": 0.79,
+        "n_stories": 95,
+        "norm_id": "men on ship",
+        "source_range": "'Sheet 1'!A53:P53"
+      }
+    },
+    {
+      "id": "c13",
+      "pse_id": "neymar & marcelo",
+      "file": "stimuli/c13.jpg",
+      "title": "neymar & marcelo",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 860,
+      "height": 320,
+      "archive_file": "classic images/neymar & marcelo.jpg",
+      "pull": {
+        "aff": 0.35,
+        "ach": 1.2,
+        "pow": 0.86,
+        "n_stories": 354,
+        "norm_id": "neymar & marcelo",
+        "source_range": "'Sheet 1'!A42:P42"
+      }
+    },
+    {
+      "id": "c14",
+      "pse_id": "nightclub scene",
+      "file": "stimuli/c14.jpg",
+      "title": "nightclub scene",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 551,
+      "height": 369,
+      "archive_file": "classic images/nightclub scene.jpg",
+      "pull": {
+        "aff": 2.39,
+        "ach": 0.14,
+        "pow": 1.08,
+        "n_stories": 2311,
+        "norm_id": "nightclub scene",
+        "source_range": "'Sheet 1'!A14:P14"
+      }
+    },
+    {
+      "id": "c15",
+      "pse_id": "ship captain",
+      "file": "stimuli/c15.jpg",
+      "title": "ship captain",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 555,
+      "height": 500,
+      "archive_file": "classic images/ship captain.jpg",
+      "pull": {
+        "aff": 0.47,
+        "ach": 0.2,
+        "pow": 1.56,
+        "n_stories": 2612,
+        "norm_id": "ship captain",
+        "source_range": "'Sheet 1'!A45:P45"
+      }
+    },
+    {
+      "id": "c16",
+      "pse_id": "sorrow",
+      "file": "stimuli/c16.jpg",
+      "title": "sorrow",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1052,
+      "height": 701,
+      "archive_file": "classic images/sorrow.jpg",
+      "pull": {
+        "aff": 2.48,
+        "ach": 0.16,
+        "pow": 1.65,
+        "n_stories": 141,
+        "norm_id": "sorrow",
+        "source_range": "'Sheet 1'!A6:P6"
+      }
+    },
+    {
+      "id": "c17",
+      "pse_id": "trapeze artists",
+      "file": "stimuli/c17.jpg",
+      "title": "trapeze artists",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 568,
+      "height": 423,
+      "archive_file": "classic images/trapeze artists.jpg",
+      "pull": {
+        "aff": 0.73,
+        "ach": 1.15,
+        "pow": 0.84,
+        "n_stories": 2316,
+        "norm_id": "trapeze artists",
+        "source_range": "'Sheet 1'!A34:P34"
+      }
+    },
+    {
+      "id": "c18",
+      "pse_id": "women in laboratory",
+      "file": "stimuli/c18.jpg",
+      "title": "women in laboratory",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 893,
+      "height": 697,
+      "archive_file": "classic images/women in laboratory.jpg",
+      "pull": {
+        "aff": 0.34,
+        "ach": 1.51,
+        "pow": 1.28,
+        "n_stories": 2331,
+        "norm_id": "women in laboratory",
+        "source_range": "'Sheet 1'!A30:P30"
+      }
+    },
+    {
+      "id": "n03",
+      "pse_id": "newpic03",
+      "file": "stimuli/n03.jpg",
+      "title": "newpic03",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 799,
+      "archive_file": "new images/newpic03.jpg",
+      "pull": {
+        "aff": 2.2,
+        "ach": 0.1,
+        "pow": 0.1,
+        "n_stories": 10,
+        "norm_id": "newpic3",
+        "source_range": "'Sheet 1'!A43:P43"
+      }
+    },
+    {
+      "id": "n04",
+      "pse_id": "newpic04",
+      "file": "stimuli/n04.jpg",
+      "title": "newpic04",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 816,
+      "archive_file": "new images/newpic04.jpg",
+      "pull": {
+        "aff": 0.25,
+        "ach": 1.12,
+        "pow": 0.62,
+        "n_stories": 8,
+        "norm_id": "newpic4",
+        "source_range": "'Sheet 1'!A49:P49"
+      }
+    },
+    {
+      "id": "n05",
+      "pse_id": "newpic05",
+      "file": "stimuli/n05.jpg",
+      "title": "newpic05",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 818,
+      "archive_file": "new images/newpic05.jpg",
+      "pull": {
+        "aff": 1.36,
+        "ach": 1.73,
+        "pow": 1.55,
+        "n_stories": 11,
+        "norm_id": "newpic5",
+        "source_range": "'Sheet 1'!A3:P3"
+      }
+    },
+    {
+      "id": "n06",
+      "pse_id": "newpic06",
+      "file": "stimuli/n06.jpg",
+      "title": "newpic06",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 717,
+      "archive_file": "new images/newpic06.jpg",
+      "pull": {
+        "aff": 2.38,
+        "ach": 0.38,
+        "pow": 1.25,
+        "n_stories": 8,
+        "norm_id": "newpic6",
+        "source_range": "'Sheet 1'!A9:P9"
+      }
+    },
+    {
+      "id": "n07",
+      "pse_id": "newpic07",
+      "file": "stimuli/n07.jpg",
+      "title": "newpic07",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 800,
+      "height": 1200,
+      "archive_file": "new images/newpic07.jpg",
+      "pull": {
+        "aff": 0.8,
+        "ach": 0.87,
+        "pow": 0.8,
+        "n_stories": 15,
+        "norm_id": "newpic7",
+        "source_range": "'Sheet 1'!A40:P40"
+      }
+    },
+    {
+      "id": "n08",
+      "pse_id": "newpic08",
+      "file": "stimuli/n08.jpg",
+      "title": "newpic08",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 798,
+      "archive_file": "new images/newpic08.jpg",
+      "pull": {
+        "aff": 0.89,
+        "ach": 1.56,
+        "pow": 1.44,
+        "n_stories": 9,
+        "norm_id": "newpic8",
+        "source_range": "'Sheet 1'!A11:P11"
+      }
+    },
+    {
+      "id": "n13",
+      "pse_id": "newpic13",
+      "file": "stimuli/n13.jpg",
+      "title": "newpic13",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic13.jpg",
+      "pull": {
+        "aff": 1.18,
+        "ach": 0.18,
+        "pow": 0.82,
+        "n_stories": 11,
+        "norm_id": "newpic13",
+        "source_range": "'Sheet 1'!A46:P46"
+      }
+    },
+    {
+      "id": "n14",
+      "pse_id": "newpic14",
+      "file": "stimuli/n14.jpg",
+      "title": "newpic14",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 800,
+      "height": 489,
+      "archive_file": "new images/newpic14.jpg",
+      "pull": {
+        "aff": 1.88,
+        "ach": 0,
+        "pow": 1.38,
+        "n_stories": 8,
+        "norm_id": "newpic14",
+        "source_range": "'Sheet 1'!A26:P26"
+      }
+    },
+    {
+      "id": "n16",
+      "pse_id": "newpic16",
+      "file": "stimuli/n16.jpg",
+      "title": "newpic16",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic16.jpg",
+      "pull": {
+        "aff": 1.29,
+        "ach": 0,
+        "pow": 1.43,
+        "n_stories": 7,
+        "norm_id": "newpic16",
+        "source_range": "'Sheet 1'!A35:P35"
+      }
+    },
+    {
+      "id": "n17",
+      "pse_id": "newpic17",
+      "file": "stimuli/n17.jpg",
+      "title": "newpic17",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic17.jpg",
+      "pull": {
+        "aff": 0.09,
+        "ach": 2.55,
+        "pow": 0.64,
+        "n_stories": 11,
+        "norm_id": "newpic17",
+        "source_range": "'Sheet 1'!A25:P25"
+      }
+    },
+    {
+      "id": "n20",
+      "pse_id": "newpic20",
+      "file": "stimuli/n20.jpg",
+      "title": "newpic20",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic20.jpg",
+      "pull": {
+        "aff": 1.75,
+        "ach": 0,
+        "pow": 0.75,
+        "n_stories": 8,
+        "norm_id": "newpic20",
+        "source_range": "'Sheet 1'!A38:P38"
+      }
+    },
+    {
+      "id": "n21",
+      "pse_id": "newpic21",
+      "file": "stimuli/n21.jpg",
+      "title": "newpic21",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic21.jpg",
+      "pull": {
+        "aff": 1.89,
+        "ach": 0.22,
+        "pow": 0.44,
+        "n_stories": 9,
+        "norm_id": "newpic21",
+        "source_range": "'Sheet 1'!A37:P37"
+      }
+    },
+    {
+      "id": "n23",
+      "pse_id": "newpic23",
+      "file": "stimuli/n23.jpg",
+      "title": "newpic23",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 797,
+      "archive_file": "new images/newpic23.jpg",
+      "pull": {
+        "aff": 0.62,
+        "ach": 0.25,
+        "pow": 1.5,
+        "n_stories": 8,
+        "norm_id": "newpic23",
+        "source_range": "'Sheet 1'!A44:P44"
+      }
+    },
+    {
+      "id": "n24",
+      "pse_id": "newpic24",
+      "file": "stimuli/n24.jpg",
+      "title": "newpic24",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 802,
+      "archive_file": "new images/newpic24.jpg",
+      "pull": {
+        "aff": 0.77,
+        "ach": 0.69,
+        "pow": 1.69,
+        "n_stories": 13,
+        "norm_id": "newpic24",
+        "source_range": "'Sheet 1'!A29:P29"
+      }
+    },
+    {
+      "id": "n25",
+      "pse_id": "newpic25",
+      "file": "stimuli/n25.jpg",
+      "title": "newpic25",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 1022,
+      "archive_file": "new images/newpic25.jpg",
+      "pull": {
+        "aff": 2.18,
+        "ach": 0.09,
+        "pow": 1.18,
+        "n_stories": 11,
+        "norm_id": "newpic25",
+        "source_range": "'Sheet 1'!A17:P17"
+      }
+    },
+    {
+      "id": "n26",
+      "pse_id": "newpic26",
+      "file": "stimuli/n26.jpg",
+      "title": "newpic26",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic26.jpg",
+      "pull": {
+        "aff": 0.67,
+        "ach": 0,
+        "pow": 0.33,
+        "n_stories": 3,
+        "norm_id": "newpic26",
+        "source_range": "'Sheet 1'!A54:P54"
+      }
+    },
+    {
+      "id": "n27",
+      "pse_id": "newpic27",
+      "file": "stimuli/n27.jpg",
+      "title": "newpic27",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 799,
+      "archive_file": "new images/newpic27.jpg",
+      "pull": {
+        "aff": 2.33,
+        "ach": 0.67,
+        "pow": 0.33,
+        "n_stories": 3,
+        "norm_id": "newpic27",
+        "source_range": "'Sheet 1'!A22:P22"
+      }
+    },
+    {
+      "id": "n28",
+      "pse_id": "newpic28",
+      "file": "stimuli/n28.jpg",
+      "title": "newpic28",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic28.jpg",
+      "pull": {
+        "aff": 1.2,
+        "ach": 0.13,
+        "pow": 0.6,
+        "n_stories": 15,
+        "norm_id": "newpic28",
+        "source_range": "'Sheet 1'!A50:P50"
+      }
+    },
+    {
+      "id": "n30",
+      "pse_id": "newpic30",
+      "file": "stimuli/n30.jpg",
+      "title": "newpic30",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic30.jpg",
+      "pull": {
+        "aff": 0.6,
+        "ach": 1.33,
+        "pow": 1.47,
+        "n_stories": 15,
+        "norm_id": "newpic30",
+        "source_range": "'Sheet 1'!A21:P21"
+      }
+    },
+    {
+      "id": "n32",
+      "pse_id": "newpic32",
+      "file": "stimuli/n32.jpg",
+      "title": "newpic32",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic32.jpg",
+      "pull": {
+        "aff": 1.57,
+        "ach": 0.14,
+        "pow": 1.86,
+        "n_stories": 7,
+        "norm_id": "newpic32",
+        "source_range": "'Sheet 1'!A15:P15"
+      }
+    },
+    {
+      "id": "n33",
+      "pse_id": "newpic33",
+      "file": "stimuli/n33.jpg",
+      "title": "newpic33",
+      "author": "See OSF source collection",
+      "source_url": "https://osf.io/pqckn/",
+      "license": "Not individually verified; supplied for this private internal exercise",
+      "license_url": null,
+      "modified": true,
+      "width": 1200,
+      "height": 800,
+      "archive_file": "new images/newpic33.jpg",
+      "pull": {
+        "aff": 1.89,
+        "ach": 0.33,
+        "pow": 1.11,
+        "n_stories": 9,
+        "norm_id": "newpic33",
+        "source_range": "'Sheet 1'!A23:P23"
+      }
     }
-  ]
+  ],
+  "pull_source": "picture_pull_norm_table.xlsx, Sheet 1, supplied OSF archive",
+  "pull_note": "German expert-coded mean motive imagery per story; picture context only, never participant norms or a correction to AMC counts. Sample sizes differ. Null means no verified row match."
 }

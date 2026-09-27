@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>故事以外 · PSE-HK 讀書會練習</title>
-<meta name="description" content="四張圖片，四個故事。由故事人物嘅想要，諗返自己正追求緊乜。一個 McAdams 讀書會小練習。">
+<meta name="description" content="四張圖片，四個想像故事。一個 McAdams 讀書會小練習。">
 <meta property="og:title" content="故事以外 · 四張圖，你會點樣寫？">
 <meta property="og:description" content="一個 15–20 分鐘嘅讀書會小練習。冇標準答案，唔係性格測驗。">
 <meta name="theme-color" content="#f6f4ed">
@@ -30,17 +30,17 @@
   <section id="v-intro" class="view" hidden aria-labelledby="intro-title">
     <div class="intro-layout">
       <div class="intro-copy">
-        <p class="eyebrow">A PICTURE. A STORY. A LITTLE OF YOU.</p>
+        <p class="eyebrow">FOUR PICTURES. FOUR IMAGINED STORIES.</p>
         <h1 id="intro-title" tabindex="-1">幅圖冇講嘅，<br>你會點樣<span class="accent-text">寫？</span></h1>
-        <p class="lede">同一張圖，可以有完全唔同嘅故事。<br>當人物想要乜仍然留白，我哋會自然填入啲咩？</p>
-        <p class="intro-description">睇四張圖片，寫低你第一時間想像到嘅故事。唔使文筆好，亦冇標準答案。寫完，再一齊睇返故事帶咗我哋去邊。</p>
+        <p class="lede">同一張圖，可以有完全唔同嘅故事。<br>人物嘅經過同結局，由你想像。</p>
+        <p class="intro-description">睇四張圖片，每張寫一個有開頭、經過同結局嘅想像故事，唔只係描述幅圖。用第一時間諗到嘅情節就得，唔使文筆好，亦冇標準答案。</p>
         <div class="activity-meta"><span>4 張圖片</span><span>15–20 分鐘</span><span>用你習慣嘅語言</span></div>
         <div class="actions intro-actions">
           <button id="btn-start" class="primary">開始第一個故事 <span aria-hidden="true">↗</span></button>
           <button id="btn-resume" class="primary" hidden>繼續上次嘅故事 <span aria-hidden="true">↗</span></button>
           <button id="btn-delete" class="quiet" hidden>刪除草稿</button>
         </div>
-        <p class="fine">一個關於想像同動機嘅小練習。唔係性格測驗。</p>
+        <p class="fine">一個想像故事小練習。唔係性格測驗。</p>
       </div>
       <aside class="folio-art" aria-label="四個故事，由一片留白開始">
         <div class="folio-back folio-back-one" aria-hidden="true"></div><div class="folio-back folio-back-two" aria-hidden="true"></div>
@@ -54,11 +54,12 @@
     <div class="intro-bottom">
       <div class="how-to"><p class="eyebrow">呢個練習點樣玩</p><ol class="instruction-grid">
         <li><span class="step-number">01</span><div><h3>先望一望</h3><p>每張圖睇 10 秒，之後收起。留意人物同情境，唔使估答案。</p></div></li>
-        <li><span class="step-number">02</span><div><h3>讓故事發生</h3><p>每個故事約 4 分鐘。寫完可早啲繼續；時間到亦唔會打斷你。</p></div></li>
+        <li><span class="step-number">02</span><div><h3>讓故事發生</h3><p>每個故事預留約 4 分鐘，盡量一次過完成四個。時間到會提醒你收尾，唔會刪走內容。</p></div></li>
         <li><span class="step-number">03</span><div><h3>回望你嘅想像</h3><p>四個故事寫完，再睇具體句子，同埋故事之外可以諗嘅問題。</p></div></li>
       </ol></div>
       <div class="intro-notes">
         <p class="fine">廣東話、中文、英文，或者混合使用都得。每按一次「下一張」，故事就會保留嗰一刻嘅版本，唔再返轉頭修改。</p>
+        <p class="fine">毋須寫自己嘅經歷，唔使擔心文法、拼字或者標點。見過幅圖都冇問題：可以寫相似或者唔同嘅故事，跟今次諗到嘅情節就得。</p>
         <p class="privacy-brief">草稿只暫存在呢個瀏覽器。提交後，會交由 Modal 同 Cloudflare Workers AI 分析及翻譯；本工具不會建立故事資料庫。</p>
         <details class="more"><summary>私隱、暫存同等候時間</summary><p>你可以刪除草稿；七日以上嘅草稿會喺下次開啟時清理。同一個瀏覽器可以繼續，另一個瀏覽器未必讀到草稿。</p><p>分析服務閒置時會休眠，提交後可能需要等一陣。等候或者出錯時，草稿會保留；成功顯示結果後先清除。</p><p>寫作時間同中途離開會喺結果細節註明。圖片來源會喺完成後顯示，避免影響想像。</p></details>
         <p class="fine repeat-play">已經玩過？ <button id="btn-random" class="link" type="button">用隨機圖片再探索</button></p>
@@ -79,13 +80,13 @@
     <div class="round-label"><span class="round-no"></span><div class="round-progress" aria-hidden="true"></div></div>
     <div class="writing-layout">
       <aside class="writing-guide"><p class="eyebrow">IMAGINE · 寫落去</p><h2 id="write-title" tabindex="-1">然後，<br>發生咗咩事？</h2><p>唔使估幅圖「真正」講緊乜。<br>我哋有興趣嘅，係你點樣補完佢。</p>
-        <details class="more prompt-notes"><summary>需要靈感？睇幾個提示</summary><ul class="prompts"><li>發生緊咩事？邊啲人喺度？</li><li>之前發生過咩事？</li><li>佢哋諗緊咩、感受緊咩、想要啲咩？</li><li>之後會點？</li></ul>
-        <p class="fine">用句號（。）或者換行分句。需要時講明邊個做緊乜，例如「個女仔」，方便之後理解你嘅故事。</p></details>
+        <div class="prompt-notes"><p class="fine">寫一個有開頭、經過同結局嘅故事。以下只係提示，唔使逐題答。</p><ul class="prompts"><li>發生緊咩事？邊啲人喺度？</li><li>之前發生過咩事？</li><li>佢哋諗緊咩、感受緊咩、想要啲咩？</li><li>之後會點？最後點樣？</li></ul>
+        <p class="fine">照你習慣嘅方式寫，唔使擔心文法、拼字或者標點。</p></div>
       </aside>
       <div class="writing-sheet"><div class="sheet-heading"><label for="story">你嘅故事</label><span class="timer-wrap">建議時間 <span id="soft-timer" class="soft-timer" aria-live="off">4:00</span></span></div>
-        <textarea id="story" rows="10" spellcheck="false" autocomplete="off" placeholder="嗰一刻，佢……"></textarea>
+        <textarea id="story" rows="10" spellcheck="false" autocomplete="off" placeholder="喺呢度寫你想像到嘅故事……"></textarea>
         <div class="meta-row"><span id="char-count"></span><span id="save-state" aria-live="polite"></span></div>
-        <p id="time-up" class="gentle" hidden>建議時間到咗，唔使急。寫完再繼續就得，結果細節會註明寫作時間。</p><p id="short-note" class="gentle" role="status" hidden></p>
+        <p id="time-up" class="gentle" hidden>約 4 分鐘喇，請幫故事收個尾，再繼續。內容會保留，結果細節會註明寫作時間。</p><p id="short-note" class="gentle" role="status" hidden></p>
         <div class="actions writing-actions"><button class="quiet skip" type="button">換一張</button><button id="btn-next" class="primary" disabled>下一張 →</button></div>
         <p class="fine lock-note">繼續之後，會保留呢一刻嘅故事版本。</p>
       </div>
@@ -127,7 +128,8 @@
       <details class="more book-note"><summary>書頁旁註：McAdams 嘅三個角度</summary><dl class="layers"><dt>Social Actor · 社會演員</dt><dd>我平時係點樣嘅人？例如特質同慣常表現。</dd><dt>Motivated Agent · 動機主體</dt><dd>我想要乜？我正追求緊乜？目標、計劃、價值同願望。</dd><dt>Autobiographical Author · 自傳作者</dt><dd>我點樣理解一路走來嘅人生？今次想像故事唔等於你嘅人生敘事。</dd></dl><p class="fine">閱讀脈絡：Dan P. McAdams，<cite lang="en">The Art and Science of Personality Development</cite>（2015），第六章 “The Motivational Agenda”。以上係閱讀提示，唔係量表分類。</p></details>
     </section>
     <aside id="bookclub-note" class="bookclub-note" hidden><span class="eyebrow">BRING A STORY, NOT A SCORE</span><h3>讀書會見，帶一句故事就夠。</h3><p>大家睇嘅係同一組四張圖，順序都一樣。你可以揀一個故事，或者一句令你有感覺嘅說話，留待嗰日傾。分唔分享、分享幾多，完全由你決定。</p></aside>
-    <details class="more technical"><summary>想睇吓系統點樣分析？</summary><div id="bars"></div><div id="agreement" class="agreement"></div><div id="protocol" class="fine"></div><p id="stats" class="fine"></p><p class="fine">圖片常模只用嚟揀一組較多樣嘅讀書會圖片，唔會用嚟標準化、計百分位或者解讀你嘅個人結果。</p><h4>圖片來源同模型</h4><ul id="credits-results" class="credits"></ul><p id="model-meta" class="fine"></p></details>
+    <details class="more"><summary>幅圖本身，會唔會影響故事主題？</summary><p>會。唔同圖片喺研究中會引出唔同比例嘅主題，稱為 picture pull。以下係德文故事經專家編碼後，每個故事平均出現嘅主題次數。</p><ul id="picture-pull" class="credits"></ul><p class="fine">呢啲係圖片嘅參考資料，唔係你應該得到嘅數字。樣本數目不同，小樣本尤其唔穩定；亦唔係香港常模。系統冇用佢哋扣分、校正、計百分位，或者判斷你嘅動機高低。故事長短同分句方式亦會影響原始次數。</p><p class="fine">來源：<a href="https://osf.io/pqckn/" target="_blank" rel="noopener">Schönbrodt et al. PSE 圖片資料庫</a>，picture_pull_norm_table.xlsx。</p></details>
+    <details class="more technical"><summary>想睇吓系統點樣分析？</summary><div id="bars"></div><div id="agreement" class="agreement"></div><div id="protocol" class="fine"></div><p id="stats" class="fine"></p><h4>圖片來源同模型</h4><ul id="credits-results" class="credits"></ul><p id="model-meta" class="fine"></p></details>
     <div class="result-footer"><div><h3>留低故事，慢慢再睇。</h3><p class="fine">下載只存到你嘅裝置。重新整理頁面唔會保留結果。</p></div><div class="actions"><button id="btn-download" class="primary">下載故事同閱讀筆記 ↓</button><button id="btn-restart" class="quiet">返回開始</button></div></div>
     <p class="fine repeat-play"><button id="btn-again-random" class="link">想再探索？用隨機圖片寫另一組故事</button></p>
   </section>

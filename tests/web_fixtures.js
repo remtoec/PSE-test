@@ -25,8 +25,29 @@ function runWebFixtures() {
   // default run is the fixed bookclub set with no skips; random mode still draws
   S = fresh(); draw();
   check("bookclub set", S.order.join() === BOOKCLUB_SET.join() && S.skipsLeft === 0);
+  check("classical default", pictures.map(p => p.pse_id).join("|") ===
+    "boxer|couple by river|women in laboratory|ship captain");
+  check("new guidance recorded", protocolNotes().guidance === GUIDE_VERSION);
+  renderPicturePull(document.getElementById("picture-pull"));
+  check("pull follows actual pictures", document.getElementById("picture-pull").textContent.includes("1724")
+    && document.getElementById("picture-pull").textContent.includes("2612"));
+  check("missing norms are not zero", pullText({ pull: null }).includes("未有核實"));
+  const oldDraft = { ...fresh(), order: ["p7", "p9", "p4", "p2"], savedAt: Date.now() };
+  delete oldDraft.guidance;
+  const previousDraft = localStorage.getItem(KEY);
+  localStorage.setItem(KEY, JSON.stringify(oldDraft));
+  const recovered = load();
+  check("old draft keeps original pictures", recovered.order.join() === "p7,p9,p4,p2"
+    && recovered.guidance === "legacy-guidance-resumed-with-v2");
+  if (previousDraft === null) localStorage.removeItem(KEY);
+  else localStorage.setItem(KEY, previousDraft);
+  check("guidance is not collapsed", document.querySelector(".prompt-notes .prompts")
+    && !document.querySelector(".prompt-notes").closest("details"));
   S = fresh(); S.mode = "random"; draw();
   check("random draws four", new Set(S.order).size === 4 && S.skipsLeft === MAX_SKIPS);
+  check("random pool covers whole archive", pool.length === 48
+    && pool.filter(p => p.archive_file.startsWith("classic images/")).length === 18
+    && pool.filter(p => p.archive_file.startsWith("new images/")).length === 30);
   S = fresh();
 
   pictures = ["p1", "p2", "p3", "p4"].map(byId); // results render against the run's pictures
@@ -112,11 +133,23 @@ function runWebFixtures() {
     ['佢唔想只係跟住做，想令大家認真考慮自己嘅意見。', 'He wanted people to consider his opinion seriously rather than simply following along.'],
     ['散場之前，佢問對方下次仲會唔會嚟。', 'Before leaving, she asked whether the other person would come again.'],
   ];
-  demo.sentences.forEach((s, i) => { s.source = stories[i][0]; if (!demo.translation_failed) s.english = stories[i][1]; });
+  pictures = BOOKCLUB_SET.map(byId);
+  demo.sentences.forEach((s, i) => {
+    s.picture_id = pictures[i % 4].id;
+    s.id = `${s.picture_id}-s${Math.floor(i / 4) + 1}`;
+    s.source = stories[i][0];
+    if (!demo.translation_failed) s.english = stories[i][1];
+  });
+  demo.summary.total_chars = Object.fromEntries(pictures.map(p => [p.id, 10]));
   lastMode = 'bookclub';
+  lastProtocol = { times: [240000, 240000, 240000, 240000], notes: [], guidance: GUIDE_VERSION };
   render(demo);
   lastResult = demo;
   check("new result resets reflection", document.querySelector('[data-reflection="1"]').hidden
     && document.getElementById("reflection-closing").hidden);
+  check("classical results retain original counts", document.getElementById("tally").textContent.includes("3 句")
+    || demo.translation_failed);
+  check("four classical result cards", document.querySelectorAll("#cards .pic-group").length === 4
+    && document.querySelector("#cards .pic-head img").getAttribute("src") === "stimuli/c05.jpg");
   return fails;
 }

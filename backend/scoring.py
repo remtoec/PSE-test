@@ -1,7 +1,12 @@
 """Validation, segmentation, AMC adapter and aggregation. No model import here."""
 import re
 
-PICTURE_IDS = frozenset(f"p{i}" for i in range(1, 10))  # the pool; mirrors web/stimuli.json
+# Full supplied archive; p1-p9 keep their historical identities for saved drafts.
+PICTURE_IDS = frozenset(
+    [f"p{i}" for i in range(1, 10)]
+    + [f"c{i:02}" for i in range(1, 19)]
+    + [f"n{i:02}" for i in (3, 4, 5, 6, 7, 8, 13, 14, 16, 17, 20, 21, 23, 24, 25, 26, 27, 28, 30, 32, 33)]
+)  # mirrors web/stimuli.json
 STORIES_PER_RUN = 4
 MOTIVES = ("ach", "aff", "pow")
 MAX_BODY_BYTES = 64 * 1024

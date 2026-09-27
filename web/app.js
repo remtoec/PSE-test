@@ -15,10 +15,10 @@ const BREAK_MS = 5 * 60_000; // a resume after this long counts as a break, not 
 const AWAY_NOTE_MS = 60_000;
 const MOTIVES = ["ach", "aff", "pow"];
 const NAMES = { ach: "成就", aff: "連結／親和", pow: "影響力／權力" };
-// Default run: everyone sees the same four, in this order. Chosen from the pool so the summed
-// picture-pull norms (Schönbrodt et al., osf.io/pqckn) are roughly even across aff/ach/pow:
-// p7 ach, p9 aff, p4 pow, p2 ach+pow → aff 4.2, ach 4.7, pow 4.4.
-const BOOKCLUB_SET = ["p7", "p9", "p4", "p2"];
+// Boxer, couple by river, women in laboratory, ship captain.
+// German reference pulls: aff 4.18, ach 3.42, pow 3.99. Context, never a score correction.
+const BOOKCLUB_SET = ["c05", "c07", "c18", "c15"];
+const GUIDE_VERSION = "pse-hk-guidance-v2";
 const API = (() => {
   const m = document.querySelector('meta[name="pse-api"]').content.trim();
   if (m) return m.replace(/\/$/, "");
@@ -67,7 +67,7 @@ let lastProtocol = null; // notes on timing and breaks for the result being show
 let lastMode = null;     // S.mode of the result being shown (S is reset once it renders)
 
 function fresh() {
-  return { v: 1, mode: "bookclub", step: "intro", round: 0, phase: "view", viewLeft: VIEW_MS, writeMs: {}, awayMs: {}, breaks: 0, nudged: null, order: [], skipsLeft: MAX_SKIPS, stories: {}, savedAt: 0 };
+  return { v: 1, guidance: GUIDE_VERSION, mode: "bookclub", step: "intro", round: 0, phase: "view", viewLeft: VIEW_MS, writeMs: {}, awayMs: {}, breaks: 0, nudged: null, order: [], skipsLeft: MAX_SKIPS, stories: {}, savedAt: 0 };
 }
 
 const byId = (id) => pool.find((p) => p.id === id);
@@ -148,6 +148,7 @@ function load() {
     const d = JSON.parse(raw);
     if (!d.order) Object.assign(d, { order: ["p1", "p2", "p3", "p4"], skipsLeft: MAX_SKIPS }); // drafts from the fixed-order version
     d.awayMs ??= {}; d.breaks ??= 0; d.mode ??= "random"; // drafts from before modes were random draws
+    d.guidance ??= "legacy-guidance-resumed-with-v2";
     if (d.v !== 1 || Date.now() - d.savedAt > MAX_AGE_MS || !d.order.every(byId)) {
       localStorage.removeItem(KEY); // cleanup happens on reopen only
       return null;
@@ -317,10 +318,8 @@ function next() {
     S.nudged = pid;
     save();
     const note = $("short-note");
-    note.textContent = (cp(t) >= 40
-      ? "呢個故事得一句。如果你寫咗幾句，記得用句號（。）或者換行分開；亦可以"
-      : "呢個故事比較短，可能不足以提供穩定分析。你可以") +
-      "補充之前發生咩事、人物點諗，或者之後會點。再按一次「下一張」就會繼續。";
+    note.textContent = "如果故事仲未講完，可以補充之前發生咩事、人物點諗，或者最後點樣。"
+      + "已經寫完就再按一次繼續，唔需要為分析加長或者改標點。";
     note.hidden = false;
     return;
   }
@@ -585,7 +584,7 @@ function dots(s) {
 
 const mmss = (ms) => `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(2, "0")}`;
 
-/** How far this run strayed from the standard protocol (4 min per story, one sitting). Shown, never enforced. */
+/** Timing of this casual adaptation; a short run is not a validated standard administration. */
 function protocolNotes() {
   const times = pictures.map((p) => S.writeMs[p.id] || 0);
   const notes = pictures.map((p, i) => {
@@ -595,14 +594,15 @@ function protocolNotes() {
     return bits.length ? `第 ${i + 1} 個故事：${bits.join("；")}` : null;
   }).filter(Boolean);
   if (S.breaks) notes.push(`分開 ${S.breaks + 1} 次先完成（中途停低，之後再繼續）`);
-  return { times, notes };
+  return { times, notes, guidance: S.guidance };
 }
 
 function protocolView(pr) {
   if (!pr) return [];
   const times = h("p", {}, "每個故事嘅寫作時間：" + pr.times.map(mmss).join("、"));
-  if (!pr.notes.length) return [times, h("p", {}, "四個故事都喺建議時間內一次過完成。")];
-  return [times, h("p", {}, "同標準做法（每張 4 分鐘、一次過完成）唔同嘅地方："),
+  const adaptation = h("p", {}, "今次係四張圖、10 秒觀看、約 4 分鐘寫作嘅讀書會改編版。可以提早完成或超時，並非標準化測驗。");
+  if (!pr.notes.length) return [adaptation, times, h("p", {}, "今次冇記錄到超時或較長中斷；唔代表已達到研究標準。")];
+  return [adaptation, times, h("p", {}, "今次記錄到嘅時間同中斷："),
     h("ul", {}, pr.notes.map((x) => h("li", {}, x))),
     h("p", {}, "超時或者中途離開嘅故事標準化程度較低，結果更加只可以當參考。")];
 }
@@ -617,6 +617,11 @@ function renderResults(d) {
     pathPanel("原文直接分析", "直接讀你寫落嘅句子。", d.summary.direct),
     pathPanel("英文翻譯後再分析", "先翻譯，再由同一模型閱讀。", d.summary.translated));
   $("bookclub-note").hidden = lastMode !== "bookclub";
+  $("bookclub-note").querySelector("p").textContent =
+    (pictures.map((p) => p.id).join() === BOOKCLUB_SET.join()
+      ? "大家新開始嘅讀書會練習會用同一組四張圖，順序都一樣。"
+      : "今次沿用舊草稿嘅圖片，同新開始嘅讀書會組合可能唔同。")
+    + "你可以揀一個故事，或者一句令你有感覺嘅說話，留待嗰日傾。分唔分享、分享幾多，完全由你決定。";
 
   const all = [d.summary.direct, d.summary.translated].filter(Boolean);
   const max = Math.max(1, ...all.flatMap((c) => MOTIVES.map((m) => c[m])));
@@ -646,6 +651,7 @@ function renderResults(d) {
   $("protocol").replaceChildren(...protocolView(lastProtocol));
   $("stats").textContent = [chars != null ? `總字數：${chars}` : "", `句子：${n}`, d.summary.english_words != null ? `英文翻譯字數：${d.summary.english_words}` : ""].filter(Boolean).join(" · ");
   credits($("credits-results"));
+  renderPicturePull($("picture-pull"));
   $("model-meta").textContent = `模型：${d.meta.amc_model} @ ${String(d.meta.amc_revision).slice(0, 7)} · 翻譯：${d.meta.translator}（prompt ${d.meta.prompt_version}）`;
   setReflection(0);
   $("reflection-closing").hidden = true;
@@ -678,11 +684,17 @@ function download() {
     "3. Promotion / prevention：得到理想結果，定係避免唔想發生嘅結果？",
     "故事人物想要嘅，同你自己而家最想要嘅，係咪同一回事？冇乜關係都可以，冇一個係更真嘅你。", "",
     "—— 技術資料 ——", `圖片：${lastMode === "bookclub" ? "讀書會固定一組" : "隨機抽出"}`,
+    `實際圖片順序：${pictures.map((p) => `${p.id} (${p.pse_id})`).join(" → ")}`,
+    `寫作指引：${lastProtocol?.guidance || "未記錄"}`,
+    "四張圖、10 秒觀看、約 4 分鐘寫作；容許提早完成或超時，屬讀書會改編版。",
     d.summary.agreement ? `兩種分析一致：${d.summary.agreement.same} ／ ${d.summary.agreement.total} 句` : "今次冇翻譯，所以冇比較。");
   if (lastProtocol) {
     lines.push("寫作時間：" + lastProtocol.times.map(mmss).join("、"));
-    lines.push(...(lastProtocol.notes.length ? ["非標準：", ...lastProtocol.notes.map((x) => "  " + x)] : ["四個故事都喺建議時間內一次過完成。"]));
+    lines.push(...(lastProtocol.notes.length ? ["時間同中斷：", ...lastProtocol.notes.map((x) => "  " + x)] : ["冇記錄到超時或較長中斷；唔代表已達到研究標準。"]));
   }
+  lines.push("", "圖片 pull 參考：德文故事專家編碼，每個故事平均主題次數。唔係你應該得到嘅數字，亦冇用嚟校正結果。",
+    "來源：Schönbrodt et al. (2020/2021), https://osf.io/pqckn/ · picture_pull_norm_table.xlsx");
+  pictures.forEach((p) => lines.push(`${p.id} (${p.pse_id})：${pullText(p)}`));
   lines.push(`模型：${d.meta.amc_model} @ ${String(d.meta.amc_revision).slice(0, 7)} · 翻譯：${d.meta.translator}（prompt ${d.meta.prompt_version}）`, "");
   lines.push("實驗性自動編碼，未經驗證適用於廣東話，唔係性格測驗。");
   const a = h("a", { href: URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" })), download: "pse-hk-result.txt" });
@@ -692,12 +704,24 @@ function download() {
 
 // ---------- wiring ----------
 
+function pullText(p) {
+  if (!p.pull) return "未有核實對應常模；唔代表零。";
+  return MOTIVES.map((m) => `${NAMES[m]} ${p.pull[m].toFixed(2)}`).join(" ／ ")
+    + `（${p.pull.n_stories} 個故事）`;
+}
+
+function renderPicturePull(container) {
+  container.replaceChildren(...pictures.map((p, i) => h("li", {},
+    `第 ${i + 1} 張（${p.pse_id}）：${pullText(p)}`)));
+}
+
 function credits(ul) {
   ul.replaceChildren(...pictures.map((p, i) => h("li", {},
     `第 ${i + 1} 張（${p.pse_id}）：${p.title}。${p.author}。`,
     h("a", { href: p.source_url, target: "_blank", rel: "noopener" }, "來源"), "；",
-    h("a", { href: p.license_url, target: "_blank", rel: "noopener" }, p.license), p.modified ? "；已縮細及壓縮。" : "")));
-  ul.append(h("li", {}, "圖片選自 Schönbrodt et al. (2019) PSE 圖片資料庫 (osf.io/pqckn)。"));
+    p.license_url ? h("a", { href: p.license_url, target: "_blank", rel: "noopener" }, p.license) : p.license,
+    p.modified ? "；已縮細及壓縮。" : "")));
+  ul.append(h("li", {}, "圖片選自 Schönbrodt et al. (2020/2021) PSE 圖片資料庫 (osf.io/pqckn)。"));
 }
 
 function confirmDelete() {
@@ -708,7 +732,6 @@ function confirmDelete() {
 }
 
 async function init() {
-  document.querySelector(".prompt-notes").open = window.matchMedia("(min-width: 601px)").matches;
   const ta = $("story");
   ta.addEventListener("input", onStoryInput);
   ta.addEventListener("compositionstart", () => (composing = true));
