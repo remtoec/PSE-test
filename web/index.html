@@ -25,22 +25,35 @@
   <section id="v-intro" class="view" hidden>
     <div class="seal" aria-hidden="true">故事</div>
     <h1>圖畫故事</h1>
-    <p class="lede">睇四張圖片，寫低你想像中嘅故事。大約需要 15–20 分鐘，冇標準答案。你可以用廣東話、中文、英文，或者混合使用。</p>
+    <p class="lede">同一張圖，可以變成完全唔同嘅故事。你會寫出點樣嘅故事？</p>
+    <p>你會睇四張冇明確答案嘅圖片，然後寫低第一時間想像到嘅故事。冇標準答案，亦唔需要寫得好。大約 15–20 分鐘。</p>
     <ol class="steps">
-      <li>每張圖會顯示 10 秒，然後收起。見過嘅圖可以「換一張」，最多換 4 次。</li>
-      <li>之後有大約 4 分鐘寫故事——時間到都唔會自動提交，寫完可以早啲繼續。超時或者中途離開，結果會註明。</li>
-      <li>按「下一張」之後，嗰個故事就定咗，唔可以返轉頭改。</li>
-      <li>四個故事寫完，你會見到一份實驗性嘅故事主題分析。</li>
+      <li>每張圖會顯示 10 秒，然後自動收起。</li>
+      <li>之後有大約 4 分鐘寫故事。時間到唔會自動提交，寫完可以早啲繼續。</li>
+      <li>按「下一張」之後，嗰個故事就定咗，唔可以返轉頭改。呢個活動重視第一時間出現嘅故事。</li>
+      <li>可以用廣東話、中文、英文，或者混合使用。</li>
     </ol>
-    <p class="fine">呢個係一個實驗性小活動，唔係性格測驗。</p>
-    <p class="fine">草稿會暫存在呢個瀏覽器，方便你中途離開再繼續。提交後，故事會傳送到 Modal 作分析，並交由 Cloudflare Workers AI 翻譯。本工具不會建立故事資料庫。你可以隨時刪除草稿。</p>
-    <p class="fine">如果分析服務閒置咗一段時間，佢需要時間醒過來，所以分析有時會等耐少少。</p>
     <div class="actions">
-      <button id="btn-start" class="primary">開始</button>
+      <button id="btn-start" class="primary">開始寫故事</button>
       <button id="btn-resume" class="primary" hidden>繼續上次嘅故事</button>
       <button id="btn-delete" class="quiet" hidden>刪除草稿</button>
     </div>
-    <p class="fine">圖片來源會喺完成之後先顯示，避免影響你嘅想像。</p>
+    <p class="fine">呢個係一個實驗性小活動，唔係性格測驗。</p>
+
+    <details class="more">
+      <summary>想知多啲先？</summary>
+      <p>同一張圖，可以令人想像出完全唔同嘅人物、目標、衝突同結局。呢個小活動想探索嘅係：當故事本身冇講明「人物想要乜」，我哋會自然填入啲咩？</p>
+      <p>寫完之後，你會見到故事入面出現過邊啲主題，同埋心理學家點樣用呢類故事研究動機。</p>
+      <p>結果唔係診斷，亦唔會話你屬於邊一種「人格類型」。佢只係另一個角度，睇返你今次寫出嚟嘅四個故事。</p>
+    </details>
+    <details class="more">
+      <summary>私隱及活動細節</summary>
+      <p>草稿會暫存喺呢個瀏覽器，方便你中途離開再繼續。你可以隨時刪除草稿。</p>
+      <p>提交後，故事會傳送到 Modal 作分析，並交由 Cloudflare Workers AI 翻譯。本工具不會建立故事資料庫。</p>
+      <p>寫作時間同中途離開唔會被阻止，但會喺結果註明。如果分析服務閒置咗一段時間，佢需要時間醒過來，所以分析有時會等耐少少。</p>
+      <p>圖片來源會喺完成之後先顯示，避免影響你嘅想像。</p>
+    </details>
+    <p class="fine">已經玩過？<button id="btn-random" class="link" type="button">用隨機抽出嘅圖片再玩一次</button></p>
   </section>
 
   <!-- Picture viewing -->
@@ -69,6 +82,7 @@
       <li>佢哋諗緊啲咩？有咩感受？想做或者想得到啲咩？</li>
       <li>之後會點？</li>
     </ul>
+    <p class="fine">唔需要估幅圖「真正」講緊乜，我哋有興趣嘅正正係你點樣將個故事補完。</p>
     <p class="fine">小貼士：講明係邊個（例如「個女仔」「嗰個醫生」），少啲用「佢」；每句用句號（。）完結。</p>
     <label for="story" class="sr-only">故事</label>
     <textarea id="story" rows="10" spellcheck="false" autocomplete="off" placeholder="喺度寫……"></textarea>
@@ -84,9 +98,10 @@
   <!-- Review -->
   <section id="v-review" class="view" hidden>
     <h2>你嘅四個故事</h2>
-    <p class="lede">故事寫完就定咗，唔可以再改。準備好就提交。</p>
+    <p class="lede">故事寫完之後會保留原本版本，因為呢個活動重視第一時間自然出現嘅故事，而唔係修改之後最完整嘅版本。</p>
     <p id="review-notice" class="notice" role="alert" hidden></p>
     <div id="review-list"></div>
+    <p class="fine">提交後，故事會傳送去外部服務（Modal、Cloudflare Workers AI）分析同翻譯，唔會建立故事資料庫。</p>
     <div class="actions">
       <button id="btn-submit" class="primary">提交分析</button>
       <button id="btn-delete-2" class="quiet">刪除草稿</button>
@@ -112,34 +127,81 @@
 
   <!-- Results -->
   <section id="v-results" class="view" hidden>
-    <p class="kicker">實驗性分析 · 只反映呢幾個故事</p>
-    <h2 id="headline"></h2>
+    <p class="kicker">實驗性分析 · 只反映今次四個故事</p>
+    <h2>你嘅故事去咗邊？</h2>
+    <p>你頭先面對四張冇明確答案嘅圖片，自己補上人物、原因、目標同結局。模型逐句睇你寫嘅故事，搵三類「人物想要啲乜」嘅主題。</p>
+    <p id="headline" class="result-line"></p>
     <p id="headline-note" class="fine"></p>
-
-    <div id="bars"></div>
-    <p class="fine">一句句子可以同時有多於一個主題，亦可以冇主題。</p>
-
-    <div id="agreement" class="agreement"></div>
-
-    <h3>逐句睇</h3>
-    <div id="cards"></div>
+    <div id="tally" class="tally"></div>
+    <p class="fine">每粒點代表一句被辨認到呢個主題嘅句子（原文分析）。一句可以同時有多過一個主題，亦可以冇主題。呢啲係句子數目，唔係分數或者百分比。</p>
 
     <h3>三個主題係咩意思？</h3>
     <dl class="defs">
-      <dt><span class="dot ach"></span>成就</dt><dd>故事入面有人想做得好、追求卓越、克服困難或者為表現感到自豪。</dd>
-      <dt><span class="dot aff"></span>親和／親密</dt><dd>故事入面有人重視關係、友誼、關心或者想同人親近。</dd>
-      <dt><span class="dot pow"></span>權力</dt><dd>故事入面有人想影響、控制、說服或者令人印象深刻。</dd>
+      <dt><span class="dot ach"></span>成就</dt><dd>故事人物想做好一件事、達到某個標準、改善表現、克服挑戰，或者證明自己做得到。</dd>
+      <dt><span class="dot aff"></span>連結／親和</dt><dd>故事人物想同其他人建立或者維持關係、得到接納、照顧對方，或者重新連結。</dd>
+      <dt><span class="dot pow"></span>影響力／權力</dt><dd>故事人物想影響事情發展、說服人、帶領、令人印象深刻，或者爭取地位同控制。「權力」喺呢度唔一定係負面：老師想改變學生、領袖帶領團隊，都可以係「想產生影響」。</dd>
     </dl>
+    <p>呢個唔代表你係「成就型」或者任何一種人格，亦唔代表某個主題係你人生最重要嘅動機。比較準確嘅講法係：當你今次要替模糊情境補上故事時，某啲主題比較容易出現。</p>
 
+    <h3>你嘅句子</h3>
+    <p class="fine">撳開每一句，可以睇原文同英文翻譯後兩種分析。</p>
+    <div id="cards"></div>
+
+    <h3>點解用故事去睇「想要啲乜」？</h3>
+    <p>如果直接問：「你重唔重視成功？」「你鍾唔鍾意影響人？」「關係對你重唔重要？」我哋通常知道自己想點答。</p>
+    <p>但一張模糊嘅圖冇講明人物想要乜。所以動機研究其中一個做法，就係睇人會自然寫出咩目標、衝突同結局。呢個做法源自 1930 年代嘅主題統覺測驗（TAT），後來發展成圖畫故事練習（Picture Story Exercise，PSE）。</p>
+    <p>正式研究會由受過訓練嘅人逐句編碼，而且要同好多人比較先有意義。今次嘅自動分析只係一個簡化、實驗性嘅版本。</p>
     <p class="disclaimer">呢個係實驗性嘅自動編碼，用一個主要以德文故事訓練嘅模型。佢未經驗證適用於廣東話，亦唔係性格測驗，唔可以用嚟判斷任何人嘅真實動機。</p>
-    <div id="protocol" class="fine"></div>
-    <p id="stats" class="fine"></p>
+
+    <p class="fine">如果你純粹想玩呢個小活動，去到呢度就完成咗。想由故事諗返自己，可以繼續睇落去。</p>
+
+    <h3>故事以外</h3>
+    <p>PSE 睇嘅係喺模糊情境入面自然出現嘅動機主題。不過人真正追求嘅嘢複雜得多：現實生活入面，我哋仲有自己知道、講得出口嘅目標、計劃、人生項目同價值。</p>
+    <p>故事入面嘅「想要」同現實生活嘅「想要」未必一樣。兩者唔一致本身都可以好有意思，冇一個係「更真嘅你」。</p>
+    <details class="more">
+      <summary>睇吓 McAdams 點樣理解呢一層人格</summary>
+      <p>McAdams 喺 <cite lang="en">The Art and Science of Personality Development</cite>（2015）提出，認識一個人唔只係問「佢通常係一個點樣嘅人？」，仲可以由三個角度去睇：</p>
+      <dl class="layers">
+        <dt>社會演員 <span lang="en">Social Actor</span></dt><dd>我通常點樣表現？（例如外向、盡責呢類特質）</dd>
+        <dt>動機主體 <span lang="en">Motivated Agent</span></dt><dd>我想要乜？我重視乜？我正追求緊乜？（目標、價值、計劃、動機）</dd>
+        <dt>自傳作者 <span lang="en">Autobiographical Author</span></dt><dd>我點樣理解自己一路走來嘅人生？（人生故事）</dd>
+      </dl>
+      <p>三層大致按成長次序出現：演員最早，主體喺童年中期，作者喺青春期至成年初期。之後三層並存，冇邊層高過邊層。</p>
+      <p>今次嘅故事練習，係睇 <span lang="en">Motivated Agent</span> 呢一層嘅其中一扇窗。McAdams 本人早年亦用過圖畫故事研究「親密動機」；今次嘅模型只編碼「親和」，冇分開計親密。</p>
+    </details>
+
+    <h3>想行多一步？</h3>
+    <p>諗一樣你最近真係想做到嘅事。唔使寫低，問吓自己：</p>
+    <ol class="steps">
+      <li>呢個目標比較關於做到、掌握、產生影響（<span lang="en">agency</span>，能動），定係關係、照顧、連結（<span lang="en">communion</span>，共融）？定係兩樣都有？成就同影響力主題大致屬於前者，連結／親和屬於後者。</li>
+      <li>你想做，係因為件事本身有意思，定係為咗回報、認同或者責任？（內在 vs 外在目標）</li>
+      <li>你係想得到一個好結果，定係想避免一個唔想發生嘅結果？（趨近 vs 迴避）</li>
+    </ol>
+    <p>最後：你故事入面嘅人物想要嘅，同你自己而家最想要嘅，係咪同一回事？</p>
+
+    <div id="bookclub-note" class="notice" hidden>
+      <p><strong>讀書會嗰日</strong></p>
+      <p>今次讀書會每個人都睇同一組四張圖，順序都一樣。如果你願意，可以帶住結果嚟分享，例如你點樣補完某一張圖。分唔分享、分享幾多，完全由你決定。</p>
+    </div>
+
+    <details class="more">
+      <summary>想睇吓系統點樣分析？</summary>
+      <div id="bars"></div>
+      <p class="fine">一句句子可以同時有多於一個主題，亦可以冇主題。</p>
+      <div id="agreement" class="agreement"></div>
+      <div id="protocol" class="fine"></div>
+      <p id="stats" class="fine"></p>
+      <h4>圖片來源同模型</h4>
+      <ul id="credits-results" class="credits"></ul>
+      <p id="model-meta" class="fine"></p>
+    </details>
+
     <p class="fine">重新載入頁面唔會保留結果，除非你先下載。</p>
     <div class="actions">
       <button id="btn-download" class="primary">下載結果</button>
-      <button id="btn-restart" class="quiet">重新開始</button>
+      <button id="btn-restart" class="quiet">返回開始</button>
+      <button id="btn-again-random" class="quiet">用隨機圖片再玩一次</button>
     </div>
-    <details class="credits"><summary>圖片來源同模型</summary><ul id="credits-results"></ul><p id="model-meta" class="fine"></p></details>
   </section>
 
   <noscript><p class="notice">呢個活動需要 JavaScript。</p></noscript>

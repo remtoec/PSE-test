@@ -103,6 +103,7 @@ button:disabled { opacity: .35; cursor: not-allowed; }
   background: var(--card); border-left: 4px solid var(--seal);
   padding: .8em 1em; border-radius: 4px; font-size: .95rem;
 }
+.notice > p:last-child { margin-bottom: 0; }
 
 /* picture */
 .round-label { display: flex; justify-content: space-between; font-family: var(--display); color: var(--ink-2); letter-spacing: .1em; }
@@ -174,7 +175,11 @@ textarea:focus { outline: none; border-color: var(--ink-2); }
 
 /* results */
 .kicker { font-size: .8rem; letter-spacing: .12em; color: var(--seal); font-weight: 700; margin-bottom: .4rem; }
-#headline { font-size: 1.3rem; }
+#headline { font: 700 1.3rem/1.5 var(--display); margin-top: 1.2rem; }
+.tally { margin: 1rem 0 .6rem; }
+.tally-row { display: grid; grid-template-columns: 7em 1fr auto; align-items: center; gap: .6em; font-size: .92rem; margin-bottom: .4rem; }
+.tally-dots { display: flex; flex-wrap: wrap; gap: .3em; }
+.tally-row .n { font-variant-numeric: tabular-nums; color: var(--ink-2); }
 .bars-group { margin: 1.4rem 0 .8rem; }
 .bars-group h4 { margin: 0 0 .5rem; font: 700 .95rem var(--display); }
 .bar-row { display: grid; grid-template-columns: 6.5em 1fr 2em; align-items: center; gap: .6em; font-size: .9rem; margin-bottom: .35rem; }
@@ -218,3 +223,13 @@ details.card[open] summary .txt > span { -webkit-line-clamp: unset; }
 .credits summary { cursor: pointer; }
 .credits li { margin-bottom: .5em; overflow-wrap: anywhere; }
 .credits a { color: inherit; }
+
+/* progressive disclosure */
+details.more { border-top: 1px solid var(--rule); padding: .6em 0; }
+details.more:last-of-type { border-bottom: 1px solid var(--rule); }
+details.more > summary { cursor: pointer; font-family: var(--display); font-weight: 700; padding: .3em 0; }
+details.more[open] > summary { margin-bottom: .6em; }
+details.more h4 { font: 700 .95rem var(--display); margin: 1.4rem 0 .4rem; }
+.layers dt { font-family: var(--display); font-weight: 700; margin-top: .6em; }
+.layers dd { margin: 0 0 0 1.3em; color: var(--ink-2); }
+button.link { min-height: 0; padding: 0; border: 0; font: inherit; color: inherit; text-decoration: underline; text-underline-offset: 3px; }

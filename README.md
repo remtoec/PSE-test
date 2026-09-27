@@ -11,8 +11,10 @@ The analysis is exploratory. It is not a personality test. The coding model was 
 
 **In scope**
 
-- Four pictures per run, drawn at random from a pool of openly licensed PSE pictures. Each is shown for 10 s, followed by a soft 4-minute writing period.
-- Participants may skip up to 4 pictures per run. A skipped picture is never drawn again on that browser.
+- Four pictures per run. Each is shown for 10 s, followed by a soft 4-minute writing period.
+- **Bookclub mode (default):** everyone gets the same four pictures in the same order (`BOOKCLUB_SET` in `web/app.js`: p7, p9, p4, p2) and there is no skipping. The set was chosen so the summed picture-pull norms (Schönbrodt et al., `picture_pull_norm_table.xlsx` on osf.io/pqckn) are roughly even: aff 4.2, ach 4.7, pow 4.4.
+- **Random mode:** offered on the intro and results pages for a second try. Four pictures are drawn at random from the pool; participants may skip up to 4 per run, and a skipped picture is never drawn again on that browser.
+- No motive category is named before the stories are written. The results page leads with the story themes as sentence counts (dots, original-language path), what they do and don't mean, the sentence cards, the PSE method, and an optional bridge to McAdams's Motivated Agent (*The Art and Science of Personality Development*, 2015) with three static reflection questions. Both-path counts, agreement, protocol notes, credits and model metadata sit in a collapsed "想睇吓系統點樣分析？" section.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
 - The writing prompts ask what is happening, what happened before, what the characters think, feel and want, and what happens next. A writing tip asks participants to name people instead of writing 佢 and to end each sentence with 。, which helps both the translator and sentence-level coding. A story of fewer than 2 sentences gets a single nudge to add more; it is never blocked.
 - Drafts are saved in the participant's browser, so they can leave and come back within 7 days.
@@ -20,7 +22,7 @@ The analysis is exploratory. It is not a personality test. The coding model was 
 - Sentence-level motive coding with the Automated Motive Coder (AMC) along two paths:
   1. **Direct:** the original sentence goes straight to AMC.
   2. **Translated:** the sentence is first translated conservatively into English, then sent to AMC.
-- A results page with per-motive counts for both paths, how often the two paths agree, and every sentence with its English translation and labels. The results can be downloaded as a text file.
+- The results can be downloaded as a text file: interpretation and stories first, technical record after.
 
 **Out of scope**
 
@@ -33,8 +35,8 @@ The analysis is exploratory. It is not a personality test. The coding model was 
 ```
 Browser (web/)                        Modal (backend/app.py)                 Cloudflare Workers AI
 ─────────────────                     ──────────────────────                 ─────────────────────
-draw 4 of 9 pictures
-view 10 s → write → (skip ≤ 4)
+fixed 4 (or random 4 of 9)
+view 10 s → write → (random: skip ≤ 4)
 review → POST /score  ──────────────▶ validate + split into sentences
                                       AMC on original sentences (direct)
                                       translate in batches  ───────────────▶ Qwen3-30B, JSON schema

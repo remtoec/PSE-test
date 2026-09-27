@@ -14,7 +14,11 @@ const LONG_WAIT_MS = 45_000;
 const BREAK_MS = 5 * 60_000; // a resume after this long counts as a break, not crash recovery
 const AWAY_NOTE_MS = 60_000;
 const MOTIVES = ["ach", "aff", "pow"];
-const NAMES = { ach: "成就", aff: "親和／親密", pow: "權力" };
+const NAMES = { ach: "成就", aff: "連結／親和", pow: "影響力／權力" };
+// Default run: everyone sees the same four, in this order. Chosen from the pool so the summed
+// picture-pull norms (Schönbrodt et al., osf.io/pqckn) are roughly even across aff/ach/pow:
+// p7 ach, p9 aff, p4 pow, p2 ach+pow → aff 4.2, ach 4.7, pow 4.4.
+const BOOKCLUB_SET = ["p7", "p9", "p4", "p2"];
 const API = (() => {
   const m = document.querySelector('meta[name="pse-api"]').content.trim();
   if (m) return m.replace(/\/$/, "");
@@ -60,9 +64,10 @@ let submitting = false;
 let warmedThisLoad = false;
 let lastResult = null;
 let lastProtocol = null; // notes on timing and breaks for the result being shown
+let lastMode = null;     // S.mode of the result being shown (S is reset once it renders)
 
 function fresh() {
-  return { v: 1, step: "intro", round: 0, phase: "view", viewLeft: VIEW_MS, writeMs: {}, awayMs: {}, breaks: 0, nudged: null, order: [], skipsLeft: MAX_SKIPS, stories: {}, savedAt: 0 };
+  return { v: 1, mode: "bookclub", step: "intro", round: 0, phase: "view", viewLeft: VIEW_MS, writeMs: {}, awayMs: {}, breaks: 0, nudged: null, order: [], skipsLeft: MAX_SKIPS, stories: {}, savedAt: 0 };
 }
 
 const byId = (id) => pool.find((p) => p.id === id);
@@ -77,6 +82,12 @@ function takeRandom(list) {
 }
 
 function draw() {
+  if (S.mode === "bookclub") {
+    S.order = [...BOOKCLUB_SET];
+    S.skipsLeft = 0; // same pictures for everyone, so no swapping; updateSkip() hides the buttons
+    S.stories = Object.fromEntries(S.order.map((id) => [id, ""]));
+    return usePictures();
+  }
   const gone = new Set(skipped());
   let free = pool.filter((p) => !gone.has(p.id));
   if (free.length < PER_RUN) {
@@ -136,7 +147,7 @@ function load() {
     if (!raw) return null;
     const d = JSON.parse(raw);
     if (!d.order) Object.assign(d, { order: ["p1", "p2", "p3", "p4"], skipsLeft: MAX_SKIPS }); // drafts from the fixed-order version
-    d.awayMs ??= {}; d.breaks ??= 0;
+    d.awayMs ??= {}; d.breaks ??= 0; d.mode ??= "random"; // drafts from before modes were random draws
     if (d.v !== 1 || Date.now() - d.savedAt > MAX_AGE_MS || !d.order.every(byId)) {
       localStorage.removeItem(KEY); // cleanup happens on reopen only
       return null;
@@ -163,6 +174,7 @@ function show(id) {
 function goIntro() {
   const d = load();
   $("btn-start").hidden = !!d;
+  $("btn-random").hidden = !!d;
   $("btn-resume").hidden = !d;
   $("btn-delete").hidden = !d;
   show("v-intro");
@@ -408,6 +420,7 @@ async function submit() {
       try {
         validateResult(data);
         lastProtocol = protocolNotes();
+        lastMode = S.mode;
         renderResults(data);
       } catch {
         return showError("收到嘅結果唔完整，未能顯示。你嘅故事仍然保存喺呢度。");
@@ -520,6 +533,14 @@ function barsGroup(title, counts, max) {
     }));
 }
 
+/** Discrete sentence counts, one dot per sentence: not a score, share or norm. */
+function tally(counts) {
+  return MOTIVES.map((m) => h("div", { class: "tally-row" },
+    h("span", {}, NAMES[m]),
+    h("span", { class: "tally-dots", "aria-hidden": "true" }, Array.from({ length: counts[m] }, () => h("span", { class: `dot ${m}` }))),
+    h("span", { class: "n" }, `${counts[m]} 句`)));
+}
+
 function labelList(score) {
   if (!score) return h("span", { class: "label none" }, "未有");
   if (!score.motives.length) return h("span", { class: "label none" }, "冇主題");
@@ -561,6 +582,9 @@ function renderResults(d) {
   $("headline").textContent = head;
   $("headline-note").textContent = [note, n < 8 ? `今次只有 ${n} 句，可以分析嘅材料有限，結果只可以當作參考。` : ""].filter(Boolean).join(" ");
 
+  $("tally").replaceChildren(...tally(d.summary.direct));
+  $("bookclub-note").hidden = lastMode !== "bookclub";
+
   const all = [d.summary.direct, d.summary.translated].filter(Boolean);
   const max = Math.max(1, ...all.flatMap((c) => MOTIVES.map((m) => c[m])));
   $("bars").replaceChildren(barsGroup("原文分析", d.summary.direct, max), barsGroup("英文翻譯後分析", d.summary.translated, max));
@@ -597,12 +621,8 @@ function download() {
   const d = lastResult;
   const lines = ["圖畫故事 · 實驗性分析結果", new Date().toLocaleString("zh-HK"), "",
     headline(d).filter(Boolean).join(" "), "",
-    "原文分析：" + MOTIVES.map((m) => `${NAMES[m]} ${d.summary.direct[m]}`).join("，"),
-    "英文翻譯後分析：" + (d.summary.translated ? MOTIVES.map((m) => `${NAMES[m]} ${d.summary.translated[m]}`).join("，") : "未有"), ""];
-  if (lastProtocol) {
-    lines.push("寫作時間：" + lastProtocol.times.map(mmss).join("、"));
-    lines.push(...(lastProtocol.notes.length ? ["非標準：", ...lastProtocol.notes.map((x) => "  " + x)] : ["四個故事都喺建議時間內一次過完成。"]), "");
-  }
+    "被辨認到每個主題嘅句子數目（原文分析）：" + MOTIVES.map((m) => `${NAMES[m]} ${d.summary.direct[m]}`).join("，"),
+    "呢啲係今次故事入面出現嘅主題，唔係人格類型，亦唔係分數。", ""];
   pictures.forEach((p, i) => {
     lines.push(`— 第 ${i + 1} 個故事 —`);
     for (const s of d.sentences.filter((x) => x.picture_id === p.id)) {
@@ -611,6 +631,14 @@ function download() {
     }
     lines.push("");
   });
+  lines.push("—— 技術資料 ——", `圖片：${lastMode === "bookclub" ? "讀書會固定一組" : "隨機抽出"}`,
+    "英文翻譯後分析：" + (d.summary.translated ? MOTIVES.map((m) => `${NAMES[m]} ${d.summary.translated[m]}`).join("，") : "未有"),
+    d.summary.agreement ? `兩種分析一致：${d.summary.agreement.same} ／ ${d.summary.agreement.total} 句` : "今次冇翻譯，所以冇比較。");
+  if (lastProtocol) {
+    lines.push("寫作時間：" + lastProtocol.times.map(mmss).join("、"));
+    lines.push(...(lastProtocol.notes.length ? ["非標準：", ...lastProtocol.notes.map((x) => "  " + x)] : ["四個故事都喺建議時間內一次過完成。"]));
+  }
+  lines.push(`模型：${d.meta.amc_model} @ ${String(d.meta.amc_revision).slice(0, 7)} · 翻譯：${d.meta.translator}（prompt ${d.meta.prompt_version}）`, "");
   lines.push("實驗性自動編碼，未經驗證適用於廣東話，唔係性格測驗。");
   const a = h("a", { href: URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" })), download: "pse-hk-result.txt" });
   a.click();
@@ -640,7 +668,10 @@ async function init() {
   ta.addEventListener("compositionstart", () => (composing = true));
   ta.addEventListener("compositionend", () => { composing = false; onStoryInput(); });
   $("btn-next").addEventListener("click", next);
-  $("btn-start").addEventListener("click", () => { S = fresh(); draw(); startRound(0); });
+  const start = (mode) => { S = fresh(); S.mode = mode; draw(); startRound(0); };
+  $("btn-start").addEventListener("click", () => start("bookclub"));
+  $("btn-random").addEventListener("click", () => start("random"));
+  $("btn-again-random").addEventListener("click", () => { lastResult = null; lastProtocol = null; start("random"); });
   document.querySelectorAll(".skip").forEach((b) => b.addEventListener("click", skip));
   $("btn-resume").addEventListener("click", () => { const d = load(); d ? resume(d) : goIntro(); });
   $("btn-delete").addEventListener("click", () => { S = load() || fresh(); confirmDelete(); });

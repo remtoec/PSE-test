@@ -22,6 +22,13 @@
       },
     };
   }
+  // default run is the fixed bookclub set with no skips; random mode still draws
+  S = fresh(); draw();
+  check("bookclub set", S.order.join() === BOOKCLUB_SET.join() && S.skipsLeft === 0);
+  S = fresh(); S.mode = "random"; draw();
+  check("random draws four", new Set(S.order).size === 4 && S.skipsLeft === MAX_SKIPS);
+  S = fresh();
+
   pictures = ["p1", "p2", "p3", "p4"].map(byId); // results render against the run's pictures
   const H = () => document.getElementById("headline").textContent;
   const render = (d) => { validateResult(d); renderResults(d); };
@@ -31,6 +38,8 @@
   check("shared leader", H().includes("兩種分析都") && H().includes("親和"));
   check("english visible without expanding", document.querySelector("#cards summary .en").textContent.includes("Sentence 0"));
   check("agreement shown", document.getElementById("agreement").textContent.includes("10 ／ 10"));
+  check("tally is a sentence count", document.getElementById("tally").textContent.includes("連結／親和10 句")
+    && document.querySelectorAll("#tally .dot.aff").length === 10);
 
   render(make([...ten(["aff"], ["aff"]), ...ten([], ["ach"])]));
   check("partial match is not a disagreement", !H().includes("唔一致") && H().includes("親和")
@@ -40,7 +49,7 @@
   check("disagreement", H().includes("唔一致"));
 
   render(make([[["ach"], ["ach"]], [["pow"], ["pow"]], ...ten([], [])]));
-  check("tie", H().includes("「成就」同「權力」") && H().includes("數量一樣"));
+  check("tie", H().includes("「成就」同「影響力／權力」") && H().includes("數量一樣"));
 
   render(make(ten([], [])));
   check("zero", H().includes("冇識別到") && document.getElementById("headline-note").textContent.includes("唔代表"));
