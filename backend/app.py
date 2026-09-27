@@ -16,7 +16,7 @@ MODEL_REVISION = "738833d148f37b993d225b572ee3ee32e4085cfb"
 MODEL_DIR = "/model"
 BATCH_SIZE = 16
 PROCESS_DEADLINE_S = 120
-PAGES_ORIGIN = os.environ.get("PSE_ORIGIN", "https://pse-hk.pages.dev")
+PAGES_ORIGIN = os.environ.get("PSE_ORIGIN", "https://pse-hk.aesopb15254.workers.dev")
 
 image = (
     modal.Image.debian_slim(python_version="3.11")

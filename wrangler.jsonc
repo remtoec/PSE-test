@@ -1,0 +1,6 @@
+{
+  // Static site only: serves web/, no Worker script. Successor to Cloudflare Pages direct upload.
+  "name": "pse-hk",
+  "compatibility_date": "2026-09-25",
+  "assets": { "directory": "./web" }
+}

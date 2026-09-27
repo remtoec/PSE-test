@@ -32,16 +32,16 @@ If the secret holds empty or invalid values, scoring still works; each assessmen
 
 ## Deploy
 
-1. Static site (Cloudflare Pages, direct upload of `web/` only):
+1. Static site (Cloudflare Workers static assets, the successor to Pages direct upload; `wrangler.jsonc` serves `web/` only, with no Worker script):
    ```bash
-   npx wrangler pages project create <project> --production-branch main   # first time
-   npx wrangler pages deploy web --project-name <project> --branch main
+   npx wrangler deploy
    ```
-2. Backend (the Pages origin is baked into the CORS allow-list at deploy time):
+   Origin: `https://pse-hk.aesopb15254.workers.dev`
+2. Backend (the site origin is baked into the CORS allow-list at deploy time; the default in `backend/app.py` is the origin above):
    ```bash
-   PSE_ORIGIN=https://<project>.pages.dev .venv/Scripts/modal.exe deploy backend/app.py
+   .venv/Scripts/modal.exe deploy backend/app.py
    ```
-3. Put the printed `...modal.run` URL into `<meta name="pse-api" content="...">` in `web/index.html`, then redeploy Pages (step 1).
+3. If the backend URL changes, update `<meta name="pse-api" content="...">` in `web/index.html` and run `npx wrangler deploy` again.
 
 The deployed values are recorded in `docs/launch-checks.md`.
 
