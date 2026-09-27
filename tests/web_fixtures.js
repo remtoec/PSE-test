@@ -22,13 +22,19 @@
       },
     };
   }
+  pictures = ["p1", "p2", "p3", "p4"].map(byId); // results render against the run's pictures
   const H = () => document.getElementById("headline").textContent;
   const render = (d) => { validateResult(d); renderResults(d); };
 
   const ten = (d, t) => Array.from({ length: 10 }, () => [d, t]);
   render(make(ten(["aff"], ["aff"])));
   check("shared leader", H().includes("兩種分析都") && H().includes("親和"));
+  check("english visible without expanding", document.querySelector("#cards summary .en").textContent.includes("Sentence 0"));
   check("agreement shown", document.getElementById("agreement").textContent.includes("10 ／ 10"));
+
+  render(make([...ten(["aff"], ["aff"]), ...ten([], ["ach"])]));
+  check("partial match is not a disagreement", !H().includes("唔一致") && H().includes("親和")
+    && document.getElementById("headline-note").textContent.includes("英文翻譯後分析另外「成就」"));
 
   render(make([...ten(["ach"], ["pow"])]));
   check("disagreement", H().includes("唔一致"));

@@ -1,5 +1,5 @@
 {
-  "note": "Fixed order. Licences verified individually on 2026-09-27. Images resized to 1200px and recompressed for web use (modification).",
+  "note": "Pool: each run draws 4 at random. Licences verified individually on 2026-09-27 (p5-p9 against the OSF sources table, osf.io/umqdb, and each source page). Images resized to at most 1200px and recompressed for web use (modification).",
   "collection": "PSE picture database, Schönbrodt et al. (2019), https://osf.io/pqckn/",
   "pictures": [
     {
@@ -52,6 +52,71 @@
       "source_url": "https://www.flickr.com/photos/14214150@N02/5815109845",
       "license": "CC BY 2.0 (Flickr licence field; the photo description also cites CC BY 3.0)",
       "license_url": "https://creativecommons.org/licenses/by/2.0/",
+      "modified": true
+    },
+    {
+      "id": "p5",
+      "pse_id": "newpic01",
+      "file": "stimuli/p5.jpg",
+      "width": 777,
+      "height": 600,
+      "title": "Shimer College class discussion (1967)",
+      "author": "Shimer College Recondite yearbook staff",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Shimer_College_class_discussion_1967.jpg",
+      "license": "Public domain (US, published without copyright notice)",
+      "license_url": "https://commons.wikimedia.org/wiki/Template:PD-US-no_notice",
+      "modified": true
+    },
+    {
+      "id": "p6",
+      "pse_id": "newpic11",
+      "file": "stimuli/p6.jpg",
+      "width": 1200,
+      "height": 960,
+      "title": "Flag pledge ceremony, Weill public school, San Francisco (1942)",
+      "author": "Dorothea Lange (U.S. War Relocation Authority; Library of Congress)",
+      "source_url": "https://commons.wikimedia.org/wiki/File:Dorothea_Lange_pledge_of_allegiance.jpg",
+      "license": "Public domain (work of the U.S. federal government)",
+      "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+      "modified": true
+    },
+    {
+      "id": "p7",
+      "pse_id": "newpic22",
+      "file": "stimuli/p7.jpg",
+      "width": 1200,
+      "height": 800,
+      "title": "People Inside Room",
+      "author": "Michael Zittel (Pexels)",
+      "source_url": "https://www.pexels.com/photo/people-inside-room-12312/",
+      "license": "CC0 1.0 (Pexels photo published 2015, before the Pexels licence change; listed as CC0 in the PSE database)",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "modified": true
+    },
+    {
+      "id": "p8",
+      "pse_id": "newpic29",
+      "file": "stimuli/p8.jpg",
+      "width": 1200,
+      "height": 800,
+      "title": "Men Sitting on Wooden Chairs Under Tree",
+      "author": "Tookapic (Pexels)",
+      "source_url": "https://www.pexels.com/photo/group-friends-grandpas-grandparents-8576/",
+      "license": "CC0 1.0 (Pexels photo published 2015, before the Pexels licence change; listed as CC0 in the PSE database)",
+      "license_url": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "modified": true
+    },
+    {
+      "id": "p9",
+      "pse_id": "newpic31",
+      "file": "stimuli/p9.jpg",
+      "width": 800,
+      "height": 534,
+      "title": "Whitewater Rafting",
+      "author": "Graeme Walker (geograph.org.uk)",
+      "source_url": "https://www.geograph.org.uk/photo/1530594",
+      "license": "CC BY-SA 2.0",
+      "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
       "modified": true
     }
   ]

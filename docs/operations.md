@@ -9,9 +9,10 @@ uv venv --python 3.11 .venv
 uv pip install --python .venv/Scripts/python.exe --index-url https://download.pytorch.org/whl/cpu torch==2.3.1
 uv pip install --python .venv/Scripts/python.exe -r backend/requirements.txt pytest psutil uvicorn modal pillow
 .venv/Scripts/python.exe -c "from huggingface_hub import snapshot_download; snapshot_download('automatedMotiveCoder/setfit', revision='738833d148f37b993d225b572ee3ee32e4085cfb', local_dir='models/amc')"
-.venv/Scripts/python.exe -m pytest tests -q          # 46 tests
+.venv/Scripts/python.exe -m pytest tests -q          # 48 tests
 .venv/Scripts/python.exe backend/app.py              # API on http://127.0.0.1:8000 (models/amc)
 python -m http.server 8080 --directory web           # UI on http://localhost:8080
+.venv/Scripts/modal.exe run scripts/eval_translation.py --repeats 3   # live translation check (uses the Modal secret)
 ```
 
 Without `CF_ACCOUNT_ID`/`CF_API_TOKEN` set, the local API returns direct-only results. `tests/web_fixtures.js` can be pasted into the page console to check result rendering.
@@ -68,4 +69,4 @@ The Pages site keeps working. Intro and writing need no backend. Submissions sho
 
 The backend logs only a random request id, sentence counts, timings, fallback reason and error codes. Story and translation text are never logged, stored or echoed in errors. Uvicorn access logs are disabled locally; Modal logs record function calls, not request bodies. Provider policies: [Modal privacy](https://modal.com/legal/privacy-policy), [Workers AI data usage](https://developers.cloudflare.com/workers-ai/platform/data-usage/).
 
-Drafts live only in the participant's browser (`localStorage` key `pse-hk:draft:v1`). A draft older than 7 days is deleted the next time the page opens; no background service deletes it.
+Drafts live only in the participant's browser (`localStorage` key `pse-hk:draft:v1`). The ids of skipped pictures are kept under `pse-hk:skipped:v1` so they are not drawn again; the list is forgotten once fewer than four unskipped pictures remain. A draft older than 7 days is deleted the next time the page opens; no background service deletes it.

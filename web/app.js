@@ -1,6 +1,9 @@
 "use strict";
 
 const KEY = "pse-hk:draft:v1";
+const SKIP_KEY = "pse-hk:skipped:v1"; // pictures skipped in any run; never drawn again
+const PER_RUN = 4;
+const MAX_SKIPS = 4;
 const MAX_AGE_MS = 7 * 24 * 3600 * 1000;
 const VIEW_MS = 10_000;
 const WRITE_SOFT_MS = 4 * 60_000;
@@ -8,6 +11,8 @@ const MAX_STORY_CHARS = 3000; // code points, mirrors backend/scoring.py
 const MAX_SENTENCES = 120;
 const REQUEST_TIMEOUT_MS = 180_000;
 const LONG_WAIT_MS = 45_000;
+const BREAK_MS = 5 * 60_000; // a resume after this long counts as a break, not crash recovery
+const AWAY_NOTE_MS = 60_000;
 const MOTIVES = ["ach", "aff", "pow"];
 const NAMES = { ach: "成就", aff: "親和／親密", pow: "權力" };
 const API = (() => {
@@ -45,7 +50,8 @@ function segment(text) {
 
 // ---------- state & drafts ----------
 
-let pictures = [];
+let pool = [];     // every picture in stimuli.json
+let pictures = []; // this run's four, in the order shown
 let storageOK = true;
 let S = fresh();
 let viewTimer = null, writeTimer = null, loadTimer = null;
@@ -53,9 +59,63 @@ let composing = false;
 let submitting = false;
 let warmedThisLoad = false;
 let lastResult = null;
+let lastProtocol = null; // notes on timing and breaks for the result being shown
 
 function fresh() {
-  return { v: 1, step: "intro", round: 0, phase: "view", viewLeft: VIEW_MS, writeMs: {}, stories: { p1: "", p2: "", p3: "", p4: "" }, savedAt: 0 };
+  return { v: 1, step: "intro", round: 0, phase: "view", viewLeft: VIEW_MS, writeMs: {}, awayMs: {}, breaks: 0, nudged: null, order: [], skipsLeft: MAX_SKIPS, stories: {}, savedAt: 0 };
+}
+
+const byId = (id) => pool.find((p) => p.id === id);
+function usePictures() { pictures = S.order.map(byId); }
+
+function skipped() {
+  try { return JSON.parse(localStorage.getItem(SKIP_KEY)) || []; } catch { return []; }
+}
+
+function takeRandom(list) {
+  return list.splice(Math.floor(Math.random() * list.length), 1)[0];
+}
+
+function draw() {
+  const gone = new Set(skipped());
+  let free = pool.filter((p) => !gone.has(p.id));
+  if (free.length < PER_RUN) {
+    // ponytail: pool used up by old skips, so forget them rather than block the activity
+    try { localStorage.removeItem(SKIP_KEY); } catch { /* storage unavailable */ }
+    free = [...pool];
+  }
+  S.order = Array.from({ length: PER_RUN }, () => takeRandom(free).id);
+  S.stories = Object.fromEntries(S.order.map((id) => [id, ""]));
+  usePictures();
+}
+
+function replacements() {
+  const gone = new Set([...skipped(), ...S.order]);
+  return pool.filter((p) => !gone.has(p.id));
+}
+
+function skip() {
+  const pid = S.order[S.round];
+  const left = replacements();
+  if (!S.skipsLeft || !left.length || composing) return;
+  if (S.stories[pid].trim() && !confirm("換圖會刪除你為呢張圖寫嘅故事，確定？")) return;
+  try { localStorage.setItem(SKIP_KEY, JSON.stringify([...skipped(), pid])); } catch { /* still skipped for this run */ }
+  const next = takeRandom(left).id;
+  S.order[S.round] = next;
+  delete S.stories[pid]; delete S.writeMs[pid];
+  S.stories[next] = "";
+  S.skipsLeft -= 1;
+  S.viewLeft = VIEW_MS;
+  usePictures();
+  startRound(S.round, "view");
+}
+
+function updateSkip() {
+  const can = S.skipsLeft > 0 && replacements().length > 0;
+  document.querySelectorAll(".skip").forEach((b) => {
+    b.hidden = !can;
+    b.textContent = `換一張（仲可以換 ${S.skipsLeft} 次）`;
+  });
 }
 
 function save() {
@@ -75,7 +135,9 @@ function load() {
     const raw = localStorage.getItem(KEY);
     if (!raw) return null;
     const d = JSON.parse(raw);
-    if (d.v !== 1 || Date.now() - d.savedAt > MAX_AGE_MS) {
+    if (!d.order) Object.assign(d, { order: ["p1", "p2", "p3", "p4"], skipsLeft: MAX_SKIPS }); // drafts from the fixed-order version
+    d.awayMs ??= {}; d.breaks ??= 0;
+    if (d.v !== 1 || Date.now() - d.savedAt > MAX_AGE_MS || !d.order.every(byId)) {
       localStorage.removeItem(KEY); // cleanup happens on reopen only
       return null;
     }
@@ -108,6 +170,9 @@ function goIntro() {
 
 function resume(d) {
   S = d;
+  usePictures();
+  // Picking up minutes later is recovery; coming back after a break is recorded as non-standard.
+  if (S.step === "round" && Date.now() - S.savedAt > BREAK_MS) S.breaks += 1;
   if (S.step === "round") startRound(S.round, S.phase);
   else if (S.step === "review" || S.step === "scoring") {
     const interrupted = S.step === "scoring";
@@ -123,6 +188,7 @@ function startRound(i, phase = "view") {
   if (phase === "view" && S.viewLeft <= 0) S.viewLeft = VIEW_MS;
   save();
   document.querySelectorAll(".round-no").forEach((e) => (e.textContent = `第 ${i + 1} ／ 4 張`));
+  updateSkip();
   if (i === 3) warm();
   phase === "view" ? showPicture() : showWriting();
 }
@@ -143,10 +209,10 @@ function showPicture() {
   img.removeAttribute("src");
   img.alt = "";
   $("countdown-bar").style.transform = "scaleX(1)";
-  $("credit-line").textContent = `圖片：${p.author} · ${p.license.split(" (")[0]}`;
   const probe = new Image();
   probe.src = p.file;
   probe.decode().then(() => {
+    if (pictures[S.round] !== p || S.phase !== "view") return; // skipped while loading
     img.src = p.file;
     img.alt = `第 ${S.round + 1} 張圖`;
     $("img-loading").hidden = true;
@@ -164,6 +230,7 @@ function runViewCountdown() {
     const now = performance.now();
     // Only count time while the page is visible (e.g. not while switched to WhatsApp).
     if (document.visibilityState === "visible") S.viewLeft -= now - last;
+    else away(now - last);
     last = now;
     $("countdown-bar").style.transform = `scaleX(${Math.max(0, S.viewLeft / VIEW_MS)})`;
     if (S.viewLeft <= 0) {
@@ -175,12 +242,18 @@ function runViewCountdown() {
   }, 100);
 }
 
+function away(ms) {
+  const pid = pictures[S.round].id;
+  S.awayMs[pid] = (S.awayMs[pid] || 0) + ms;
+}
+
 function showWriting() {
   const pid = pictures[S.round].id;
   const ta = $("story");
   show("v-write");
   ta.value = S.stories[pid];
   $("time-up").hidden = true;
+  $("short-note").hidden = true;
   updateWriteMeta();
   ta.focus({ preventScroll: true });
   let last = performance.now();
@@ -188,9 +261,10 @@ function showWriting() {
   writeTimer = setInterval(() => {
     const now = performance.now();
     if (document.visibilityState === "visible") S.writeMs[pid] = (S.writeMs[pid] || 0) + (now - last);
+    else away(now - last);
     last = now;
     const left = Math.max(0, WRITE_SOFT_MS - (S.writeMs[pid] || 0));
-    $("soft-timer").textContent = left ? `${Math.floor(left / 60000)}:${String(Math.floor(left / 1000) % 60).padStart(2, "0")}` : "";
+    $("soft-timer").textContent = left ? mmss(left) : "";
     if (!left) $("time-up").hidden = false; // soft: nothing is locked or submitted
   }, 500);
 }
@@ -214,7 +288,21 @@ function onStoryInput() {
 function next() {
   if (composing) return; // don't cut off an unfinished IME composition
   onStoryInput();
-  if (!$("story").value.trim()) return;
+  const t = $("story").value;
+  if (!t.trim()) return;
+  const pid = pictures[S.round].id;
+  // AMC codes sentences; one-sentence stories give it little to work with. Nudge once, never block.
+  if (segment(t).length < 2 && S.nudged !== pid) {
+    S.nudged = pid;
+    save();
+    const note = $("short-note");
+    note.textContent = (cp(t) >= 40
+      ? "呢個故事得一句。如果你寫咗幾句，記得用句號（。）或者換行分開；亦可以"
+      : "呢個故事比較短，可能不足以提供穩定分析。你可以") +
+      "補充之前發生咩事、人物點諗，或者之後會點。再按一次「下一張」就會繼續。";
+    note.hidden = false;
+    return;
+  }
   clearInterval(writeTimer);
   if (S.round < 3) {
     S.viewLeft = VIEW_MS;
@@ -224,7 +312,8 @@ function next() {
 
 // ---------- review & submit ----------
 
-function goReview(notice = "", flagPid = null) {
+/** Stories are final once written; only a story the checks reject (or all, if no single one is at fault) opens for editing. */
+function goReview(notice = "", flagPid = null, editAll = false) {
   clearInterval(viewTimer); clearInterval(writeTimer);
   S.step = "review";
   save();
@@ -232,6 +321,7 @@ function goReview(notice = "", flagPid = null) {
   list.replaceChildren(...pictures.map((p, i) => {
     const ta = h("textarea", { id: `rv-${p.id}`, rows: "6", spellcheck: "false" });
     ta.value = S.stories[p.id];
+    ta.readOnly = !(editAll || p.id === flagPid);
     const count = h("span");
     const upd = () => {
       S.stories[p.id] = ta.value;
@@ -260,7 +350,7 @@ function localCheck() {
     if (cp(t) > MAX_STORY_CHARS) return [`第 ${i + 1} 個故事超過 ${MAX_STORY_CHARS} 字，請刪減。`, p.id];
   }
   const n = pictures.reduce((a, p) => a + segment(S.stories[p.id]).length, 0);
-  if (n > MAX_SENTENCES) return [`四個故事合共超過 ${MAX_SENTENCES} 句，請精簡少少。`, null];
+  if (n > MAX_SENTENCES) return [`四個故事合共超過 ${MAX_SENTENCES} 句，請精簡少少。`, null, true];
   return null;
 }
 
@@ -275,7 +365,7 @@ const ERR = {
 async function submit() {
   if (submitting || composing) return;
   const bad = localCheck();
-  if (bad) return goReview(bad[0], bad[1]);
+  if (bad) return goReview(...bad);
   if (!API) return showError("分析服務未設定。你嘅故事仍然保存喺呢個瀏覽器。", false);
 
   submitting = true;
@@ -317,6 +407,7 @@ async function submit() {
     return finish(() => {
       try {
         validateResult(data);
+        lastProtocol = protocolNotes();
         renderResults(data);
       } catch {
         return showError("收到嘅結果唔完整，未能顯示。你嘅故事仍然保存喺呢度。");
@@ -332,7 +423,8 @@ async function submit() {
     return finish(() => showError("而家有其他人正在分析，請稍等一陣再試。", true, wait));
   }
   if (res.status === 400 || res.status === 413) {
-    return finish(() => goReview(ERR[code] || "有啲內容處理唔到，請檢查一下。", data && data.picture_id));
+    const pid = (data && data.picture_id) || null;
+    return finish(() => goReview(ERR[code] || "有啲內容處理唔到，請檢查一下。", pid, !pid));
   }
   return finish(() => showError("分析服務暫時未能使用。你嘅故事仍然保存喺呢個瀏覽器，可以稍後再試。"));
 }
@@ -404,6 +496,15 @@ function headline(d) {
   if (dl.join() === tl.join()) {
     return [`兩種分析都顯示，呢四個故事最常出現${joinNames(dl)}主題${dl.length > 1 ? "（數量一樣）" : ""}。`, ""];
   }
+  const shared = dl.filter((m) => tl.includes(m));
+  if (shared.length) {
+    // Same leader, one path has an extra tie: that's a partial match, not a disagreement.
+    const extra = (a, b, who) => {
+      const x = a.filter((m) => !b.includes(m));
+      return x.length ? `${who}分析另外${joinNames(x)}都一樣多。` : "";
+    };
+    return [`兩種分析都顯示，呢四個故事最常出現${joinNames(shared)}主題。`, extra(dl, tl, "原文") + extra(tl, dl, "英文翻譯後")];
+  }
   const describe = (ls) => (ls.length ? `最多係${joinNames(ls)}` : "冇識別到主題");
   return ["兩種分析方法嘅結果唔一致。", `原文分析${describe(dl)}；英文翻譯後分析${describe(tl)}。`];
 }
@@ -430,6 +531,30 @@ function dots(s) {
   return ms.size ? MOTIVES.filter((m) => ms.has(m)).map((m) => h("span", { class: `dot ${m}` })) : h("span", { class: "dot none" });
 }
 
+const mmss = (ms) => `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(2, "0")}`;
+
+/** How far this run strayed from the standard protocol (4 min per story, one sitting). Shown, never enforced. */
+function protocolNotes() {
+  const times = pictures.map((p) => S.writeMs[p.id] || 0);
+  const notes = pictures.map((p, i) => {
+    const bits = [];
+    if (times[i] > WRITE_SOFT_MS) bits.push(`寫咗 ${mmss(times[i])}，超過建議嘅 4 分鐘`);
+    if ((S.awayMs[p.id] || 0) > AWAY_NOTE_MS) bits.push(`中途離開頁面約 ${Math.round(S.awayMs[p.id] / 60000)} 分鐘`);
+    return bits.length ? `第 ${i + 1} 個故事：${bits.join("；")}` : null;
+  }).filter(Boolean);
+  if (S.breaks) notes.push(`分開 ${S.breaks + 1} 次先完成（中途停低，之後再繼續）`);
+  return { times, notes };
+}
+
+function protocolView(pr) {
+  if (!pr) return [];
+  const times = h("p", {}, "每個故事嘅寫作時間：" + pr.times.map(mmss).join("、"));
+  if (!pr.notes.length) return [times, h("p", {}, "四個故事都喺建議時間內一次過完成。")];
+  return [times, h("p", {}, "同標準做法（每張 4 分鐘、一次過完成）唔同嘅地方："),
+    h("ul", {}, pr.notes.map((x) => h("li", {}, x))),
+    h("p", {}, "超時或者中途離開嘅故事標準化程度較低，結果更加只可以當參考。")];
+}
+
 function renderResults(d) {
   const [head, note] = headline(d);
   const n = d.sentences.length;
@@ -451,17 +576,18 @@ function renderResults(d) {
     return h("div", { class: "pic-group" },
       h("div", { class: "pic-head" }, h("img", { src: p.file, alt: "" }), h("span", {}, `第 ${i + 1} 個故事`)),
       ss.map((s) => h("details", { class: "card" },
-        h("summary", {}, h("span", { class: "chips" }, dots(s)), h("span", { class: "txt" }, s.source)),
+        h("summary", {}, h("span", { class: "chips" }, dots(s)),
+          h("div", { class: "txt" }, h("span", {}, s.source), h("span", { class: "en", lang: "en" }, "EN: ", s.english ?? "（未有翻譯）"))),
         h("dl", { class: "card-body" },
-          h("dt", {}, "原文"), h("dd", {}, s.source),
-          h("dt", {}, "英文翻譯"), h("dd", {}, s.english ?? "（未有翻譯）",
-            s.uncertain ? h("div", { class: "flag-uncertain" }, "⚑ 翻譯可能有歧義") : null),
+          s.uncertain ? h("dd", { class: "flag-uncertain" }, "⚑ 翻譯可能有歧義") : null,
           h("dt", {}, "原文分析"), h("dd", {}, labelList(s.direct)),
           h("dt", {}, "英文翻譯後分析"), h("dd", {}, labelList(s.translated))))));
   }));
 
   const chars = d.summary.total_chars ? Object.values(d.summary.total_chars).reduce((a, b) => a + b, 0) : null;
+  $("protocol").replaceChildren(...protocolView(lastProtocol));
   $("stats").textContent = [chars != null ? `總字數：${chars}` : "", `句子：${n}`, d.summary.english_words != null ? `英文翻譯字數：${d.summary.english_words}` : ""].filter(Boolean).join(" · ");
+  credits($("credits-results"));
   $("model-meta").textContent = `模型：${d.meta.amc_model} @ ${String(d.meta.amc_revision).slice(0, 7)} · 翻譯：${d.meta.translator}（prompt ${d.meta.prompt_version}）`;
   show("v-results");
 }
@@ -473,6 +599,10 @@ function download() {
     headline(d).filter(Boolean).join(" "), "",
     "原文分析：" + MOTIVES.map((m) => `${NAMES[m]} ${d.summary.direct[m]}`).join("，"),
     "英文翻譯後分析：" + (d.summary.translated ? MOTIVES.map((m) => `${NAMES[m]} ${d.summary.translated[m]}`).join("，") : "未有"), ""];
+  if (lastProtocol) {
+    lines.push("寫作時間：" + lastProtocol.times.map(mmss).join("、"));
+    lines.push(...(lastProtocol.notes.length ? ["非標準：", ...lastProtocol.notes.map((x) => "  " + x)] : ["四個故事都喺建議時間內一次過完成。"]), "");
+  }
   pictures.forEach((p, i) => {
     lines.push(`— 第 ${i + 1} 個故事 —`);
     for (const s of d.sentences.filter((x) => x.picture_id === p.id)) {
@@ -510,7 +640,8 @@ async function init() {
   ta.addEventListener("compositionstart", () => (composing = true));
   ta.addEventListener("compositionend", () => { composing = false; onStoryInput(); });
   $("btn-next").addEventListener("click", next);
-  $("btn-start").addEventListener("click", () => { S = fresh(); startRound(0); });
+  $("btn-start").addEventListener("click", () => { S = fresh(); draw(); startRound(0); });
+  document.querySelectorAll(".skip").forEach((b) => b.addEventListener("click", skip));
   $("btn-resume").addEventListener("click", () => { const d = load(); d ? resume(d) : goIntro(); });
   $("btn-delete").addEventListener("click", () => { S = load() || fresh(); confirmDelete(); });
   $("btn-delete-2").addEventListener("click", confirmDelete);
@@ -519,7 +650,7 @@ async function init() {
   $("btn-retry").addEventListener("click", submit);
   $("btn-back-review").addEventListener("click", () => goReview());
   $("btn-download").addEventListener("click", download);
-  $("btn-restart").addEventListener("click", () => { lastResult = null; S = fresh(); goIntro(); });
+  $("btn-restart").addEventListener("click", () => { lastResult = null; lastProtocol = null; S = fresh(); goIntro(); });
 
   try {
     const probe = "pse-hk:probe";
@@ -531,13 +662,11 @@ async function init() {
   }
 
   try {
-    pictures = (await (await fetch("stimuli.json")).json()).pictures;
+    pool = (await (await fetch("stimuli.json")).json()).pictures;
   } catch {
     $("app").prepend(h("p", { class: "notice", role: "alert" }, "頁面載入唔完整，請重新整理。"));
     return;
   }
-  credits($("credits-intro"));
-  credits($("credits-results"));
   goIntro();
 }
 

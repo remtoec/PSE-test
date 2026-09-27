@@ -27,8 +27,9 @@
     <h1>圖畫故事</h1>
     <p class="lede">睇四張圖片，寫低你想像中嘅故事。大約需要 15–20 分鐘，冇標準答案。你可以用廣東話、中文、英文，或者混合使用。</p>
     <ol class="steps">
-      <li>每張圖會顯示 10 秒，然後收起。</li>
-      <li>之後有大約 4 分鐘寫故事——時間到都唔會自動提交，寫完可以早啲繼續。</li>
+      <li>每張圖會顯示 10 秒，然後收起。見過嘅圖可以「換一張」，最多換 4 次。</li>
+      <li>之後有大約 4 分鐘寫故事——時間到都唔會自動提交，寫完可以早啲繼續。超時或者中途離開，結果會註明。</li>
+      <li>按「下一張」之後，嗰個故事就定咗，唔可以返轉頭改。</li>
       <li>四個故事寫完，你會見到一份實驗性嘅故事主題分析。</li>
     </ol>
     <p class="fine">呢個係一個實驗性小活動，唔係性格測驗。</p>
@@ -39,7 +40,7 @@
       <button id="btn-resume" class="primary" hidden>繼續上次嘅故事</button>
       <button id="btn-delete" class="quiet" hidden>刪除草稿</button>
     </div>
-    <details class="credits"><summary>圖片來源</summary><ul id="credits-intro"></ul></details>
+    <p class="fine">圖片來源會喺完成之後先顯示，避免影響你嘅想像。</p>
   </section>
 
   <!-- Picture viewing -->
@@ -55,7 +56,7 @@
     </figure>
     <div class="countdown" aria-hidden="true"><div id="countdown-bar"></div></div>
     <p class="hint">請留意圖中嘅人同發生緊嘅事。圖片會自動收起。</p>
-    <p class="credit-line" id="credit-line"></p>
+    <div class="actions"><button class="quiet skip" type="button">換一張</button></div>
   </section>
 
   <!-- Writing -->
@@ -65,22 +66,25 @@
     <ul class="prompts">
       <li>發生緊咩事？邊啲人喺度？</li>
       <li>之前發生過咩事？</li>
-      <li>佢哋諗緊、感受到、想要啲咩？</li>
+      <li>佢哋諗緊啲咩？有咩感受？想做或者想得到啲咩？</li>
       <li>之後會點？</li>
     </ul>
+    <p class="fine">小貼士：講明係邊個（例如「個女仔」「嗰個醫生」），少啲用「佢」；每句用句號（。）完結。</p>
     <label for="story" class="sr-only">故事</label>
     <textarea id="story" rows="10" spellcheck="false" autocomplete="off" placeholder="喺度寫……"></textarea>
     <div class="meta-row"><span id="char-count"></span><span id="save-state" aria-live="polite"></span></div>
-    <p id="time-up" class="gentle" hidden>建議時間到咗。你可以繼續寫完，準備好就按「下一張」。</p>
+    <p id="time-up" class="gentle" hidden>建議時間到咗。你可以繼續寫完，準備好就按「下一張」。結果會註明呢個故事超時。</p>
+    <p id="short-note" class="gentle" role="status" hidden></p>
     <div class="actions">
       <button id="btn-next" class="primary" disabled>下一張</button>
+      <button class="quiet skip" type="button">換一張</button>
     </div>
   </section>
 
   <!-- Review -->
   <section id="v-review" class="view" hidden>
-    <h2>檢查你嘅故事</h2>
-    <p class="lede">提交之前仲可以修改。</p>
+    <h2>你嘅四個故事</h2>
+    <p class="lede">故事寫完就定咗，唔可以再改。準備好就提交。</p>
     <p id="review-notice" class="notice" role="alert" hidden></p>
     <div id="review-list"></div>
     <div class="actions">
@@ -128,6 +132,7 @@
     </dl>
 
     <p class="disclaimer">呢個係實驗性嘅自動編碼，用一個主要以德文故事訓練嘅模型。佢未經驗證適用於廣東話，亦唔係性格測驗，唔可以用嚟判斷任何人嘅真實動機。</p>
+    <div id="protocol" class="fine"></div>
     <p id="stats" class="fine"></p>
     <p class="fine">重新載入頁面唔會保留結果，除非你先下載。</p>
     <div class="actions">

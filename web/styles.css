@@ -120,7 +120,6 @@ button:disabled { opacity: .35; cursor: not-allowed; }
 .countdown { height: 3px; background: var(--rule); margin: 1rem 0; border-radius: 3px; overflow: hidden; }
 #countdown-bar { height: 100%; background: var(--seal); width: 100%; transform-origin: left; }
 .hint { color: var(--ink-2); font-size: .95rem; }
-.credit-line { font-size: .72rem; color: var(--ink-2); opacity: .8; }
 
 /* writing */
 .prompts { list-style: none; padding: 0; margin: 0 0 1rem; color: var(--ink-2); font-size: .95rem; }
@@ -196,8 +195,10 @@ textarea:focus { outline: none; border-color: var(--ink-2); }
 details.card { background: var(--card); border: 1px solid var(--rule); border-radius: 8px; margin-bottom: .5rem; }
 details.card summary { list-style: none; padding: .75em 1em; cursor: pointer; display: flex; gap: .6em; align-items: flex-start; }
 details.card summary::-webkit-details-marker { display: none; }
-details.card summary .txt { flex: 1; overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
-details.card[open] summary .txt { -webkit-line-clamp: unset; }
+details.card summary .txt { flex: 1; min-width: 0; }
+details.card summary .txt > span { overflow: hidden; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; }
+details.card summary .en { color: var(--ink-2); font-size: .88rem; margin-top: .2em; }
+details.card[open] summary .txt > span { -webkit-line-clamp: unset; }
 .card-body { padding: 0 1em 1em; font-size: .92rem; }
 .card-body dt { color: var(--ink-2); font-size: .78rem; margin-top: .7em; }
 .card-body dd { margin: 0; }

@@ -46,7 +46,7 @@ def test_sentence_ids_are_stable():
     ({"stories": []}, "wrong_story_count"),
     (body(("a", " \n ", "c", "d")), "empty_story"),
     ({"stories": [{"picture_id": "p1", "text": "a"}] * 4}, "duplicate_picture"),
-    ({"stories": [{"picture_id": "p9", "text": "a"}] + body()["stories"][1:]}, "unknown_picture"),
+    ({"stories": [{"picture_id": "p10", "text": "a"}] + body()["stories"][1:]}, "unknown_picture"),
     ({"stories": [{"picture_id": "p1", "text": 5}] + body()["stories"][1:]}, "invalid_story"),
     (body(("字" * 3001, "b", "c", "d")), "story_too_long"),
 ])
@@ -57,10 +57,12 @@ def test_validate_rejects(payload, code):
     assert "字字字" not in str(e.value.body())  # never echo stories
 
 
-def test_validate_preserves_text_and_orders():
+def test_validate_preserves_text_and_shown_order():
     b = body(("  a  b.", "b", "c", "d"))
+    b["stories"][3]["picture_id"] = "p9"  # any pool picture
     b["stories"].reverse()
-    assert list(validate(b).items())[0] == ("p1", "  a  b.")
+    assert list(validate(b)) == ["p9", "p3", "p2", "p1"]
+    assert validate(b)["p1"] == "  a  b."
 
 
 def test_too_many_sentences():
@@ -104,3 +106,11 @@ def test_fallback_response_has_no_partial_comparison():
     assert all(s["english"] is None and s["translated"] is None and s["uncertain"] is None for s in r["sentences"])
     assert r["summary"]["direct"]["ach"] == len(items)
     assert r["summary"]["total_chars"]["p1"] == 4
+
+
+def test_picture_pool_matches_stimuli():
+    import json
+    from scoring import PICTURE_IDS
+    pics = json.loads((Path(__file__).resolve().parents[1] / "web" / "stimuli.json").read_text(encoding="utf-8"))["pictures"]
+    assert {p["id"] for p in pics} == PICTURE_IDS
+    assert all((Path(__file__).resolve().parents[1] / "web" / p["file"]).is_file() for p in pics)

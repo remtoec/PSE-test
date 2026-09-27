@@ -44,6 +44,15 @@ These are single measurements, not guarantees. No wait estimate is shown to part
 | Backend down on submit | Pass: error with cooldown retry; draft retained with `step=review` |
 | Result fixtures (`tests/web_fixtures.js`) | Pass: shared leader, disagreement, tie, zero, sparse, fallback, 6 invalid shapes rejected |
 
+## Redeploy: picture pool, locked stories, prompt v3 (2026-09-27)
+
+| Check | Result |
+|---|---|
+| Backend `modal deploy` | Same URL. `/score` with pool ids p9/p2/p5/p7 returned 200 in 4.2 s with `prompt_version=v3` and `translation_failed=false`. CORS header present. Passive 俾 translated correctly |
+| Site `npx wrangler deploy` | Version `7f812466-13e4-43e0-a17f-14614b414d34`. Live page has 9 pictures (all 200), skip buttons, no picture credits before results, new prompts and tip, lock notice |
+| Local browser checks | Random draw; 4 skips never re-drawn in a later run; review read-only except the flagged story; short-story nudge once; timing, away and break notes on results; English visible on sentence cards; partial-match headline |
+| Translation regression (`scripts/eval_translation.py`) | v3: 30/33 dev on 3 of 3 runs; v1: 21–23/33 (see `spike-results.md`) |
+
 ## Still to do (needs the owner)
 
 - [ ] Put a Workers-AI-scoped API token in the Modal secret (see `operations.md`), then re-run a submission and confirm `translation_failed=false`.

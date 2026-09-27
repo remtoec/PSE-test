@@ -74,11 +74,17 @@ def test_instruction_like_text_stays_in_user_data():
 
 
 def test_batches_bounded():
-    items = [{"id": str(i), "source": "x" * 100} for i in range(50)]
+    items = [{"id": f"p1-s{i}", "source": "x" * 100} for i in range(50)]
     bs = batches(items)
     assert all(len(b) <= 20 and sum(len(i["source"]) for i in b) <= 2400 for b in bs)
     assert sum(map(len, bs)) == 50
-    assert batches([{"id": "a", "source": "x" * 3000}]) == [[{"id": "a", "source": "x" * 3000}]]
+    assert batches([{"id": "p1-s1", "source": "x" * 3000}]) == [[{"id": "p1-s1", "source": "x" * 3000}]]
+
+
+def test_batches_keep_one_story_together():
+    # The translator needs the rest of the story to resolve 佢 and dropped subjects.
+    items = [{"id": f"{p}-s{i}", "source": "句。"} for p in ("p3", "p7") for i in range(1, 4)]
+    assert [[i["id"] for i in b] for b in batches(items)] == [["p3-s1", "p3-s2", "p3-s3"], ["p7-s1", "p7-s2", "p7-s3"]]
 
 
 # --- provider behaviour ---

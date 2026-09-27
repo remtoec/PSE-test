@@ -4,3 +4,4 @@ __pycache__/
 models/
 assets/newpic-raw/
 .wrangler/
+assets/classic-raw/

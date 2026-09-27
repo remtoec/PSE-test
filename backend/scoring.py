@@ -1,7 +1,8 @@
 """Validation, segmentation, AMC adapter and aggregation. No model import here."""
 import re
 
-PICTURE_IDS = ("p1", "p2", "p3", "p4")  # fixed order; mirrors web/stimuli.json
+PICTURE_IDS = frozenset(f"p{i}" for i in range(1, 10))  # the pool; mirrors web/stimuli.json
+STORIES_PER_RUN = 4
 MOTIVES = ("ach", "aff", "pow")
 MAX_BODY_BYTES = 64 * 1024
 MAX_STORY_CHARS = 3000  # Unicode code points, i.e. len(str)
@@ -28,11 +29,11 @@ class InputError(Exception):
 
 
 def validate(payload):
-    """Return {picture_id: text} in fixed order, or raise InputError(400)."""
+    """Return {picture_id: text} in the order shown, or raise InputError(400)."""
     if not isinstance(payload, dict) or not isinstance(payload.get("stories"), list):
         raise InputError(400, "invalid_body", "Expected {\"stories\": [...]}.")
     stories = payload["stories"]
-    if len(stories) != len(PICTURE_IDS):
+    if len(stories) != STORIES_PER_RUN:
         raise InputError(400, "wrong_story_count", "Exactly four stories are required.")
     seen = {}
     for item in stories:
@@ -48,7 +49,7 @@ def validate(payload):
         if len(text) > MAX_STORY_CHARS:
             raise InputError(400, "story_too_long", f"Story exceeds {MAX_STORY_CHARS} characters.", picture_id=pid)
         seen[pid] = text
-    return {pid: seen[pid] for pid in PICTURE_IDS}
+    return seen
 
 
 def segment(text):
