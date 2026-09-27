@@ -1,6 +1,6 @@
-// Result-rendering checks. Paste into the page console (or run via a browser tool)
-// on http://localhost:8080 after it has loaded. Returns a list of failures ([] = pass).
-(() => {
+// Result-rendering checks, loaded only by scripts/preview_ui.py at /__test__/.
+// Returns a list of failures ([] = pass).
+function runWebFixtures() {
   const fails = [];
   const check = (name, cond) => { if (!cond) fails.push(name); };
   const sc = (...m) => ({ motives: m, scores: { ach: 0.1, aff: 0.1, pow: 0.1, null: 0.9 } });
@@ -36,10 +36,15 @@
   const ten = (d, t) => Array.from({ length: 10 }, () => [d, t]);
   render(make(ten(["aff"], ["aff"])));
   check("shared leader", H().includes("兩種分析都") && H().includes("親和"));
-  check("english visible without expanding", document.querySelector("#cards summary .en").textContent.includes("Sentence 0"));
+  check("source is the sentence entry point", document.querySelector("#cards summary .txt").textContent.includes("句子 0"));
   check("agreement shown", document.getElementById("agreement").textContent.includes("10 ／ 10"));
-  check("tally is a sentence count", document.getElementById("tally").textContent.includes("連結／親和10 句")
-    && document.querySelectorAll("#tally .dot.aff").length === 10);
+  check("both paths lead the results", document.querySelectorAll("#tally .path-panel").length === 2
+    && !document.getElementById("tally").closest("details"));
+  check("both paths show sentence counts", document.querySelectorAll("#tally .tally-row .n").length === 6
+    && document.getElementById("tally").textContent.includes("10 句"));
+  check("correct theory bridge", document.getElementById("reflection")?.textContent.includes("competence")
+    && document.getElementById("reflection")?.textContent.includes("relatedness")
+    && !document.getElementById("reflection").querySelector("input,textarea"));
 
   render(make([...ten(["aff"], ["aff"]), ...ten([], ["ach"])]));
   check("partial match is not a disagreement", !H().includes("唔一致") && H().includes("親和")
@@ -60,6 +65,8 @@
   render(make(ten(["aff"], []), true));
   check("fallback headline", H().startsWith("原文分析"));
   check("fallback not zero", document.getElementById("bars").textContent.includes("翻譯未能完成"));
+  check("fallback visible in main comparison", document.getElementById("tally").textContent.includes("翻譯未能完成")
+    && document.querySelectorAll("#tally .path-panel")[1].querySelectorAll(".tally-row").length === 0);
   check("fallback cards", document.getElementById("cards").textContent.includes("未有翻譯"));
 
   // empty motive lists compare equal
@@ -80,5 +87,36 @@
   x.sentences[0].source = '<img src=x onerror="window.__xss2=1">';
   render(x);
   check("no markup", !document.querySelector("#cards img[src='x']") && document.getElementById("cards").textContent.includes("<img"));
+  document.getElementById("reflection-next").click();
+  check("reflection advances", !document.querySelector('[data-reflection="1"]').hidden
+    && document.querySelector('[data-reflection="0"]').hidden);
+  document.getElementById("reflection-prev").click();
+  check("reflection goes back", !document.querySelector('[data-reflection="0"]').hidden);
+  document.getElementById("reflection-next").click();
+  document.getElementById("reflection-next").click();
+  document.getElementById("reflection-next").click();
+  check("reflection closes without collecting answers", !document.getElementById("reflection-closing").hidden);
+
+  // Leave a clearly synthetic, readable debrief for visual QA.
+  const demo = make([
+    [["ach"], ["ach"]], [["aff"], ["aff"]], [[], ["pow"]], [["pow"], ["pow"]],
+    [[], ["ach"]], [["aff"], ["aff"]], [["pow"], ["pow"]], [[], ["aff"]],
+  ], new URLSearchParams(location.search).get('outcome') === 'fallback');
+  const stories = [
+    ['佢練習咗好多次，今次想試吓可唔可以做得更好。', 'She had practised many times and wanted to see if she could do better.'],
+    ['兩個人好耐冇見，坐低之後慢慢傾返以前嘅事。', 'They had not met for a long time and sat down to talk about the past.'],
+    ['佢希望其他人聽完之後，會願意一齊改變。', 'He hoped that after listening, the others would be willing to make a change together.'],
+    ['佢企出嚟，帶大家試另一個方法。', 'She stepped forward and led everyone in trying another approach.'],
+    ['就算今次未做到，佢都想再試一次。', 'Even if he could not do it this time, he wanted to try again.'],
+    ['最後佢行返過去，坐喺朋友身邊。', 'In the end she went back and sat beside her friend.'],
+    ['佢唔想只係跟住做，想令大家認真考慮自己嘅意見。', 'He wanted people to consider his opinion seriously rather than simply following along.'],
+    ['散場之前，佢問對方下次仲會唔會嚟。', 'Before leaving, she asked whether the other person would come again.'],
+  ];
+  demo.sentences.forEach((s, i) => { s.source = stories[i][0]; if (!demo.translation_failed) s.english = stories[i][1]; });
+  lastMode = 'bookclub';
+  render(demo);
+  lastResult = demo;
+  check("new result resets reflection", document.querySelector('[data-reflection="1"]').hidden
+    && document.getElementById("reflection-closing").hidden);
   return fails;
-})();
+}

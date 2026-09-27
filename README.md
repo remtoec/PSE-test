@@ -1,8 +1,31 @@
-# PSE-HK · 圖畫故事
+# PSE-HK · 故事以外
 
 A small, mobile-first Picture Story Exercise (PSE) for a Hong Kong reading group. Participants look at four pictures, write a short story about each in Cantonese, Chinese, English or a mix, and get an **experimental** automated analysis of achievement, affiliation and power imagery in their stories.
 
 The analysis is exploratory. It is not a personality test. The coding model was trained mostly on German stories, and nobody has shown that it works for Cantonese.
+
+## Interpretation boundary
+
+The experience is a reading companion to Dan P. McAdams's *The Art and Science
+of Personality Development* (2015), especially Chapter 6, “The Motivational
+Agenda”: ambiguous pictures → imagined wants → story themes → reflection on
+one's own goals. It detects imagery in four stories, not a participant's “true
+motives.” PSE is one window into the Motivated Agent, which also includes
+conscious goals, plans, projects, values and aspirations. These imagined
+stories are not autobiographical narratives.
+
+Original-text and translated-text results receive equal visual prominence.
+Neither is ground truth, and agreement is not a confidence score. Counts are
+raw sentence-level detections, not standardized psychological scores,
+percentiles, diagnoses or validated Cantonese norms.
+
+**Picture-pull norms are used only to choose a reasonably varied fixed
+bookclub set. They are not used to normalize, percentile, or interpret an
+individual participant's result.**
+
+The private reflection uses competence/relatedness, intrinsic/extrinsic and
+promotion/prevention. It asks for no personal-goal input and transmits no
+reflection answers. The final comparison may simply be “no connection.”
 
 - Site: https://pse-hk.aesopb15254.workers.dev
 - Backend: https://remtoec--pse-hk-scorer-web.modal.run
@@ -28,7 +51,7 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 - Sentence-level motive coding with the Automated Motive Coder (AMC) along two paths:
   1. **Direct:** the original sentence goes straight to AMC.
   2. **Translated:** the sentence is first translated conservatively into English, then sent to AMC.
-- The results can be downloaded as a text file: interpretation and stories first, technical record after.
+- Results present both paths together, then sentence-level examples, a private three-question McAdams reflection and optional technical detail. The download includes both paths, the stories and reflection prompts before the technical record.
 
 **Out of scope**
 
@@ -86,7 +109,9 @@ The classic pictures (ship captain, couple by river, trapeze artists, women in l
 .venv/Scripts/python.exe -m pytest tests -q
 .venv/Scripts/python.exe backend/app.py              # API on :8000, uses models/amc
 python -m http.server 8080 --directory web           # UI on :8080
-# paste tests/web_fixtures.js into the page console → [] means pass
+# local-only fixture runner, no live model requests
+python scripts/preview_ui.py                        # UI on :8081; /__test__/ runs result fixtures
+# /__test__/?mode=flow exercises the full UI with a synthetic busy response
 
 # deploy
 npx wrangler deploy                                  # static site

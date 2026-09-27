@@ -168,7 +168,13 @@ const hasWriting = () => Object.values(S.stories).some((t) => t.trim());
 
 function show(id) {
   document.querySelectorAll(".view").forEach((v) => (v.hidden = v.id !== id));
+  const stage = id === "v-intro" ? "intro" : id === "v-results" ? "results" : "write";
+  document.querySelectorAll("[data-stage]").forEach((item) => {
+    if (item.dataset.stage === stage) item.setAttribute("aria-current", "step");
+    else item.removeAttribute("aria-current");
+  });
   window.scrollTo(0, 0);
+  $(id).querySelector("h1, h2")?.focus({ preventScroll: true });
 }
 
 function goIntro() {
@@ -200,6 +206,9 @@ function startRound(i, phase = "view") {
   if (phase === "view" && S.viewLeft <= 0) S.viewLeft = VIEW_MS;
   save();
   document.querySelectorAll(".round-no").forEach((e) => (e.textContent = `第 ${i + 1} ／ 4 張`));
+  document.querySelectorAll(".round-progress").forEach((e) => e.replaceChildren(
+    ...Array.from({ length: PER_RUN }, (_, n) => h("span", { class: n < i ? "complete" : n === i ? "current" : "" }))));
+  $("btn-next").textContent = i === PER_RUN - 1 ? "完成四個故事 →" : "下一張 →";
   updateSkip();
   if (i === 3) warm();
   phase === "view" ? showPicture() : showWriting();
@@ -537,8 +546,30 @@ function barsGroup(title, counts, max) {
 function tally(counts) {
   return MOTIVES.map((m) => h("div", { class: "tally-row" },
     h("span", {}, NAMES[m]),
-    h("span", { class: "tally-dots", "aria-hidden": "true" }, Array.from({ length: counts[m] }, () => h("span", { class: `dot ${m}` }))),
-    h("span", { class: "n" }, `${counts[m]} 句`)));
+    h("span", { class: "n" }, `${counts[m]} 句`),
+    h("span", { class: "tally-dots", "aria-hidden": "true" }, Array.from({ length: counts[m] }, () => h("span", { class: `dot ${m}` })))));
+}
+
+function pathPanel(title, caption, counts) {
+  return h("section", { class: "path-panel", "aria-label": title },
+    h("h3", {}, title), h("p", { class: "path-caption" }, caption),
+    counts ? tally(counts) : h("p", { class: "bars-missing" }, "翻譯未能完成，今次冇呢部分。唔代表零個主題。"));
+}
+
+let reflectionStep = 0;
+function setReflection(step, focus = false) {
+  reflectionStep = Math.max(0, Math.min(2, step));
+  document.querySelectorAll("[data-reflection]").forEach((card, i) => {
+    card.hidden = i !== reflectionStep;
+    if (i === reflectionStep && focus) {
+      const title = card.querySelector("h3");
+      title.setAttribute("tabindex", "-1");
+      title.focus({ preventScroll: true });
+    }
+  });
+  $("reflection-count").textContent = `0${reflectionStep + 1} / 03`;
+  $("reflection-prev").disabled = reflectionStep === 0;
+  $("reflection-next").textContent = reflectionStep === 2 ? "最後，問吓自己 ↗" : "下一個問題 →";
 }
 
 function labelList(score) {
@@ -582,7 +613,9 @@ function renderResults(d) {
   $("headline").textContent = head;
   $("headline-note").textContent = [note, n < 8 ? `今次只有 ${n} 句，可以分析嘅材料有限，結果只可以當作參考。` : ""].filter(Boolean).join(" ");
 
-  $("tally").replaceChildren(...tally(d.summary.direct));
+  $("tally").replaceChildren(
+    pathPanel("原文直接分析", "直接讀你寫落嘅句子。", d.summary.direct),
+    pathPanel("英文翻譯後再分析", "先翻譯，再由同一模型閱讀。", d.summary.translated));
   $("bookclub-note").hidden = lastMode !== "bookclub";
 
   const all = [d.summary.direct, d.summary.translated].filter(Boolean);
@@ -600,10 +633,11 @@ function renderResults(d) {
     return h("div", { class: "pic-group" },
       h("div", { class: "pic-head" }, h("img", { src: p.file, alt: "" }), h("span", {}, `第 ${i + 1} 個故事`)),
       ss.map((s) => h("details", { class: "card" },
-        h("summary", {}, h("span", { class: "chips" }, dots(s)),
-          h("div", { class: "txt" }, h("span", {}, s.source), h("span", { class: "en", lang: "en" }, "EN: ", s.english ?? "（未有翻譯）"))),
+        h("summary", {}, h("span", { class: "chips", "aria-hidden": "true" }, dots(s)),
+          h("div", { class: "txt" }, h("span", {}, s.source))),
         h("dl", { class: "card-body" },
-          s.uncertain ? h("dd", { class: "flag-uncertain" }, "⚑ 翻譯可能有歧義") : null,
+          h("dt", {}, "英文翻譯"), h("dd", { class: "en", lang: s.english ? "en" : "zh-Hant-HK" }, s.english ?? "（未有翻譯）"),
+          s.uncertain ? [h("dt", { class: "flag-uncertain" }, "留意翻譯"), h("dd", { class: "flag-uncertain" }, "翻譯可能有歧義，可以對照原句再睇。")] : null,
           h("dt", {}, "原文分析"), h("dd", {}, labelList(s.direct)),
           h("dt", {}, "英文翻譯後分析"), h("dd", {}, labelList(s.translated))))));
   }));
@@ -613,15 +647,20 @@ function renderResults(d) {
   $("stats").textContent = [chars != null ? `總字數：${chars}` : "", `句子：${n}`, d.summary.english_words != null ? `英文翻譯字數：${d.summary.english_words}` : ""].filter(Boolean).join(" · ");
   credits($("credits-results"));
   $("model-meta").textContent = `模型：${d.meta.amc_model} @ ${String(d.meta.amc_revision).slice(0, 7)} · 翻譯：${d.meta.translator}（prompt ${d.meta.prompt_version}）`;
+  setReflection(0);
+  $("reflection-closing").hidden = true;
+  document.querySelectorAll("#v-results details").forEach((detail) => { detail.open = false; });
   show("v-results");
 }
 
 function download() {
   if (!lastResult) return;
   const d = lastResult;
-  const lines = ["圖畫故事 · 實驗性分析結果", new Date().toLocaleString("zh-HK"), "",
+  const lines = ["故事以外 · 故事同閱讀筆記", new Date().toLocaleString("zh-HK"), "",
     headline(d).filter(Boolean).join(" "), "",
     "被辨認到每個主題嘅句子數目（原文分析）：" + MOTIVES.map((m) => `${NAMES[m]} ${d.summary.direct[m]}`).join("，"),
+    "被辨認到每個主題嘅句子數目（英文翻譯後分析）：" + (d.summary.translated ? MOTIVES.map((m) => `${NAMES[m]} ${d.summary.translated[m]}`).join("，") : "翻譯未能完成，唔代表零個主題。"),
+    "原文分析可能漏咗廣東話表達；翻譯亦可能改變意思。兩條路線用同一個模型，一致唔代表準確。",
     "呢啲係今次故事入面出現嘅主題，唔係人格類型，亦唔係分數。", ""];
   pictures.forEach((p, i) => {
     lines.push(`— 第 ${i + 1} 個故事 —`);
@@ -631,8 +670,14 @@ function download() {
     }
     lines.push("");
   });
-  lines.push("—— 技術資料 ——", `圖片：${lastMode === "bookclub" ? "讀書會固定一組" : "隨機抽出"}`,
-    "英文翻譯後分析：" + (d.summary.translated ? MOTIVES.map((m) => `${NAMES[m]} ${d.summary.translated[m]}`).join("，") : "未有"),
+  lines.push("—— 故事以外 ——", "McAdams · The Art and Science of Personality Development (2015), Chapter 6: The Motivational Agenda",
+    "Motivated Agent：我想要乜、重視乜，同埋正追求緊乜？PSE 只係其中一扇窗。",
+    "諗一件你最近真係想做到嘅事。唔需要交答案俾任何人。",
+    "1. Competence / relatedness：做到、掌握、產生影響，定係建立、維持或照顧關係？定係兩樣都有？",
+    "2. Intrinsic / extrinsic：件事本身有意思，定係回報、認同、責任或者其他外在原因？",
+    "3. Promotion / prevention：得到理想結果，定係避免唔想發生嘅結果？",
+    "故事人物想要嘅，同你自己而家最想要嘅，係咪同一回事？冇乜關係都可以，冇一個係更真嘅你。", "",
+    "—— 技術資料 ——", `圖片：${lastMode === "bookclub" ? "讀書會固定一組" : "隨機抽出"}`,
     d.summary.agreement ? `兩種分析一致：${d.summary.agreement.same} ／ ${d.summary.agreement.total} 句` : "今次冇翻譯，所以冇比較。");
   if (lastProtocol) {
     lines.push("寫作時間：" + lastProtocol.times.map(mmss).join("、"));
@@ -663,6 +708,7 @@ function confirmDelete() {
 }
 
 async function init() {
+  document.querySelector(".prompt-notes").open = window.matchMedia("(min-width: 601px)").matches;
   const ta = $("story");
   ta.addEventListener("input", onStoryInput);
   ta.addEventListener("compositionstart", () => (composing = true));
@@ -681,6 +727,15 @@ async function init() {
   $("btn-retry").addEventListener("click", submit);
   $("btn-back-review").addEventListener("click", () => goReview());
   $("btn-download").addEventListener("click", download);
+  $("reflection-prev").addEventListener("click", () => setReflection(reflectionStep - 1, true));
+  $("reflection-next").addEventListener("click", () => {
+    if (reflectionStep < 2) setReflection(reflectionStep + 1, true);
+    else {
+      $("reflection-closing").hidden = false;
+      $("reflection-closing").scrollIntoView({ behavior: "auto", block: "center" });
+      $("reflection-closing").focus({ preventScroll: true });
+    }
+  });
   $("btn-restart").addEventListener("click", () => { lastResult = null; lastProtocol = null; S = fresh(); goIntro(); });
 
   try {
