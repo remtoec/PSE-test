@@ -96,6 +96,13 @@ actual image order, source identities, guidance version, timing, and picture
 pulls. Existing p1–p9 image bytes and IDs are preserved. Deploy the expanded
 backend allowlist before releasing the new frontend.
 
+## Current policy
+
+The subsequent [copy and benchmark review](copy-benchmark-rationale.md)
+supersedes the rules below: faint detections are exploratory only; stronger
+wording requires cross-story support and omission stability; reference shares
+are explicitly not average-person scores. The following entries are historical.
+
 ## 2026-09-29 revision: results with a benchmark
 
 The owner reviewed the flow and found it too text-heavy for phones, found the

@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>畫中有你 · PSE-HK 讀書會練習</title>
-<meta name="description" content="四張圖，四個完整故事。你寫落嘅人物，藏住你自己想要嘅嘢。">
+<meta name="description" content="四張圖，四個完整故事。由人物想要嘅嘢，開始一場同自己嘅對話。">
 <meta property="og:title" content="畫中有你 · 每張圖，都係故事嘅中間">
 <meta property="og:description" content="約 20 分鐘嘅圖畫故事練習。冇標準答案。">
 <meta name="theme-color" content="#f6f4ed">
@@ -24,7 +24,7 @@
   <section id="v-intro" class="view" hidden aria-labelledby="intro-title">
     <p class="eyebrow">圖畫故事練習 · PSE</p>
     <h1 id="intro-title" tabindex="-1">每張圖，<br>都係故事嘅<span class="accent-text">中間</span>。</h1>
-    <p class="lede">圖入面每個人經歷緊咩？之前發生過咩？最後點收場？由你寫出成個故事。</p>
+    <p class="lede">圖入面嘅人物經歷緊咩？之前發生過咩？最後點收場？由你寫出成個故事。</p>
     <ol class="steps" aria-label="點樣玩">
       <li><b>10 秒</b>睇圖</li>
       <li><b>4 分鐘</b>寫故事</li>
@@ -49,7 +49,7 @@
 
   <section id="v-view" class="view exercise-view" hidden aria-labelledby="view-title">
     <div class="round-bar"><span class="round-no"></span><div class="round-progress" aria-hidden="true"></div></div>
-    <h2 id="view-title" class="round-title" tabindex="-1">記住呢個畫面</h2>
+    <h2 id="view-title" class="round-title" tabindex="-1">睇下呢個畫面</h2>
     <figure class="stimulus"><img id="stim-img" alt=""><div id="img-loading" class="img-state">圖片載入中…</div><div id="img-error" class="img-state" hidden><p>圖片載入唔到。</p><button id="btn-img-retry">再試一次</button></div></figure>
     <div class="countdown" aria-hidden="true"><div id="countdown-bar"></div></div>
     <p class="hint">10 秒後收起，然後由你寫出成個故事。</p>
@@ -61,9 +61,9 @@
     <h2 id="write-title" class="round-title" tabindex="-1">寫出成個故事</h2>
     <p id="lang-note" class="lang-note">英文、廣東話、書面語，或者夾雜都得，點舒服點寫。</p>
     <label for="story" class="sr-only">你嘅故事</label>
-    <textarea id="story" rows="10" spellcheck="false" autocomplete="off" aria-describedby="lang-note" placeholder="圖入面每個人係邊個？他／她而家經歷緊咩？&#10;之前發生咗咩事，令他／她走到呢一刻？&#10;每個人心入面諗緊咩、感受到咩、最想要咩？&#10;最後，每個人點樣收場？&#10;&#10;用「他」「她」、「男人」「女人」或者畀個名，分清楚邊個係邊個。唔使逐題答。"></textarea>
+    <textarea id="story" rows="10" spellcheck="false" autocomplete="off" aria-describedby="lang-note" placeholder="人物係邊個？而家經歷緊咩？&#10;之前發生咗咩事，令故事走到呢一刻？&#10;人物各自諗緊咩、感受到咩、最想要咩？&#10;件事最後點樣收場？&#10;&#10;揀你想寫嘅人物，唔使逐題答。有幾個人物嘅話，可以用名或者身份，等人睇得出邊個做緊咩。"></textarea>
     <div class="meta-row"><span class="arc"><span class="sr-only">提示：</span><span>此刻</span><span>前因</span><span>內心</span><span>結局</span></span><span><span id="char-count"></span> <span id="save-state" aria-live="polite"></span></span></div>
-    <p id="time-up" class="gentle" hidden>差唔多 4 分鐘喇，可以慢慢幫佢哋收個尾。</p>
+    <p id="time-up" class="gentle" hidden>4 分鐘到喇，可以幫個故事收個尾。</p>
     <p id="short-note" class="gentle" role="status" hidden></p>
     <div class="actions writing-actions"><button class="quiet skip" type="button">換一張</button><button id="btn-next" class="primary" disabled>下一張 →</button></div>
     <p class="fine lock-note">按「下一張」之後，呢個故事就定稿。</p>
@@ -87,57 +87,57 @@
       <h1 id="results-title" tabindex="-1"></h1>
       <p id="insight-lede" class="lede"></p>
       <div id="profile" class="profile"></div>
-      <p id="profile-legend" class="legend fine"><span class="key you"></span>你嘅故事<span class="key typical"></span>一般人寫同一組圖</p>
+      <p id="profile-legend" class="legend fine"><span class="key you"></span>你嘅故事<span class="key typical"></span>同組圖片嘅研究參照</p>
       <p id="profile-note" class="fine"></p>
+      <div id="evidence" class="reading-evidence" hidden></div>
       <p id="brought" class="brought-line" hidden></p>
     </div>
 
     <section id="meaning" class="chapter" aria-labelledby="meaning-title">
-      <h2 id="meaning-title">研究點講呢啲動機？</h2>
+      <h2 id="meaning-title">呢啲主題，可以點理解？</h2>
       <div id="motive-notes">
         <details class="motive-note" data-motive="ach"><summary><span class="dot ach"></span><b>成就</b>想做得好<span class="need-tag">勝任</span></summary>
           <p>故事人物想做好一件事、達到或者超越一個標準、克服挑戰。</p>
-          <p class="fine">研究發現，故事入面呢類主題多嘅人，通常：</p>
-          <ul><li>鍾意唔太難、唔太易嘅挑戰，想即刻知道做得好唔好</li><li>有恆心、講效率，為咗成果有時會走捷徑</li><li>自制力高，眼光放喺將來</li><li>靜唔落嚟，鍾意創新同改變</li></ul>
+          <p>呢個角度關心「我可唔可以做得到？」。想進步，可以令人投入練習；當成敗變得太重要，亦可能難以容許自己失手。</p>
+          <p class="fine">回望故事：人物想做好件事，係享受挑戰，定係好怕做唔到？</p>
         </details>
         <details class="motive-note" data-motive="aff"><summary><span class="dot aff"></span><b>連結</b>想親近<span class="need-tag">關係</span></summary>
           <p>故事人物想建立、維持或者修補溫暖嘅關係：關心、陪伴、被接納。</p>
-          <p class="fine">親密動機研究發現，呢類主題多嘅人，通常：</p>
-          <ul><li>同朋友相處時多笑、眼神友善</li><li>成日諗起朋友同友誼</li><li>被身邊人視為細心、真誠、關懷，係好嘅聆聽者</li><li>重視小圈子入面嘅分享同溫暖；整體快樂感同心理健康較高</li></ul>
+          <p>呢個角度關心「我哋可唔可以靠近？」。重視關係，可以帶來陪伴同照顧；當好怕失去連結，亦可能難以講出自己唔同嘅想法。</p>
+          <p class="fine">回望故事：人物想靠近邊個？靠近嘅同時，有冇留低自己嘅位置？</p>
         </details>
         <details class="motive-note" data-motive="pow"><summary><span class="dot pow"></span><b>影響力</b>想有份量<span class="need-tag">勝任</span></summary>
           <p>故事人物想感到強大、影響或者帶領其他人、爭取地位同話語權。</p>
-          <p class="fine">研究發現，故事入面呢類主題多嘅人，通常：</p>
-          <ul><li>喺唔同場合爭取影響力；較多做老師、治療師、管理層等影響人嘅工作</li><li>為咗被睇見，願意冒大風險</li><li>朋友圈大、吸引注意，被視為有魄力嘅領袖</li><li>權力似火：可以用嚟幫人、做義工，亦可以變成攻擊。處於低位時壓力特別大；人生目標以權力為主嘅人，自尊同快樂感較低</li></ul>
+          <p>呢個角度關心「我可唔可以令事情有所改變？」。想有影響，可以令人帶頭、保護人或者爭取改變；當好需要掌握局面，亦可能難以留空間俾別人。</p>
+          <p class="fine">回望故事：人物想影響邊個、改變啲乜？其他人又有幾多選擇？</p>
         </details>
       </div>
-      <p class="fine">以上係群體研究嘅傾向，唔係對你嘅判斷。</p>
+      <p class="fine">以上係理解故事嘅角度同反思問題，唔係由結果推斷你嘅性格。每種主題都可以有唔同面向。</p>
     </section>
 
     <section id="pictures" class="chapter" aria-labelledby="pictures-title">
       <h2 id="pictures-title">逐張圖睇</h2>
-      <p class="chapter-intro">每張圖本身都會將故事拉去某個方向。<span class="brought-mark" aria-hidden="true">✦</span> 係圖片一般唔會引出、由你帶入嘅主題，最接近你自己嘅投射。</p>
+      <p class="chapter-intro">研究故事入面，每張圖都有較突出嘅主題。<span class="brought-mark" aria-hidden="true">✦</span> 表示你亦寫到圖片參照主要方向以外嘅一面，唔代表罕見，亦唔證明係你嘅個人投射。</p>
       <div id="cards"></div>
     </section>
 
     <section id="reflection" class="chapter reflection-chapter" aria-labelledby="reflection-title">
       <p class="eyebrow">畫外，返到你自己</p>
       <h2 id="reflection-title">故事人物想要嘅，<br>同你想要嘅呢？</h2>
-      <p>自我決定論（Self-Determination Theory）認為，人有三種基本心理需要：<strong>勝任</strong>（competence）、<strong>關係</strong>（relatedness）同<strong>自主</strong>（autonomy）。圖畫故事係一個粗略指標，反映你對頭兩種需要有幾敏感；第三種，要問你自己。</p>
+      <p>自我決定論（Self-Determination Theory）提出三種基本心理需要：<strong>勝任</strong>（competence）、<strong>關係</strong>（relatedness）同<strong>自主</strong>（autonomy）。呢度借用三個角度，由故事返到生活；上面嘅主題比例唔係心理需要嘅分數。</p>
       <ol class="reflect-list">
         <li><span class="need-tag">勝任</span>最近有冇一件事，你好想做得更好，或者想有多啲影響？</li>
         <li><span class="need-tag">關係</span>你而家最想同邊個更親近？</li>
         <li><span class="need-tag">自主</span>呢啲「想要」，係你自己揀嘅，定係為咗別人嘅期望？</li>
       </ol>
-      <p class="fine">答案留俾自己，呢度唔會收集任何輸入。動機會隨人生階段改變，今次只係一張快照。</p>
+      <p class="fine">答案留俾自己，呢度唔會收集任何輸入。今次只係四個故事嘅一次閱讀，你可以認同，亦可以有唔同理解。</p>
     </section>
 
     <aside id="bookclub-note" class="bookclub-note" hidden><h3>讀書會見</h3><p></p></aside>
 
     <details class="more technical"><summary>點樣計？限制同技術資料</summary>
       <h4>點樣計</h4>
-      <p>每一句用兩種方法讀：原文直接分析，同翻譯成英文後再分析，兩者都用自動動機編碼模型 AMC。只要其中一種讀法認為一句有某個主題嘅機會達 30%，就計一次（模型本身要 50% 先算），每句每種主題最多計一次。呢個係刻意寧願多計、唔好漏：句子卡入面，未達 50% 嘅會標示「隱約」。上面嘅百分比，係三種主題之間嘅比例。</p>
-      <p>「一般」係 Schönbrodt 等人德國研究入面，專家為同一組圖編碼嘅平均主題比例。語言、編碼方法同故事長度都唔同，所以只係粗略參照，唔係常模、百分位或者分數。模型未經驗證適用於廣東話；故事亦唔係你嘅自傳。</p>
+      <div id="reading-method"></div>
       <h4>兩種讀法</h4>
       <div id="tally" class="comparison"></div>
       <div class="reading-note"><p id="headline"></p><p id="headline-note" class="fine"></p></div>
@@ -148,7 +148,7 @@
       <h4>寫作時間</h4>
       <div id="protocol" class="fine"></div><p id="stats" class="fine"></p>
       <h4>理論背景</h4>
-      <p>Murray 喺 1930 年代設計 TAT，相信人會將自己最強嘅渴望投射落想像故事。McClelland 等人將佢標準化成 PSE，建立成就動機嘅編碼；之後再有權力動機（Winter）同親和／親密動機（McAdams）。成就同權力大致落喺「勝任」嘅範圍，親和同親密對應「關係」。</p>
+      <p>PSE 用想像故事探索成就、親和同權力等動機主題。今次讀書會借用 McAdams 嘅討論，把成就同影響力放喺「勝任」、連結放喺「關係」之下，方便反思；呢種分組唔代表 AMC 量度咗自我決定論嘅心理需要。</p>
       <p class="fine">閱讀脈絡：Dan P. McAdams，<cite lang="en">The Art and Science of Personality Development</cite>（2015），第六章 “The Motivational Agenda”。</p>
       <h4>圖片來源同模型</h4>
       <ul id="credits-results" class="credits"></ul><p id="model-meta" class="fine"></p>

@@ -199,6 +199,8 @@ details.card[open] summary::after { transform: rotate(90deg); }
 .label.none { color: var(--ink-2); border: 1px solid #bac3b5; }
 .label.faint { background: transparent; border: 1px dashed currentColor; }
 .label.faint.ach { color: var(--ach); } .label.faint.aff { color: var(--aff); } .label.faint.pow { color: var(--pow); }
+.reading-evidence { margin-top: 20px; }
+.reading-evidence blockquote { margin: 8px 0 16px; padding: 4px 0 4px 14px; border-left: 2px solid var(--rule); overflow-wrap: anywhere; white-space: pre-wrap; }
 .flag-uncertain { color: var(--annotation); }
 
 .reflection-chapter h2 { margin-bottom: 16px; }

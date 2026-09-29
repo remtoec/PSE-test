@@ -18,17 +18,24 @@ const NAMES = { ach: "成就", aff: "連結／親和", pow: "影響力／權力"
 const SHORT = { ach: "成就", aff: "連結", pow: "影響力" };
 // Self-determination theory: achievement and power sit within competence, affiliation within relatedness.
 const NEEDS = [["勝任", "competence", ["ach", "pow"]], ["關係", "relatedness", ["aff"]]];
-const MIN_THEMES = 3;      // below this many detected themes, no lean is claimed
+const MIN_THEMES = 3;      // label floor; assessReading also checks distinct sentences and pictures
 const LEAN = 0.12;         // share above the pictures' typical share that counts as a clear lean
 const TILT = 0.05;         // ...and as a slight one
-// A theme counts when either reading rates it at least this likely; the model's own cut-off is 0.5.
-// Deliberately sensitive: for this exercise a faint false positive beats saying nothing.
+// Exploratory labels only. Model scores are not calibrated Cantonese probabilities.
 const FAINT = 0.3;
 const TYPICAL_OF_MAX = 0.75; // a picture "usually" pulls motives within 75% of its strongest pull
 // Boxer, couple by river, women in laboratory, ship captain.
 // German reference pulls: aff 4.18, ach 3.42, pow 3.99. A rough share benchmark, never a score correction.
 const BOOKCLUB_SET = ["c05", "c07", "c18", "c15"];
-const GUIDE_VERSION = "pse-hk-guidance-v3";
+const GUIDE_VERSION = "pse-hk-guidance-v4";
+const READING_VERSION = "pse-hk-reading-v2";
+// Shared verbatim by the screen and download to keep method claims in sync.
+const READING_METHOD = [
+  "每句用原文同英文翻譯兩種方法讀，兩者都用 AMC 模型。主題比例只計模型正式標記：任何一種讀法標記就計一次，每句每種主題最多一次。未有正式標記、模型分值達 0.30 嘅，會喺句子詳情標示「隱約」，只供探索，唔計入主題比例、重點句或 ✦。分值唔代表經核實嘅正確機率。",
+  "研究參照來自 Schönbrodt 等人嘅德國專家編碼故事：先加埋同組圖片每種主題嘅平均次數，再換成比例；唔係參加者個人比例嘅平均值。語言、編碼同故事長度唔同，只可粗略對照，唔係本地常模、百分位或個人分數。缺少任何一張圖嘅參照，就唔作整組比較。",
+  "至少三句有正式主題標記，而且分布喺兩個故事，先顯示整體比例。高出參照 5 個百分點稱為少少偏向，12 點為較大差距；較大差距仲要喺至少三個故事出現，而且逐個故事抽走、按餘下圖片重計參照後，仍然係主要差距之一並高出至少 5 點，先用較強措辭。每次抽走後仍須有三句、兩個故事嘅材料。翻譯未完成亦只用暫定措辭。呢啲係展示規則，唔係統計顯著性或經驗證嘅心理界線。",
+  "圖片參照中，平均次數達該圖最高主題嘅 75% 就列為主要方向。✦ 只表示正式標記落喺其他方向，唔表示罕見或證明個人投射。模型未經驗證適用於廣東話；故事亦唔係你嘅自傳。",
+];
 const API = (() => {
   const m = document.querySelector('meta[name="pse-api"]').content.trim();
   if (m) return m.replace(/\/$/, "");
@@ -159,7 +166,7 @@ function load() {
     if (!d.order) Object.assign(d, { order: ["p1", "p2", "p3", "p4"], skipsLeft: MAX_SKIPS }); // drafts from the fixed-order version
     d.awayMs ??= {}; d.breaks ??= 0; d.mode ??= "random"; // drafts from before modes were random draws
     // A draft begun under older guidance keeps that on record; it finishes under the current screens.
-    if (d.guidance !== GUIDE_VERSION && !String(d.guidance).includes("-resumed-with-")) d.guidance = `${d.guidance || "legacy-guidance"}-resumed-with-v3`;
+    if (d.guidance !== GUIDE_VERSION && !String(d.guidance).endsWith("-resumed-with-v4")) d.guidance = `${d.guidance || "legacy-guidance"}-resumed-with-v4`;
     if (d.v !== 1 || Date.now() - d.savedAt > MAX_AGE_MS || !d.order.every(byId)) {
       localStorage.removeItem(KEY); // cleanup happens on reopen only
       return null;
@@ -326,7 +333,7 @@ function next() {
     S.nudged = pid;
     save();
     const note = $("short-note");
-    note.replaceChildren("想講多少少都得。他／她心入面諗緊咩、最後點樣，往往藏住你自己嘅影子。",
+    note.replaceChildren("想講多少少都得：人物心入面諗緊咩？件事最後點收場？",
       h("small", {}, "寫完就再按一次。"));
     note.hidden = false;
     return;
@@ -554,13 +561,13 @@ function pathPanel(title, caption, counts) {
 
 // ---------- reading: combined themes against the pictures' pull ----------
 
-/** Themes the model flagged, plus ones it rated at least FAINT likely but below its own cut-off. */
+/** Exploratory scores not flagged by this reading; excluded from the main profile. */
 const faintOf = (score) => MOTIVES.filter((m) => !score.motives.includes(m) && (score.scores?.[m] ?? 0) >= FAINT);
 
-/** A sentence carries a theme if either reading found it, even faintly (direct Cantonese under-detects). */
+/** Main profile: model flags from either reading, each theme at most once per sentence. */
 function themesOf(s) {
   const out = new Set();
-  for (const r of [s.direct, s.translated]) if (r) for (const m of [...r.motives, ...faintOf(r)]) out.add(m);
+  for (const r of [s.direct, s.translated]) if (r) for (const m of r.motives) out.add(m);
   return out;
 }
 
@@ -570,11 +577,12 @@ function combined(sentences) {
   return c;
 }
 
-/** Share of each theme in German expert-coded stories for these pictures (pictures without norms are left out). */
+/** Ratio of summed picture means, not the mean of individual participants' shares. */
 function typicalShares(pics) {
+  if (!pics.length || pics.some((p) => !p.pull || MOTIVES.some((m) => !Number.isFinite(p.pull[m]) || p.pull[m] < 0))) return null;
   const sum = Object.fromEntries(MOTIVES.map((m) => [m, pics.reduce((a, p) => a + (p.pull ? p.pull[m] : 0), 0)]));
   const total = MOTIVES.reduce((a, m) => a + sum[m], 0);
-  return Object.fromEntries(MOTIVES.map((m) => [m, total ? sum[m] / total : 1 / 3]));
+  return total ? Object.fromEntries(MOTIVES.map((m) => [m, sum[m] / total])) : null;
 }
 
 /** sparse: too few themes to read a profile; lean / tilt: a theme clearly / slightly above what the pictures pull; balanced: neither. */
@@ -582,12 +590,37 @@ function reading(c, typical) {
   const total = MOTIVES.reduce((a, m) => a + c[m], 0);
   const share = Object.fromEntries(MOTIVES.map((m) => [m, total ? c[m] / total : 0]));
   if (total < MIN_THEMES) return { kind: "sparse", total, share, focus: leaders(c) };
+  if (!typical) return { kind: "unbenchmarked", total, share, focus: leaders(c) };
   const lift = Object.fromEntries(MOTIVES.map((m) => [m, share[m] - typical[m]]));
   const top = Math.max(...MOTIVES.map((m) => lift[m]));
   const near = (floor) => MOTIVES.filter((m) => lift[m] >= floor && top - lift[m] < 0.02);
   if (top >= LEAN) return { kind: "lean", total, share, focus: near(LEAN) };
   if (top >= TILT) return { kind: "tilt", total, share, focus: near(TILT) };
   return { kind: "balanced", total, share, focus: leaders(c) };
+}
+
+/** Descriptive robustness gates, not significance tests or validated trait thresholds. */
+function assessReading(sentences, pics, failed = false) {
+  const flagged = sentences.filter((s) => themesOf(s).size);
+  const r = reading(combined(sentences), typicalShares(pics));
+  r.support = Object.fromEntries(MOTIVES.map((m) => [m,
+    new Set(flagged.filter((s) => themesOf(s).has(m)).map((s) => s.picture_id)).size]));
+  r.sentenceCount = flagged.length;
+  if (flagged.length < 3 || new Set(flagged.map((s) => s.picture_id)).size < 2) {
+    r.kind = "sparse";
+  } else if (r.kind === "lean") {
+    const stable = !failed && r.focus.every((m) => r.support[m] >= 3 && pics.every((omit) => {
+      const rest = sentences.filter((s) => s.picture_id !== omit.id);
+      const remainingFlags = rest.filter((s) => themesOf(s).size);
+      if (remainingFlags.length < 3 || new Set(remainingFlags.map((s) => s.picture_id)).size < 2) return false;
+      const remainingTypical = typicalShares(pics.filter((p) => p.id !== omit.id));
+      const reduced = reading(combined(rest), remainingTypical);
+      return remainingTypical && reduced.focus.includes(m)
+        && reduced.share[m] - remainingTypical[m] >= TILT;
+    }));
+    if (!stable) r.kind = "tentative";
+  }
+  return r;
 }
 
 const pct = (x) => `${Math.round(x * 100)}%`;
@@ -599,24 +632,24 @@ const needOf = (m) => NEEDS.find(([, , ms]) => ms.includes(m));
 
 function insightText(r, typical, failed) {
   if (r.kind === "sparse") {
-    return ["你嘅故事，較少寫到人物想要乜。",
-      (r.total ? `模型只喺 ${r.total} 句認到動機主題。` : "模型喺今次故事入面認唔到動機主題。")
-      + "故事多描述畫面、少寫人物想要乜同點收場，通常就會咁。唔代表你冇呢啲動機。"
+    return ["你嘅故事，可以先逐句回望。",
+      "今次模型辨認到嘅主題較少，或者集中喺一個故事，未夠材料比較整體比例。唔代表你冇呢啲動機，亦唔係寫得好唔好嘅評分。"
       + (failed ? "今次翻譯未完成，只用咗原文分析，主題可能偏少。" : "")];
   }
+  if (r.kind === "unbenchmarked") {
+    return ["你嘅故事，可以由呢啲主題睇起。",
+      `今次較多辨認到${quote(r.focus)}。呢組圖片未有完整研究參照，所以唔作高低比較。`];
+  }
   if (r.kind === "balanced") {
-    return ["你嘅故事，貼近圖片本身。",
-      `三種主題嘅比例，同一般人寫呢四張圖時相近，冇一種特別突出。最多嘅係${quote(r.focus)}。`];
+    return ["你嘅故事，幾種主題都各有位置。",
+      "今次辨認到嘅主題比例，同組圖片嘅研究參照相近。可以由一句令你有感覺嘅故事開始，睇下邊個人物最令你在意。"];
   }
-  const [m] = r.focus;
-  const verb = r.kind === "lean" ? "特別著重" : "有少少偏向";
-  if (r.focus.length > 1) {
-    return [`你嘅故事，${verb}${quote(r.focus)}。`, `兩種主題都比一般人寫呢四張圖時多。`];
-  }
-  const [need, en] = needOf(m);
-  return [`你嘅故事，${verb}${quote([m])}。`,
-    `「${SHORT[m]}」佔你故事主題嘅 ${pct(r.share[m])}；一般人寫呢四張圖，大約係 ${pct(typical[m])}。`
-    + `佢對應「${need}」（${en}）呢種心理需要。`];
+  const title = r.kind === "lean" ? `${quote(r.focus)}反覆出現。`
+    : r.kind === "tilt" ? `有少少偏向${quote(r.focus)}。` : `${quote(r.focus)}佔比較多。`;
+  const comparison = r.focus.map((m) => `「${SHORT[m]}」佔已辨認主題嘅 ${pct(r.share[m])}，同組圖片嘅研究參照約 ${pct(typical[m])}，高出 ${Math.round((r.share[m] - typical[m]) * 100)} 個百分點。`).join("");
+  return [`今次故事入面，${title}`, comparison
+    + (r.kind === "lean" ? "呢個方向喺幾個故事都有出現；逐個故事抽走再比較，方向仍然保留。"
+      : r.kind === "tentative" ? "呢個差距暫時只當線索，未足以講係跨故事都穩定嘅方向。" : "差距細，可以當作一個回望故事嘅角度。")];
 }
 
 function profile(c, r, typical) {
@@ -625,13 +658,13 @@ function profile(c, r, typical) {
     return h("div", { class: "need-group" },
       h("div", { class: "need-head" },
         h("span", {}, need, " ", h("small", { lang: "en" }, en)),
-        h("span", {}, pct(sum(r.share)), h("small", {}, ` · 一般 ${pct(sum(typical))}`))),
+        h("span", {}, pct(sum(r.share)), h("small", {}, typical ? ` · 參照 ${pct(sum(typical))}` : " · 未有完整參照"))),
       ms.map((m) => h("div", { class: "profile-row" + (r.focus.includes(m) ? " focus" : "") },
         h("span", { class: "profile-name" }, SHORT[m], h("small", {}, `${c[m]} 句`)),
         h("span", { class: "profile-track", "aria-hidden": "true" },
           h("span", { class: `profile-fill ${m}-bg`, style: `width:${pct(r.share[m])}` }),
-          h("span", { class: "profile-typical", style: `left:${pct(typical[m])}` })),
-        h("span", { class: "profile-n" }, pct(r.share[m]), h("small", {}, `一般 ${pct(typical[m])}`)))));
+          typical ? h("span", { class: "profile-typical", style: `left:${pct(typical[m])}` }) : null),
+        h("span", { class: "profile-n" }, pct(r.share[m]), h("small", {}, typical ? `參照 ${pct(typical[m])}` : "未有參照")))));
   });
 }
 
@@ -642,7 +675,7 @@ function typicalOf(p) {
   return MOTIVES.filter((m) => p.pull[m] >= max * TYPICAL_OF_MAX);
 }
 
-/** Themes the participant wrote that the picture does not usually pull: the clearest projection cue. */
+/** Flagged themes outside the picture's leading reference means; not a rarity test. */
 function broughtIn(p, c) {
   const typ = typicalOf(p);
   return typ ? MOTIVES.filter((m) => c[m] && !typ.includes(m)) : [];
@@ -675,7 +708,7 @@ function pictureCard(p, i, ss) {
       h("img", { src: p.file, alt: "" }),
       h("span", { class: "pic-sum" },
         h("span", { class: "pic-title" }, `第 ${i + 1} 張`),
-        h("span", { class: "pic-line" }, h("small", {}, "圖片一般引出"),
+        h("span", { class: "pic-line" }, h("small", {}, "圖片參照較偏向"),
           typ ? typ.map((m) => chip(m, SHORT[m], "muted")) : h("span", { class: "chip muted" }, "未有常模"),
           typ && p.pull.n_stories < 30 ? h("small", {}, "（樣本少）") : null),
         h("span", { class: "pic-line" }, h("small", {}, "你寫咗"),
@@ -722,19 +755,23 @@ function protocolView(pr) {
 function summarise(d) {
   const c = combined(d.sentences);
   const typical = typicalShares(pictures);
-  const r = reading(c, typical);
+  const r = assessReading(d.sentences, pictures, d.translation_failed);
   const byPic = pictures.map((p) => d.sentences.filter((s) => s.picture_id === p.id));
   const brought = pictures.map((p, i) => [i, broughtIn(p, combined(byPic[i]))]).filter(([, ms]) => ms.length);
-  return { c, typical, r, byPic, brought, text: insightText(r, typical, d.translation_failed) };
+  const evidence = r.kind === "sparse" ? [] : r.focus.map((m) => {
+    const s = d.sentences.find((s) => themesOf(s).has(m));
+    return s ? { motive: m, source: s.source, picture: pictures.findIndex((p) => p.id === s.picture_id) + 1, stories: r.support[m] } : null;
+  }).filter(Boolean);
+  return { c, typical, r, byPic, brought, evidence, text: insightText(r, typical, d.translation_failed) };
 }
 
 function broughtText(brought) {
   if (!brought.length) return "";
   const [i, ms] = brought[0];
   return (brought.length === 1
-    ? `✦ 第 ${i + 1} 張圖一般唔會引出${quote(ms)}，你就寫咗出嚟。`
-    : `✦ 你喺 ${brought.length} 張圖寫咗圖片一般唔會引出嘅主題，例如第 ${i + 1} 張嘅${quote(ms)}。`)
-    + "由你帶入嘅主題，最接近你自己嘅投射。";
+    ? `✦ 第 ${i + 1} 個故事亦寫到${quote(ms)}，喺呢張圖嘅研究參照入面，佢唔係主要方向。`
+    : `✦ 有 ${brought.length} 個故事寫到圖片參照主要方向以外嘅主題，例如第 ${i + 1} 個嘅${quote(ms)}。`)
+    + "可以回望相關句子，睇下呢個角度對你有冇意思。";
 }
 
 function renderResults(d) {
@@ -747,15 +784,21 @@ function renderResults(d) {
   const sparse = r.kind === "sparse";
   $("profile").replaceChildren(...(sparse ? [] : profile(c, r, typical)));
   $("profile").hidden = sparse;
-  $("profile-legend").hidden = sparse;
+  $("profile-legend").hidden = sparse || !typical;
   $("profile-note").textContent = sparse ? "" : [
-    `${r.total} 個主題，來自 ${n} 句。`,
+    `${r.total} 次主題標記，來自 ${r.sentenceCount} 句；全文共 ${n} 句。`,
     r.total < 6 ? "數目少，比例容易變。" : "",
     d.translation_failed ? "今次翻譯未完成，只用咗原文分析。" : "",
-    "「一般」係德國研究嘅粗略參照，點樣計見最底。",
+    "比例只計模型正式標記，唔計「隱約」。參照來自德國研究，唔係個人分數或排名。",
   ].join("");
+  $("evidence").replaceChildren(...x.evidence.map((e) => h("div", {},
+    h("p", { class: "fine" }, `「${SHORT[e.motive]}」喺 ${e.stories} 個故事有標記，例如第 ${e.picture} 個：`),
+    h("blockquote", {}, e.source))));
+  if (x.evidence.length) $("evidence").append(h("p", { class: "fine" }, "呢句令你諗起乜？你亦可以有唔同讀法。"));
+  $("evidence").hidden = !x.evidence.length;
   $("brought").textContent = broughtText(x.brought);
   $("brought").hidden = !x.brought.length;
+  $("reading-method").replaceChildren(...READING_METHOD.map((text) => h("p", {}, text)));
 
   // The note on the leading theme opens first; the other two stay one tap away.
   const notes = $("motive-notes");
@@ -794,24 +837,24 @@ function renderResults(d) {
   show("v-results");
 }
 
-function download() {
-  if (!lastResult) return;
-  const d = lastResult;
+function resultText(d) {
   const x = summarise(d);
   const fmtCounts = (c) => MOTIVES.map((m) => `${NAMES[m]} ${c[m]}`).join("，");
   const lines = ["畫中有你 · 故事同結果", new Date().toLocaleString("zh-HK"), "", ...x.text, ""];
   if (x.r.kind !== "sparse") {
-    lines.push("主題比例（你 ／ 一般人寫同一組圖）：");
+    lines.push("主題比例（你嘅故事 ／ 同組圖片嘅研究參照；唔計隱約）：");
     for (const [need, en, ms] of NEEDS) {
       lines.push(`${need} ${en}`);
-      for (const m of ms) lines.push(`  ${SHORT[m]}：${x.c[m]} 句，${pct(x.r.share[m])} ／ 一般 ${pct(x.typical[m])}`);
+      for (const m of ms) lines.push(`  ${SHORT[m]}：${x.c[m]} 句，${pct(x.r.share[m])} ／ ${x.typical ? `參照 ${pct(x.typical[m])}` : "未有完整參照"}`);
     }
     lines.push("");
   }
+  for (const e of x.evidence) lines.push(`「${SHORT[e.motive]}」喺 ${e.stories} 個故事有標記，例如第 ${e.picture} 個：`, e.source, "");
+  if (x.evidence.length) lines.push("呢句令你諗起乜？你亦可以有唔同讀法。", "");
   if (x.brought.length) lines.push(broughtText(x.brought), "");
   pictures.forEach((p, i) => {
     const typ = typicalOf(p);
-    lines.push(`— 第 ${i + 1} 個故事 —`, `圖片一般引出：${typ ? typ.map((m) => SHORT[m]).join("、") : "未有常模"}`);
+    lines.push(`— 第 ${i + 1} 個故事 —`, `圖片參照較偏向：${typ ? typ.map((m) => SHORT[m]).join("、") : "未有參照"}`);
     for (const s of x.byPic[i]) {
       const fmt = (y) => {
         if (!y) return "未有";
@@ -823,13 +866,13 @@ function download() {
     lines.push("");
   });
   lines.push("—— 畫外，返到你自己 ——",
-    "自我決定論：勝任（competence）、關係（relatedness）、自主（autonomy）。圖畫故事係一個粗略指標，反映你對頭兩種需要有幾敏感。",
+    "自我決定論：勝任（competence）、關係（relatedness）、自主（autonomy）。呢度借用三個角度反思，主題比例唔係心理需要嘅分數。",
     "1. 勝任：最近有冇一件事，你好想做得更好，或者想有多啲影響？",
     "2. 關係：你而家最想同邊個更親近？",
     "3. 自主：呢啲「想要」，係你自己揀嘅，定係為咗別人嘅期望？",
     "McAdams · The Art and Science of Personality Development (2015), Chapter 6: The Motivational Agenda", "",
     "—— 點樣計 ——",
-    `每句用原文同英文翻譯兩種方法讀（同一個 AMC 模型），任何一種讀法認為機會達 ${FAINT * 100}% 就計一次（模型本身要 50%），刻意寧願多計。「一般」係德國研究專家為同一組圖編碼嘅平均主題比例，只係粗略參照，唔係常模、百分位或者分數。`,
+    ...READING_METHOD,
     "原文分析：" + fmtCounts(d.summary.direct),
     "英文翻譯後分析：" + (d.summary.translated ? fmtCounts(d.summary.translated) : "翻譯未能完成，唔代表零個主題。"),
     "兩種讀法：" + headline(d).filter(Boolean).join(" "),
@@ -837,6 +880,7 @@ function download() {
     "—— 技術資料 ——", `圖片：${lastMode === "bookclub" ? "讀書會固定一組" : "隨機抽出"}`,
     `實際圖片順序：${pictures.map((p) => `${p.id} (${p.pse_id})`).join(" → ")}`,
     `寫作指引：${lastProtocol?.guidance || "未記錄"}`,
+    `解讀規則：${READING_VERSION}`,
     "四張圖、10 秒觀看、約 4 分鐘寫作；容許提早完成或超時，屬讀書會改編版。");
   if (lastProtocol) {
     lines.push("寫作時間：" + lastProtocol.times.map(mmss).join("、"));
@@ -847,7 +891,12 @@ function download() {
   pictures.forEach((p) => lines.push(`${p.id} (${p.pse_id})：${pullText(p)}`));
   lines.push(`模型：${d.meta.amc_model} @ ${String(d.meta.amc_revision).slice(0, 7)} · 翻譯：${d.meta.translator}（prompt ${d.meta.prompt_version}）`, "");
   lines.push("實驗性自動編碼，未經驗證適用於廣東話，唔係性格測驗。");
-  const a = h("a", { href: URL.createObjectURL(new Blob([lines.join("\n")], { type: "text/plain;charset=utf-8" })), download: "pse-hk-result.txt" });
+  return lines.join("\n");
+}
+
+function download() {
+  if (!lastResult) return;
+  const a = h("a", { href: URL.createObjectURL(new Blob([resultText(lastResult)], { type: "text/plain;charset=utf-8" })), download: "pse-hk-result.txt" });
   a.click();
   setTimeout(() => URL.revokeObjectURL(a.href), 1000);
 }

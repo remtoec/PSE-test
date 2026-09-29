@@ -14,25 +14,28 @@ motives.” PSE is one window into the Motivated Agent, which also includes
 conscious goals, plans, projects, values and aspirations. These imagined
 stories are not autobiographical narratives.
 
-The results are framed by self-determination theory: the PSE serves as a rough
-marker of how sensitive someone's imagination is to the **competence** need
-(achievement and power imagery) and the **relatedness** need (affiliation
-imagery). Autonomy is left to the participant's own reflection.
+Self-determination theory provides reflection lenses: **competence** groups
+achievement and power imagery, and **relatedness** groups affiliation imagery.
+These are not measured need scores. Autonomy is also a reflection question.
 
 **Results lead with an interpretation, benchmarked against the pictures' pull.**
-Detection is deliberately sensitive, because the page's job is to intrigue
-rather than to measure. A sentence carries a theme if either reading
-(original or translated) rates it at least 30% likely. The model's own cut-off
-is 50%, and sentence cards mark the 30–50% themes as 「隱約」. The page compares each theme's
-*share* of the participant's themes with its share in German expert-coded
-stories for the same pictures. It then names a clear lean (12 percentage points
-or more above), a slight lean (5–12), a profile close to the pictures, or too few
-themes (fewer than 3) to read. Each picture also shows
-the theme(s) it usually pulls, and flags themes the participant brought in
-against that pull. Research correlates from McAdams (2015, ch. 6) explain the
-leading theme. The benchmark is only a rough reference: it uses shares, never
-z-scores, percentiles, pull subtraction or rankings, and says so on the page.
-See [the protocol review](docs/pse-protocol-review.md#2026-09-29-revision-results-with-a-benchmark).
+Main counts use the model's flags from either reading, once per theme per
+sentence. Unflagged scores of at least 0.30 remain exploratory 「隱約」 labels in
+sentence details; they do not affect the profile or headline. A profile needs
+three theme-bearing sentences across two stories. Shares are compared with the
+normalised sum of the same pictures' German expert-coded means, explicitly a
+research reference rather than an average person's score. Any missing picture
+reference disables the overall comparison.
+
+A 5-point excess gets slight wording; a 12-point excess gets stronger wording
+only when supported in three stories and stable after omitting each story and
+recomputing the matching reference. Otherwise the larger difference remains
+tentative. Translation failure cannot receive the strongest wording. These are
+display heuristics, not validated psychological cutoffs. Results include exact
+source sentences, balanced reflection notes and relative picture emphasis,
+without claiming rarity or proven personal projection. No percentiles or
+participant rankings are calculated.
+See the [review rationale and precise rules](docs/copy-benchmark-rationale.md).
 
 Both analysis paths, agreement, picture pulls and timing stay available in one
 collapsed technical section. Neither path is ground truth, and agreement is not
@@ -57,9 +60,9 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 - Four pictures per run. Each is shown for 10 s, followed by a soft 4-minute writing period.
 - **Bookclub mode (default):** new runs show boxer, couple by river, women in laboratory, and ship captain, in that order (`BOOKCLUB_SET`: c05, c07, c18, c15), without skipping. Summed German picture-pull means: aff 4.18, ach 3.42, pow 3.99. Existing drafts keep their original pictures.
 - **Random mode:** four pictures from the entire supplied archive (18 classical and 30 newer pictures). Participants may skip up to 4 per run. Skipped pictures are excluded on that browser until fewer than four eligible pictures remain, when the exclusion list resets.
-- No motive category is named before the stories are written. The results page leads with one interpretation (leading theme, balanced, or too few themes), a competence/relatedness profile with the pictures' typical shares marked, and any brought-in themes. Then come research notes on each motive (the leading one open), a picture-by-picture view with sentence cards, and three static SDT reflection questions. Both-path counts, agreement, picture pulls, protocol notes, theory background, credits and model metadata sit in a collapsed "點樣計？限制同技術資料" section.
+- No motive category is named before writing. Results show a descriptive interpretation, a theme-share profile with research reference markers when complete, exact supporting sentences, and relative picture emphasis. Balanced motive reflection notes, sentence cards and three SDT questions follow. Method, both-path counts, agreement, picture means, timing and sources remain in the collapsed technical section.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
-- The writing screen asks for a complete story (「寫出成個故事」), not a continuation. A line above the box says English, Cantonese, written Chinese or a mix are all fine. The four standard prompts sit inside the writing box as faint placeholder text on every screen size, asked of each character rather than a collective 佢哋: who each person is and what he or she is going through, what led up to this, what each thinks/feels/wants, and how each ends. The placeholder suggests 他／她, 男人／女人 or names; the translation prompt renders an unspecified 佢 as singular "they", which blurs who is who when a story has two characters. The prompts disappear once the participant types; a row of four small reminders (此刻 · 前因 · 內心 · 結局) stays underneath. Separate answers and polished grammar/punctuation are not required. Returning participants may write similar or different stories. A story of fewer than 2 sentences gets a single quiet invitation to say more (what he or she is thinking, how it ends, "often where your own shadow is"); pressing again continues, and it is never blocked.
+- The writing screen asks for a complete story (「寫出成個故事」) in any comfortable language or mix. Placeholder prompts cover the scene, before, characters' inner experience and ending, with optional names or roles for clarity. Participants choose whom to write about; no gendered pronouns or answers for every person are required. Persistent reminders read 此刻 · 前因 · 內心 · 結局. A short story gets one optional, non-judgmental invitation to add thoughts or an ending. No self-revelation claim is made during writing. Guidance v4 preserves earlier draft history.
 - Drafts are saved in the participant's browser, so they can leave and come back within 7 days.
 - Deviations from the standard protocol (4 minutes per story, one sitting) are recorded but not enforced: writing time per story, time away from the page, and resuming after more than 5 minutes. They appear on the results page and in the download, with a note that such stories are less standardised.
 - Sentence-level motive coding with the Automated Motive Coder (AMC) along two paths:

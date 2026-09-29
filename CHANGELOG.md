@@ -1,5 +1,22 @@
 # Changelog
 
+## 2026-09-29 — Ground interpretations in story evidence
+
+- Keep 畫中有你 and complete-story prompts; make character guidance optional
+  and remove hidden-self claims during writing. Balance all three motive notes.
+- Exclude faint scores from main counts; retain them as exploratory sentence
+  labels. Require distinct sentences across stories before showing a profile.
+- Label the ratio of summed picture means as a research reference. Missing
+  picture means disable overall comparison; no average-person claim is made.
+- Reserve stronger wording for themes recurring across three stories and
+  surviving every story omission with a recalculated matching reference.
+  Other larger differences and translation failures remain tentative.
+- Show exact supporting sentences; replace projection/rarity claims with
+  relative picture emphasis. Share method text and interpretation with export.
+- Record guidance v4 and reading v2. Backend and picture pool unchanged.
+
+Rationale, trade-offs and verification: [independent review](docs/copy-benchmark-rationale.md).
+
 Each change is listed with the reason for it. Commits: `f5fed36` (redesign) and
 `e9c0d2d` (same-day follow-up). Details of the benchmark and its limits:
 [protocol review, 2026-09-29](docs/pse-protocol-review.md#2026-09-29-revision-results-with-a-benchmark).
