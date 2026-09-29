@@ -1,5 +1,14 @@
 # Changelog
 
+## 2026-09-29 — Bookclub narrative copy and booklet styling
+
+- Applied the approved copy direction across entry, picture/writing prompts, review, waiting/error states, results, and text downloads. Natural Hong Kong written Chinese replaces translated phrasing and repeated disclaimers.
+- Results now lead with characters’ pursuits and verbatim excerpts; three theme definitions and a short book introduction lead to one reflection. Power includes both helping and dominating. Research comparisons and full stories remain expandable.
+- Shared copy keeps downloads and screens aligned. Existing scoring gates remain; sparse, tentative, tied and missing-reference states retain distinct wording. Sparse results open the original stories. Fallback bars now explicitly describe shares rather than density.
+- Simplified the visual direction to a contemporary reading booklet: paper, green ink, serif headings and quotations, clear sans-serif controls. Removed the seal, need tags and stacked theme cards; result thumbnails show the whole image.
+- Guidance v5 and reading v4 record the change. Earlier draft history is preserved. No backend model, translation prompt or deployment changed.
+
+
 ## 2026-09-29 (copy round) — Why stories, plain definitions, 勝任感／歸屬感, story vs life
 
 Owner-proposed copy, reviewed and adjusted together before implementing.

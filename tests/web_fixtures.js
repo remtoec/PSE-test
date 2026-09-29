@@ -37,26 +37,26 @@ function runWebFixtures() {
   localStorage.setItem(KEY, JSON.stringify(oldDraft));
   const recovered = load();
   check("old draft keeps original pictures", recovered.order.join() === "p7,p9,p4,p2"
-    && recovered.guidance === "legacy-guidance-resumed-with-v4");
+    && recovered.guidance === "legacy-guidance-resumed-with-v5");
   localStorage.setItem(KEY, JSON.stringify({ ...oldDraft, guidance: "pse-hk-guidance-v2" }));
-  check("v2 draft records new guidance", load().guidance === "pse-hk-guidance-v2-resumed-with-v4");
+  check("v2 draft records new guidance", load().guidance === "pse-hk-guidance-v2-resumed-with-v5");
   localStorage.setItem(KEY, JSON.stringify({ ...oldDraft, guidance: "legacy-guidance-resumed-with-v3" }));
-  check("older resume history is retained", load().guidance === "legacy-guidance-resumed-with-v3-resumed-with-v4");
-  localStorage.setItem(KEY, JSON.stringify({ ...oldDraft, guidance: "legacy-guidance-resumed-with-v3-resumed-with-v4" }));
-  check("same guidance resume is not stacked", load().guidance === "legacy-guidance-resumed-with-v3-resumed-with-v4");
+  check("older resume history is retained", load().guidance === "legacy-guidance-resumed-with-v3-resumed-with-v5");
+  localStorage.setItem(KEY, JSON.stringify({ ...oldDraft, guidance: "legacy-guidance-resumed-with-v3-resumed-with-v5" }));
+  check("same guidance resume is not stacked", load().guidance === "legacy-guidance-resumed-with-v3-resumed-with-v5");
   if (previousDraft === null) localStorage.removeItem(KEY);
   else localStorage.setItem(KEY, previousDraft);
   const ph = document.getElementById("story").placeholder;
-  check("full-story guidance sits in the writing box", ["人物", "經歷緊咩", "之前發生咗咩事", "感受到咩", "最想要咩", "點樣收場"]
+  check("full-story guidance sits in the writing box", ["人物", "正在經歷", "之前發生", "感受", "想做甚麼", "結束"]
     .every((x) => ph.includes(x)) && document.querySelectorAll("#v-write .arc span:not(.sr-only)").length === 4);
-  check("character clarity preserves language freedom", ph.includes("名或者身份") && !ph.includes("他／她"));
+  check("character clarity preserves language freedom", document.getElementById("writing-help").textContent.includes("名字或身份") && !ph.includes("他／她"));
   check("language line above the box", ["英文", "廣東話", "書面語", "夾雜"].every((x) => document.getElementById("lang-note").textContent.includes(x))
     && document.getElementById("lang-note").compareDocumentPosition(document.getElementById("story")) & Node.DOCUMENT_POSITION_FOLLOWING);
   check("no continuation framing", !document.getElementById("v-write").textContent.includes("然後"));
   const beforeWriting = ["v-intro", "v-view", "v-write"].map((id) => document.getElementById(id).textContent).join("")
     + document.getElementById("story").placeholder;
   check("no theme is named before writing", !["成就", "連結", "影響力", "成功", "關係", "勝任感", "歸屬感", "動機"].some((t) => beforeWriting.includes(t)));
-  check("before-writing note: first instinct, whole story, no going back", ["唔使諗定先寫", "有頭有尾", "唔再返轉頭"].every((t) => document.getElementById("v-intro").textContent.includes(t))
+  check("before-writing note: first instinct, whole story, no going back", ["第一個想到", "有頭有尾", "不能修改"].every((t) => document.getElementById("v-intro").textContent.includes(t))
     && !document.querySelector("#v-intro .intro-why"));
   check("lock note fits every round's button", !document.querySelector("#v-write .lock-note").textContent.includes("下一張"));
   check("review does not name motives before results", !document.getElementById("v-review").textContent.includes("動機"));
@@ -86,10 +86,10 @@ function runWebFixtures() {
   setChoices(false);
   check("first visit leads with the classic set", document.getElementById("choices").firstElementChild.id === "btn-start"
     && document.getElementById("btn-start").classList.contains("primary") && !document.getElementById("btn-random").classList.contains("primary")
-    && document.getElementById("btn-random").textContent.includes("玩過？"));
+    && document.getElementById("btn-random").textContent.includes("寫過了？"));
   setChoices(true);
   check("returning players are offered new pictures first", document.getElementById("choices").firstElementChild.id === "btn-random"
-    && document.getElementById("btn-random").classList.contains("primary") && document.getElementById("btn-start").textContent.includes("經典"));
+    && document.getElementById("btn-random").classList.contains("primary") && document.getElementById("btn-start").textContent.includes("讀書會"));
   setChoices(false);
   check("results offer new pictures visibly", document.getElementById("btn-again-random").classList.contains("secondary"));
   Object.entries(stored).forEach(([k, v]) => (v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v)));
@@ -107,7 +107,7 @@ function runWebFixtures() {
   const ten = (d, t) => Array.from({ length: 10 }, () => [d, t]);
   const shared = make(ten(["aff"], ["aff"]));
   render(shared);
-  check("shared leader", H(shared).includes("兩種分析都") && H(shared).includes("「連結」"));
+  check("shared leader", H(shared).includes("兩種分析都") && H(shared).includes("「關係」"));
   check("source is the sentence entry point", document.querySelector("#cards summary .txt").textContent.includes("句子 0"));
   check("method stays off the page", !document.getElementById("tally") && !document.getElementById("headline")
     && !document.getElementById("reading-method") && !document.querySelector("#v-results details.technical")
@@ -117,42 +117,35 @@ function runWebFixtures() {
   check("sentence cards show English and themes only", document.querySelector("#cards .card-body").textContent.includes("英文")
     && document.querySelector("#cards .card-body").textContent.includes("主題")
     && !document.getElementById("cards").textContent.includes("原文分析"));
-  check("insight leads the results", document.getElementById("results-title").textContent.includes("「連結」反覆出現")
-    && document.querySelectorAll("#profile .profile-row").length === 3 && !document.getElementById("profile").closest("details"));
-  check("benchmark named in words", document.getElementById("insight-lede").textContent.includes("同研究入面寫同一組圖嘅故事比")
-    && document.getElementById("profile-legend").textContent.includes("研究故事嘅濃度"));
-  check("headline supported by a literal source quote", document.querySelector("#evidence blockquote").textContent === "句子 0"
-    && document.getElementById("evidence").textContent.includes("幾個故事都有出現"));
+  check("story reading leads; analysis is collapsed", document.getElementById("results-title").textContent.includes("彼此的關係")
+    && document.querySelectorAll("#profile .profile-row").length === 3 && !document.getElementById("analysis-detail").open
+    && document.getElementById("evidence-section").compareDocumentPosition(document.getElementById("meaning")) & Node.DOCUMENT_POSITION_FOLLOWING);
+  check("comparison belongs in analysis details", document.getElementById("comparison-note").textContent.includes("研究參照")
+    && !document.getElementById("insight-lede").textContent.includes("研究參照"));
+  check("headline supported by literal source quotes", document.querySelector("#evidence blockquote").textContent === "句子 0"
+    && document.querySelectorAll("#evidence blockquote").length === 2);
   check("bars are length-adjusted against reference lines", summarise(shared).refRates && summarise(shared).youRates
     && document.querySelectorAll("#profile .profile-typical").length === 3
-    && [...document.querySelectorAll("#profile .profile-word")].every((e) => ["較濃", "相若", "較淡"].includes(e.textContent)));
+    && [...document.querySelectorAll("#profile .profile-word")].every((e) => ["較密集", "相若", "較疏落"].includes(e.textContent)));
   check("leading theme's research note opens first", document.querySelector("#motive-notes > details").dataset.motive === "aff"
     && document.querySelector("#motive-notes > details").open
     && [...document.querySelectorAll("#motive-notes > details")].filter((x) => x.open).length === 1);
-  const reflection = document.getElementById("reflection").textContent;
-  check("reflection: story vs life, three plain questions, closing questions", reflection.includes("同現實一樣嗎")
-    && reflection.includes("好怕輸") && document.querySelectorAll("#reflection .reflect-list li").length === 3
-    && ["我係自己揀嘅", "我覺得自己做得到", "我同其他人有連結", "咁我自己而家追緊嘅"].every((t) => reflection.includes(t))
+  check("reflection uses the reading, without collecting personal answers", document.getElementById("reflection-title").textContent === reflectionText(summarise(shared).r)[0]
     && !document.getElementById("v-results").querySelector("input,textarea"));
-  check("no theory jargon on the results page", !/competence|relatedness|autonomy|自我決定論/.test(document.getElementById("v-results").textContent));
-  check("need groups named 勝任感 and 歸屬感", [...document.querySelectorAll("#profile .need-head > span")].map((e) => e.textContent).join() === "勝任感,歸屬感"
-    && [...document.querySelectorAll("#motive-notes .need-tag")].every((e) => ["勝任感", "歸屬感"].includes(e.textContent)));
-  check("why stories comes after writing, with the direct questions", document.getElementById("why").closest("#v-results")
-    && ["成功對你重要嗎", "影響其他人", "重唔重視關係", "真正嘅你"].every((t) => document.getElementById("why").textContent.includes(t)));
-  check("motive notes use the plain definitions", ["想做好啲", "唔一定係控制人", "兩個人慢慢靠近"].every((t) => document.getElementById("motive-notes").textContent.includes(t)));
-  check("frame wording follows the reading", frameText({ kind: "sparse" }) === "" && frameText({ kind: "balanced" }).includes("冇一種特別突出")
-    && ["lean", "tilt", "tentative", "unbenchmarked"].every((kind) => frameText({ kind }).includes("唔代表你係某一種人")));
-  check("frame matches a reading that stands out", document.getElementById("reading-frame").textContent.includes("比較突出")
-    && !document.getElementById("reading-frame").hidden);
+  check("book follows themes and stays after writing", document.getElementById("why").closest("#v-results")
+    && document.getElementById("meaning").compareDocumentPosition(document.getElementById("why")) & Node.DOCUMENT_POSITION_FOLLOWING);
+  check("screen shares book and theme copy with the export", RESULT_COPY.why.every(t=>document.getElementById("why-body").textContent.includes(t))
+    && MOTIVES.every(m=>document.getElementById("motive-notes").textContent.includes(MOTIVE_COPY[m].body)));
+  check("no unsupported need scores", !document.querySelector("#profile .need-head") && !document.querySelector(".need-tag"));
 
   const partial = make([...ten(["aff"], ["aff"]), ...ten([], ["ach"])]);
-  check("partial match is not a disagreement", !H(partial).includes("唔一致") && H(partial).includes("「連結」")
-    && HN(partial).includes("英文翻譯後分析另外「成就」"));
-  check("disagreement", H(make([...ten(["ach"], ["pow"])])).includes("唔一致"));
+  check("partial match is not a disagreement", !H(partial).includes("主要方向不同") && H(partial).includes("「關係」")
+    && HN(partial).includes("英文翻譯後分析另外標到同樣多的「成就」"));
+  check("disagreement", H(make([...ten(["ach"], ["pow"])])).includes("主要方向不同"));
   const tie = make([[["ach"], ["ach"]], [["pow"], ["pow"]], ...ten([], [])]);
-  check("tie", H(tie).includes("「成就」同「影響力」") && H(tie).includes("數量一樣"));
+  check("tie", H(tie).includes("「成就」和「影響」") && H(tie).includes("數量一樣"));
   const zero = make(ten([], []));
-  check("zero", H(zero).includes("冇識別到") && HN(zero).includes("唔代表"));
+  check("zero", H(zero).includes("未標到") && HN(zero).includes("對照原文"));
 
   const fallback = make(ten(["aff"], []), true);
   render(fallback);
@@ -160,6 +153,8 @@ function runWebFixtures() {
   check("fallback reads the original and says so", !document.getElementById("profile-note").hidden
     && document.getElementById("profile-note").textContent.includes("翻譯未完成"));
   check("fallback cards show no English", !document.querySelector("#cards .card-body").textContent.includes("英文"));
+  check("fallback bars describe shares, not density", document.getElementById("profile-explanation").textContent.includes("比重")
+    && !document.getElementById("profile").textContent.includes("密集"));
 
   // empty motive lists compare equal
   const e = make([[[], []]]);
@@ -199,8 +194,8 @@ function runWebFixtures() {
   check("sparse", reading({ ach: 1, aff: 1, pow: 0 }, clubTypical).kind === "sparse");
   check("slight lean", reading({ ach: 3, aff: 4, pow: 2 }, clubTypical).kind === "tilt"
     && reading({ ach: 3, aff: 4, pow: 2 }, clubTypical).focus.join() === "aff");
-  check("slight lean is worded softer", insightText(reading({ ach: 3, aff: 4, pow: 2 }, clubTypical), clubTypical, false)[0].includes("有少少偏向")
-    && insightText(reading({ ach: 1, aff: 5, pow: 1 }, clubTypical), clubTypical, false)[0].includes("反覆出現"));
+  check("slight lean is worded softer", insightText(reading({ ach: 3, aff: 4, pow: 2 }, clubTypical), clubTypical, false)[0].includes("一些線索")
+    && insightText(reading({ ach: 1, aff: 5, pow: 1 }, clubTypical), clubTypical, false)[1].includes("反覆出現"));
   check("tied lean names both", reading({ ach: 3, aff: 3, pow: 0 }, even).focus.join() === "ach,aff");
   check("lab picture pulls two themes", typicalOf(byId("c18")).join() === "ach,pow");
   check("unmatched picture has no typical theme", typicalOf({ pull: null }) === null
@@ -211,12 +206,13 @@ function runWebFixtures() {
   // boxer ach, couple POWER (picture pulls affiliation), lab ach, captain pow
   render(club([[["ach"], ["ach"]], [[], ["pow"]], [["ach"], ["ach"]], [["pow"], ["pow"]]]));
   check("brought-in theme is flagged", document.querySelectorAll("#cards .chip.brought").length === 1
-    && document.querySelectorAll("#cards .pic-group")[1].querySelector(".chip.brought").textContent.includes("影響力")
+    && document.querySelectorAll("#cards .pic-group")[1].querySelector(".chip.brought").textContent.includes("影響")
     && !document.getElementById("brought").hidden && document.getElementById("brought").textContent.includes("第 2 個"));
 
   render(club([[[], []], [["aff"], []], [[], []], [[], []]]));
-  check("sparse hides the profile", document.getElementById("reading-frame").hidden && document.getElementById("results-title").textContent.includes("逐句回望")
-    && document.getElementById("profile").hidden && document.getElementById("insight-lede").textContent.includes("唔代表")
+  check("sparse reveals own stories instead of invented evidence", document.getElementById("profile").hidden
+    && document.getElementById("evidence-section").hidden && document.getElementById("stories-detail").open
+    && document.querySelector("#cards .pic-group").open
     && ![...document.querySelectorAll("#motive-notes > details")].some((x) => x.open));
   const unsafe = club(ten(["aff"], ["aff"]));
   unsafe.sentences[0].source = '<img src=x onerror="window.__xss3=1">';
@@ -227,7 +223,7 @@ function runWebFixtures() {
   pictures = [missingPic, ...pictures.slice(1)];
   render(unsafe);
   check("incomplete references hide markers without crashing", document.querySelectorAll("#profile .profile-typical").length === 0
-    && document.getElementById("profile-legend").hidden && document.getElementById("insight-lede").textContent.includes("未有完整研究參照"));
+    && document.getElementById("profile-legend").hidden && document.getElementById("comparison-note").textContent.includes("未有完整研究參照"));
   const faintRun = club(ten([], []));
   faintRun.sentences.forEach(s => { s.translated.scores.aff = .4; });
   render(faintRun);
@@ -268,8 +264,11 @@ function runWebFixtures() {
     && [...document.querySelectorAll("#evidence blockquote")].every(el => exported.includes(el.textContent))
     && READING_METHOD.every((t) => exported.includes(t)) && exported.includes("技術記錄"));
   check("new result closes the about note", !document.querySelector("#v-results details.about").open);
-  check("one name per theme", !/親和|權力/.test([...Object.values(NAMES), exported].join(""))
-    && !document.getElementById("v-results").textContent.includes("親和"));
+  check("consistent theme labels", Object.values(NAMES).join() === "成就,關係,影響"
+    && !document.querySelector("#motive-notes").textContent.includes("勝任感"));
+  check("download matches reflection and book on screen", exported.includes(document.getElementById("reflection-title").textContent)
+    && exported.includes(document.getElementById("reflection-note").textContent)
+    && RESULT_COPY.why.every(t=>exported.includes(t)) && RESULT_COPY.about.every(t=>exported.includes(t)));
   check("credits: Chinese title, one licence note", document.querySelector("#credits-results li").textContent.startsWith("第 1 張 · 拳手（boxer）")
     && !document.getElementById("credits-results").textContent.includes("Not individually verified")
     && document.getElementById("credits-results").textContent.includes("未逐張核實授權"));

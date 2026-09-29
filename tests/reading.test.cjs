@@ -100,7 +100,7 @@ test('download preserves exact evidence and method with missing references and f
   assert.match(text, /<img src=x> 原句/);
   assert.match(text, /未有完整參照/);
   assert.match(text, /隱約成就/);
-  assert.match(text, /唔計入主題比例/);
+  assert.match(text, /不計入主題比例/);
   assert.match(text, /翻譯未能完成/);
   assert.doesNotMatch(text, /undefined|NaN|一般人/);
 });
@@ -131,9 +131,38 @@ test('screen wording carries no numbers; long stories are not read as more motiv
     assert.doesNotMatch(x.text.join(''), /[0-9%]/);
   }
   context.data = { sentences: mk(10), translation_failed: false, meta: {}, summary: {} };
-  assert.match(run('summarise(data)').text[1], /筆墨比研究故事濃/);   // 8 themes in 80 words
+  const short = run('summarise(data)');
+  assert.doesNotMatch(short.text.join(''), /筆墨|濃|淡|研究故事/);
   context.data = { sentences: mk(200), translation_failed: false, meta: {}, summary: {} };
-  assert.match(run('summarise(data)').text[1], /筆墨比研究故事淡/);   // same 8 themes in 1,600 words
+  const long = run('summarise(data)');
+  assert.deepEqual(short.text, long.text); // length changes the comparison, not the story interpretation
+  assert.ok(short.overall > long.overall);
+});
+
+test('balanced reference with only one detected theme does not invent other pursuits', () => {
+  context.r = {kind:'balanced',focus:['ach'],share:{ach:1,aff:0,pow:0}};
+  const text = run('insightText(r)').join('');
+  assert.doesNotMatch(text, /幾種|多種|不只一種|關係|影響/);
+  assert.match(text, /成就/);
+});
+
+test('tied narrative readings preserve both supported themes', () => {
+  context.r = {kind:'lean',focus:['ach','pow'],share:{ach:.5,aff:0,pow:.5}};
+  const text = run('insightText(r)').join('');
+  assert.match(text, /成就/);
+  assert.match(text, /影響/);
+  assert.doesNotMatch(text, /關係/);
+});
+
+test('supporting excerpts come from distinct stories and remain verbatim', () => {
+  const rows = context.fixturePics.flatMap(p=>[row(p.id,['aff']),row(p.id,['aff'])]);
+  rows.forEach((s,i)=>s.source=`<b>literal ${i}</b>`);
+  context.data = {sentences:rows,translation_failed:false};
+  run('pictures = fixturePics');
+  const x = run('summarise(data)');
+  assert.equal(x.evidence.length, 2);
+  assert.equal(new Set(x.evidence.map(e=>e.picture)).size,2);
+  x.evidence.forEach(e=>assert.ok(rows.some(s=>s.source===e.source)));
 });
 test('download keeps the numbers for research use', () => {
   const rows = context.fixturePics.flatMap(p => [row(p.id, [], { english: 'one two three four five', translated: score(['aff']) })]);

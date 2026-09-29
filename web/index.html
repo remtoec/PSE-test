@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>畫中有你 · PSE-HK 讀書會練習</title>
-<meta name="description" content="四張圖，四個完整故事。由人物想要嘅嘢，開始一場同自己嘅對話。">
-<meta property="og:title" content="畫中有你 · 每張圖，都係故事嘅中間">
-<meta property="og:description" content="約 20 分鐘嘅圖畫故事練習。冇標準答案。">
+<meta name="description" content="看四張圖，寫四個故事。讀書會上，再一起看看大家寫出了甚麼。">
+<meta property="og:title" content="畫中有你 · 每張圖，都是故事的中間">
+<meta property="og:description" content="讀書會前的看圖寫故事，約 20 分鐘。故事怎樣開始、怎樣結束，由你來寫。">
 <meta name="theme-color" content="#f6f4ed">
 <meta name="pse-api" content="https://remtoec--pse-hk-scorer-web.modal.run">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,148 +17,139 @@
 </head>
 <body>
 <a class="skip-link" href="#app">跳到主要內容</a>
-<header class="masthead"><span class="wordmark"><span class="book-mark" aria-hidden="true">有<br>你</span>畫中有你</span></header>
+<header class="masthead"><span class="wordmark">畫中有你</span><span class="masthead-note">讀書會 · 看圖寫故事</span></header>
 <main id="app" tabindex="-1">
-  <p id="storage-notice" class="notice" role="status" hidden>呢個瀏覽器唔俾暫存草稿，重新載入會失去內容。請保持頁面開啟直至完成。</p>
+  <p id="storage-notice" class="notice" role="status" hidden>這個瀏覽器未能保存草稿，重新整理會失去內容。請先保持頁面開啟，並自行複製故事備份。</p>
 
   <section id="v-intro" class="view" hidden aria-labelledby="intro-title">
-    <p class="eyebrow">讀書會前嘅小練習</p>
-    <h1 id="intro-title" tabindex="-1">每張圖，<br>都係故事嘅<span class="accent-text">中間</span>。</h1>
-    <p class="lede">圖入面嘅人物經歷緊咩？之前發生過咩？最後點收場？由你寫出成個故事。</p>
-    <ol class="steps" aria-label="點樣玩">
-      <li><b>10 秒</b>睇圖</li>
+    <p class="eyebrow">讀書會前，先寫幾個故事</p>
+    <h1 id="intro-title" tabindex="-1">每張圖，<br>都是故事的<span class="accent-text">中間</span>。</h1>
+    <p class="lede">之前發生了甚麼？人物此刻在想甚麼？最後又會怎樣？看四張圖，把你想到的故事寫下來。</p>
+    <ol class="steps" aria-label="活動步驟">
+      <li><b>10 秒</b>看圖</li>
       <li><b>4 分鐘</b>寫故事</li>
-      <li><b>四輪</b>之後睇解讀</li>
+      <li><b>四個故事</b>寫完再看解讀</li>
     </ol>
     <div id="choices" class="choices">
-      <button id="btn-start" class="choice primary" type="button"><span class="choice-title">開始：經典四張圖</span><span class="choice-note">第一次玩就揀呢組；讀書會大家都寫同一組。</span></button>
-      <button id="btn-random" class="choice" type="button"><span class="choice-title">玩過？換四張新圖</span><span class="choice-note">隨機抽研究常用圖片，每次唔同，仲可以換圖。</span></button>
+      <button id="btn-start" class="choice primary" type="button"><span class="choice-title">開始寫故事 →</span><span class="choice-note">讀書會用這組圖，約 20 分鐘。</span></button>
+      <button id="btn-random" class="choice" type="button"><span class="choice-title">寫過了？換四張新圖</span><span class="choice-note">隨機抽另一組，也可以中途換圖。</span></button>
     </div>
     <div id="resume-actions" class="actions intro-actions" hidden>
-      <button id="btn-resume" class="primary">繼續上次嘅故事</button>
+      <button id="btn-resume" class="primary">繼續上次的故事</button>
       <button id="btn-delete" class="quiet">刪除草稿</button>
     </div>
     <div class="before-writing">
       <h2>寫故事前</h2>
-      <p>唔使諗定先寫。睇住張圖，跟你第一個自然想到嘅方向寫落去，寫到有頭有尾就得。</p>
-      <p>去到下一張圖，就唔再返轉頭改上一個故事。</p>
-      <p class="fine">廣東話、書面語、英文，或者夾雜都得。</p>
+      <p>跟着第一個想到的方向寫，有頭有尾就可以。不用寫得漂亮，也不用寫自己的經歷。</p>
+      <p>進入下一張圖後，上一個故事便不能修改。</p>
+      <p class="fine">廣東話、書面語、英文，或夾雜使用都可以。</p>
     </div>
-    <details class="more"><summary>開始之前要知</summary>
+    <details class="more"><summary>草稿和故事會怎樣處理？</summary>
       <ul class="plain">
-        <li>唔使寫自己嘅經歷。見過幅圖都冇問題，跟今次諗到嘅寫就得。</li>
-        <li>草稿只存喺呢個瀏覽器，七日後清走。提交後，故事會經雲端服務（Modal、Cloudflare）翻譯同分析；呢個練習唔會儲存或者記錄你嘅故事。</li>
-        <li>分析服務閒置時會休眠，提交後可能要等一陣。</li>
+        <li>草稿暫存在這個瀏覽器，有效期七日，可以稍後回來繼續。</li>
+        <li>提交後，故事會傳送到 Modal 和 Cloudflare 翻譯及分析。伺服器處理後不會保存故事，也不會把內容寫入記錄。</li>
+        <li>看過這些圖片也可以參加，按今次想到的故事寫就好。</li>
       </ul>
     </details>
   </section>
 
   <section id="v-view" class="view exercise-view" hidden aria-labelledby="view-title">
     <div class="round-bar"><span class="round-no"></span><div class="round-progress" aria-hidden="true"></div></div>
-    <h2 id="view-title" class="round-title" tabindex="-1">睇下呢個畫面</h2>
-    <figure class="stimulus"><img id="stim-img" alt=""><div id="img-loading" class="img-state">圖片載入中…</div><div id="img-error" class="img-state" hidden><p>圖片載入唔到。</p><button id="btn-img-retry">再試一次</button></div></figure>
+    <h2 id="view-title" class="round-title" tabindex="-1">先看看這個畫面</h2>
+    <figure class="stimulus"><img id="stim-img" alt=""><div id="img-loading" class="img-state">圖片載入中…</div><div id="img-error" class="img-state" hidden><p>圖片未能載入。</p><button id="btn-img-retry">再試一次</button></div></figure>
     <div class="countdown" aria-hidden="true"><div id="countdown-bar"></div></div>
-    <p class="hint">10 秒後收起，然後由你寫出成個故事。</p>
+    <p class="hint">圖片會在 10 秒後收起，再由你寫一個完整的故事。</p>
     <div class="actions"><button class="quiet skip" type="button">換一張</button></div>
   </section>
 
   <section id="v-write" class="view exercise-view" hidden aria-labelledby="write-title">
     <div class="round-bar"><span class="round-no"></span><div class="round-progress" aria-hidden="true"></div><span class="timer"><span class="sr-only">建議時間 </span><span id="soft-timer" aria-live="off">4:00</span></span></div>
-    <h2 id="write-title" class="round-title" tabindex="-1">寫出成個故事</h2>
-    <p id="lang-note" class="lang-note">英文、廣東話、書面語，或者夾雜都得，點舒服點寫。</p>
-    <label for="story" class="sr-only">你嘅故事</label>
-    <textarea id="story" rows="10" spellcheck="false" autocomplete="off" aria-describedby="lang-note" placeholder="人物係邊個？而家經歷緊咩？&#10;之前發生咗咩事，令故事走到呢一刻？&#10;人物各自諗緊咩、感受到咩、最想要咩？&#10;件事最後點樣收場？&#10;&#10;唔使逐題答，揀你想寫嘅人物就得。人物多過一個嘅話，可以用名或者身份稱呼，分得清邊個係邊個。"></textarea>
+    <h2 id="write-title" class="round-title" tabindex="-1">把故事寫下來</h2>
+    <p id="lang-note" class="lang-note">廣東話、書面語、英文，或夾雜使用都可以。</p>
+    <label for="story" class="sr-only">你的故事</label>
+    <textarea id="story" rows="10" spellcheck="false" autocomplete="off" aria-describedby="lang-note writing-help" placeholder="人物是誰？正在經歷甚麼？&#10;之前發生了甚麼事？&#10;他們在想甚麼、有甚麼感受、想做甚麼？&#10;故事最後怎樣結束？"></textarea>
+    <p id="writing-help" class="writing-help">不用逐題回答，選你想寫的人物，寫成一個有頭有尾的故事。人物較多時，可用名字或身份分清楚。</p>
     <div class="meta-row"><span class="arc"><span class="sr-only">提示：</span><span>此刻</span><span>前因</span><span>內心</span><span>結局</span></span><span><span id="char-count"></span> <span id="save-state" aria-live="polite"></span></span></div>
-    <p id="time-up" class="gentle" hidden>4 分鐘到喇，可以幫個故事收個尾。</p>
+    <p id="time-up" class="gentle" hidden>4 分鐘到了，可以替故事收個尾。寫好再繼續。</p>
     <p id="short-note" class="gentle" role="status" hidden></p>
     <div class="actions writing-actions"><button class="quiet skip" type="button">換一張</button><button id="btn-next" class="primary" disabled>下一張 →</button></div>
-    <p class="fine lock-note">按下去之後，呢個故事就定稿。</p>
+    <p class="fine lock-note">按下按鈕後，這個故事便不能修改。</p>
   </section>
 
   <section id="v-review" class="view exercise-view" hidden aria-labelledby="review-title">
-    <h2 id="review-title" tabindex="-1">四個故事，完成。</h2>
-    <p class="lede">準備好就睇結果：四個故事入面，人物反覆想要啲乜？</p>
+    <h2 id="review-title" tabindex="-1">四個故事，寫好了。</h2>
+    <p class="lede">一起看看，你筆下的人物在追求甚麼。</p>
     <p id="review-notice" class="notice" role="alert" hidden></p><div id="review-list"></div>
-    <div class="submit-footer"><div class="actions"><button id="btn-submit" class="primary">睇結果 →</button><button id="btn-delete-2" class="quiet">刪除草稿</button></div>
-      <p class="fine">故事會經雲端服務（Modal、Cloudflare）翻譯同分析，唔會儲存；可能要等一陣。</p></div>
+    <div class="submit-footer"><div class="actions"><button id="btn-submit" class="primary">看看故事的解讀 →</button><button id="btn-delete-2" class="quiet">刪除草稿</button></div>
+      <p class="fine">提交後，故事會傳送到 Modal 和 Cloudflare 翻譯及分析，處理後不會保存在伺服器。</p></div>
   </section>
 
-  <section id="v-loading" class="view center" hidden aria-labelledby="loading-title"><div class="waiting-book" aria-hidden="true"><span></span><span></span><span></span><span></span></div><h2 id="loading-title" tabindex="-1">細讀緊你嘅故事</h2><p id="loading-msg" role="status" aria-live="polite"></p><p class="elapsed">已等候 <span id="elapsed">0</span> 秒</p></section>
+  <section id="v-loading" class="view center" hidden aria-labelledby="loading-title"><div class="waiting-book" aria-hidden="true"><span></span><span></span><span></span><span></span></div><h2 id="loading-title" tabindex="-1">正在整理故事中的主題</h2><p id="loading-msg" role="status" aria-live="polite"></p><p class="elapsed">已等候 <span id="elapsed">0</span> 秒</p></section>
 
   <section id="v-error" class="view center" hidden aria-labelledby="error-title"><span class="error-mark" aria-hidden="true">⋯</span><h2 id="error-title" tabindex="-1">暫時未有結果</h2><p id="error-msg" role="alert"></p><div class="actions"><button id="btn-retry" class="primary">再試一次</button><button id="btn-back-review" class="quiet">返回故事</button></div></section>
 
   <section id="v-results" class="view" hidden aria-labelledby="results-title">
     <div class="insight">
-      <p class="eyebrow">你今次嘅故事</p>
+      <p class="eyebrow">再讀一次，你寫的故事</p>
       <h1 id="results-title" tabindex="-1"></h1>
       <p id="insight-lede" class="lede"></p>
-      <div id="profile" class="profile"></div>
-      <p id="profile-legend" class="legend fine"><span class="key you"></span>你嘅故事<span class="key typical"></span>研究故事嘅濃度（已按長短調整）</p>
-      <p id="profile-note" class="fine" hidden></p>
-      <p id="reading-frame" class="reading-frame" hidden></p>
-      <div id="evidence" class="reading-evidence" hidden></div>
-      <p id="brought" class="brought-line" hidden></p>
+      <p id="profile-note" class="notice" hidden></p>
     </div>
 
-    <section id="why" class="chapter" aria-labelledby="why-title">
-      <h2 id="why-title">點解要寫故事？</h2>
-      <p>如果直接問「成功對你重要嗎？」「你鍾唔鍾意影響其他人？」「你重唔重視關係？」，你大概都答到。但有時，我哋未必會留意自己一再被咩吸引。</p>
-      <p>所以今次唔直接問，而係畀你幾張模糊嘅圖，睇下當故事需要一個「想要」去推動時，你自然會加啲乜落去。</p>
-      <p>唔係要搵出一個「真正嘅你」，只係換一個角度睇自己。</p>
+    <section id="evidence-section" class="chapter" aria-labelledby="evidence-title" hidden>
+      <p class="eyebrow">從你寫下的句子看起</p>
+      <h2 id="evidence-title">人物在追求甚麼？</h2>
+      <div id="evidence" class="reading-evidence"></div>
     </section>
 
     <section id="meaning" class="chapter" aria-labelledby="meaning-title">
-      <h2 id="meaning-title">呢啲主題，可以點理解？</h2>
-      <div id="motive-notes">
-        <details class="motive-note" data-motive="ach"><summary><span class="dot ach"></span><b>成就</b>想做得好<span class="need-tag">勝任感</span></summary>
-          <p>想做好一件事、進步、克服挑戰，或者達到某個標準。</p>
-          <p>重點唔只係「做完」，而係想做好啲。</p>
-        </details>
-        <details class="motive-note" data-motive="aff"><summary><span class="dot aff"></span><b>連結</b>想親近<span class="need-tag">歸屬感</span></summary>
-          <p>想同人建立關係、保持聯繫、得到接納，或者修補一段關係。</p>
-          <p>有人會寫一大班人一齊，有人會寫兩個人慢慢靠近。今次主要睇嘅，都係故事入面對「同人連結」嘅關注。</p>
-        </details>
-        <details class="motive-note" data-motive="pow"><summary><span class="dot pow"></span><b>影響力</b>想有份量<span class="need-tag">勝任感</span></summary>
-          <p>想改變事情發展、帶動其他人、令人注意，或者令自己嘅想法真正產生作用。</p>
-          <p>影響力唔一定係控制人。帶領、說服、鼓勵、改變，都可以係其中一種表現。</p>
-        </details>
-      </div>
+      <p class="eyebrow">書中的三種追求</p>
+      <h2 id="meaning-title">想做好，想靠近，想有影響。</h2>
+      <p class="chapter-intro">這些追求，可以同時出現在一個故事裏。</p>
+      <div id="motive-notes"></div>
     </section>
 
-    <section id="pictures" class="chapter" aria-labelledby="pictures-title">
-      <h2 id="pictures-title">逐張圖睇</h2>
-      <p class="chapter-intro">研究故事入面，每張圖都有較常引出嘅主題。<span class="brought-mark" aria-hidden="true">✦</span> 標住你寫到、而呢張圖平時較少引出嘅主題。只係一個值得留意嘅位，唔代表特別，亦唔代表就係你自己。</p>
-      <div id="cards"></div>
+    <section id="why" class="chapter book-chapter" aria-labelledby="why-title">
+      <p class="eyebrow">由這裏，走進書裏</p>
+      <h2 id="why-title">為甚麼請你寫故事？</h2>
+      <div id="why-body"></div>
+      <details class="book-more"><summary>這些追求，又從哪裏來？</summary><div id="origins-body"></div></details>
+      <p id="book-source" class="fine"></p>
     </section>
 
     <section id="reflection" class="chapter reflection-chapter" aria-labelledby="reflection-title">
-      <p class="eyebrow">畫外，返到你自己</p>
-      <h2 id="reflection-title">故事入面嘅「想要」，<br>同現實一樣嗎？</h2>
-      <p>未必。你現實可能想轉工、學新嘢、識多啲朋友，但故事入面反覆出現嘅，可能係另一種推動力。兩邊唔一樣都好正常。</p>
-      <p>就算兩個人都好想成功：一個可能因為享受挑戰，另一個可能因為好怕輸。表面一樣，背後嘅力量可以完全唔同。</p>
-      <h3 class="reflect-head">再諗多一步</h3>
-      <p>揀一樣你最近真係想做到嘅事，問自己：</p>
-      <ol class="reflect-list">
-        <li><strong>我想得到啲乜？</strong><span>做得更好？產生影響？同人更親近？</span></li>
-        <li><strong>我點解想做？</strong><span>本身覺得有趣？真心覺得重要？定係怕失敗、怕令人失望，或者想證明自己？</span></li>
-        <li><strong>做緊嘅時候，有冇呢三種感覺？</strong><span>我係自己揀嘅。我覺得自己做得到。我同其他人有連結。</span></li>
-      </ol>
-      <p class="closing-q">點解我會咁樣替故事人物安排佢哋想要嘅嘢？<br>咁我自己而家追緊嘅，又係因為乜？</p>
-      <p class="fine">答案留喺心入面就得，呢頁冇地方填，亦唔會記錄。</p>
+      <p class="eyebrow">把問題留給自己</p>
+      <h2 id="reflection-title"></h2>
+      <p id="reflection-note"></p>
     </section>
 
-    <aside id="bookclub-note" class="bookclub-note" hidden><h3>讀書會見</h3><p></p></aside>
+    <aside id="bookclub-note" class="bookclub-note" hidden><h3>帶一句話來，讀書會見。</h3><p></p></aside>
+    <p id="closing-note" class="closing-note"></p>
 
-    <details class="more about"><summary>關於呢個練習</summary>
-      <p>靈感來自心理學嘅圖畫故事練習（Picture Story Exercise）。你嘅故事會翻譯成英文，再由一個用專家評分故事訓練嘅模型閱讀；參照線係研究入面同一組圖嘅故事，已按長短調整。</p>
-      <p>呢個係輕鬆嘅自我探索，唔係心理測驗；四個故事只係一次閱讀，你可以認同，亦可以有唔同理解。</p>
+    <details id="stories-detail" class="more stories-detail">
+      <summary>重看四個故事</summary>
+      <p class="fine">展開圖片可看原文；再按句子，可看英文譯文和主題標記。</p>
+      <div id="cards"></div>
+    </details>
+
+    <details id="analysis-detail" class="more analysis-detail">
+      <summary>看看分析詳情</summary>
+      <p id="comparison-note"></p>
+      <div id="profile" class="profile"></div>
+      <p id="profile-legend" class="legend fine"><span class="key you"></span>你的故事<span class="key typical"></span>同組圖片的研究參照</p>
+      <p id="profile-explanation" class="fine"></p>
+      <p id="brought" class="brought-line" hidden></p>
+    </details>
+
+    <details class="more about"><summary>關於這份解讀</summary>
+      <div id="about-body"></div>
       <h4>圖片來源</h4>
       <ul id="credits-results" class="credits"></ul>
     </details>
 
-    <div class="result-footer"><div class="actions"><button id="btn-download" class="primary">下載故事同結果 ↓</button><button id="btn-again-random" class="secondary">換四張新圖再玩 →</button><button id="btn-restart" class="quiet">返回開始</button></div><p class="fine">結果唔會保存，重新整理就會消失。</p></div>
+    <div class="result-footer"><div class="actions"><button id="btn-download" class="primary">儲存故事和解讀 ↓</button><button id="btn-again-random" class="secondary">換四張新圖再寫 →</button><button id="btn-restart" class="quiet">返回開始</button></div><p class="fine">離開前記得下載，重新整理後結果會消失。</p></div>
   </section>
-  <noscript><p class="notice">呢個活動需要 JavaScript。</p></noscript>
+  <noscript><p class="notice">請啟用 JavaScript，才能開始寫故事。</p></noscript>
 </main>
 </body>
 </html>

@@ -14,50 +14,53 @@ motives.” PSE is one window into the Motivated Agent, which also includes
 conscious goals, plans, projects, values and aspirations. These imagined
 stories are not autobiographical narratives.
 
-Self-determination theory provides reflection lenses, named in plain words on
-the page: **勝任感** (competence) groups achievement and power imagery, and
-**歸屬感** (relatedness) groups affiliation imagery. These are not measured need
-scores. No theory terms appear on the page; autonomy appears only as a
-reflection question (「我係自己揀嘅」).
+**Results read like a bookclub companion:** a narrative about the characters,
+verbatim story excerpts, three kinds of pursuit (**成就 / 關係 / 影響**), a short
+bridge to the book, and one reflection question. Hong Kong written Chinese
+with light colloquial phrasing is used throughout the UI and download.
+Repeated trait disclaimers and the extra 勝任感／歸屬感 grouping have been removed.
+The relationship category includes affiliation imagery; it does not separately
+measure intimacy. Power retains both helpful and domineering possibilities.
 
-**Results lead with an interpretation in words, benchmarked against the
-pictures' pull.** The page shows no percentages or counts: bars, a reference
-line and words (較濃 / 相若 / 較淡: imagery per 1,000 words is a density). Main counts use the **English
-reading's** model flags, once per theme per sentence; the original-text reading
-is used only when translation fails, because AMC was tested on translated
-English and never on Cantonese. Unflagged scores of at least 0.30 remain exploratory 「隱約」 labels in
-sentence details; they do not affect the profile or headline. A profile needs
-three theme-bearing sentences across two stories. Which theme stands out is
-judged on shares against the normalised sum of the same pictures' German
-expert-coded means, explicitly a research reference rather than an average
-person's score. The bars, the reference line and the "more or less wanting
-overall" sentence use **imagery per 1,000 words** on both sides (English words;
-the norms' own mean words per story), the PSE's between-sample length
-correction, because the norm means are raw counts from ~90-word stories. Any
-missing picture reference disables the overall comparison.
+The narrative uses fixed category templates, not a generated interpretation
+of each plot. Excerpts are exact source sentences, selected from different
+stories where possible. Strong language still requires the existing evidence
+gates; tentative results stay tentative, ties retain both themes, and sparse
+results open the participant's own stories rather than inventing an explanation.
+A balanced reference does not imply equal motives: its copy names only themes
+actually detected. Density does not change the narrative headline.
 
-A 5-point excess gets slight wording; a 12-point excess gets stronger wording
-only when supported in three stories and stable after omitting each story and
-recomputing the matching reference. Otherwise the larger difference remains
-tentative. Translation failure cannot receive the strongest wording. These are
-display heuristics, not validated psychological cutoffs. Results include exact
-source sentences, balanced reflection notes and relative picture emphasis,
-without claiming rarity or proven personal projection. No percentiles or
-participant rankings are calculated.
-See the [review rationale and precise rules](docs/copy-benchmark-rationale.md).
+**Scoring is unchanged.** Main counts use English-reading model flags, once
+per theme per sentence; original text is used only if translation fails.
+Unflagged scores of at least 0.30 remain exploratory 「隱約」 labels in sentence
+details and do not affect the profile or headline. A profile needs three
+theme-bearing sentences across two stories. Focus is judged against the
+normalised sum of the same pictures' German expert-coded means. A 5-point
+excess is tentative; a 12-point excess permits stronger wording only with
+three-story support and stability after omitting each story and recomputing
+its reference. Translation failure never receives the strongest wording.
+These are display heuristics, not validated psychological cutoffs.
 
-Method stays off the page: 「關於呢個練習」 has one plain sentence and the picture
-credits. The download's research record keeps the method, per-1,000-word
-figures, both paths' labels, agreement, picture means with word counts and
-timing. Neither path is ground truth, and agreement is not a confidence score.
+「看看分析詳情」 contains the comparison, bars and picture emphasis. With a
+complete translation and reference, bars compare imagery per 1,000 words
+(English words versus the norms' own German words). Without a translation,
+they compare theme shares and say so. Missing picture references disable the
+overall comparison. No percentiles or participant rankings are calculated.
+The short 「關於這份解讀」 note keeps the method limitation and picture credits;
+the download retains the full technical record, both readings, picture norms,
+word counts and timing. Agreement between paths is not a confidence score.
 
-Before writing, no theme is named, so the stories are not primed. After
-writing, 「點解要寫故事？」
-explains why stories can show what direct questions miss. The private
-reflection separates what you want, why you want it (interest or value versus
-fear or proving yourself) and whether you feel autonomy, competence and
-relatedness while doing it, all in plain Cantonese. It collects no input and
-transmits no reflection answers.
+Before writing, no motive category is named. The prompts preserve a full story:
+the current scene, what came before, characters' thoughts/feelings/wants, and
+an ending. Guidance v5 shortens the wording and keeps the names/roles hint
+outside the input. Older drafts retain their original picture order and
+record their guidance history. Reflection collects no input.
+
+Visual direction: a contemporary bookclub booklet, with paper colour, green
+ink, serif headings and quotations, and sans-serif instructions. The decorative
+seal and stacked theme cards are removed; source sentences lead the results.
+See the [copy review](docs/copy-review-2026-09-29.md) and
+[implementation checks](docs/copy-revision-checks.md).
 
 - Site: https://pse-hk.aesopb15254.workers.dev
 - Backend: https://remtoec--pse-hk-scorer-web.modal.run
@@ -75,10 +78,10 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 - Four pictures per run. Each is shown for 10 s, followed by a soft 4-minute writing period.
 - **Bookclub mode (default):** new runs show boxer, couple by river, women in laboratory, and ship captain, in that order (`BOOKCLUB_SET`: c05, c07, c18, c15), without skipping. Summed German picture-pull means: aff 4.18, ach 3.42, pow 3.99. Existing drafts keep their original pictures.
 - **Random mode (「換四張新圖」):** four pictures from the 18 outside the classic set whose German reference rests on at least 30 stories (`MIN_NORM_STORIES`; in practice 81–2,316). Pictures with tiny or missing norms stay in the catalogue for old drafts but are not drawn, because a reference from 3–9 stories makes the reference line and picture emphasis noise. Pictures already drawn on this browser are avoided until all 18 have been seen, so about four replays bring only new pictures. Participants may skip up to 4 per run; skipped pictures are avoided too. When too few remain, the seen list is forgotten first, then the skip list, so the activity never blocks.
-- **Choosing a set:** the intro offers two buttons. On a first visit 「開始：經典四張圖」 leads and 「玩過？換四張新圖」 follows; after a completed result the order flips (「換四張新圖再玩」 first, 「再寫一次經典四張」 second). The results page has a visible 「換四張新圖再玩」 button.
-- No motive category is named before writing. Results show a descriptive interpretation in words, a profile of bars against length-adjusted research reference lines when complete, exact supporting sentences, and relative picture emphasis. A line matched to the reading says what it can and cannot mean. Then 「點解要寫故事？」, plain definitions of the three themes (tagged 勝任感／歸屬感), sentence cards (English and its themes), 「故事入面嘅「想要」，同現實一樣嗎？」 with three reflection questions and two closing questions, and a short 「關於呢個練習」 note with credits.
+- **Choosing a set:** first visits lead with 「開始寫故事」 (the bookclub set); returning visits lead with 「換四張新圖再寫」. The fixed set remains available as 「再寫一次讀書會這組圖」.
+- Results show a narrative interpretation, exact source excerpts, expandable definitions, the book bridge and one reflection. Full stories, analysis and method are separate expandable sections. Sparse readings open the stories immediately. The download shares the same prose and adds technical records.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
-- The writing screen asks for a complete story (「寫出成個故事」) in any comfortable language or mix. Placeholder prompts cover the scene, before, characters' inner experience and ending, with optional names or roles for clarity. Participants choose whom to write about; no gendered pronouns or answers for every person are required. Persistent reminders read 此刻 · 前因 · 內心 · 結局. A short story gets one optional, non-judgmental invitation to add thoughts or an ending. No self-revelation claim is made during writing. Guidance v4 preserves earlier draft history.
+- The writing screen asks for a complete story in any comfortable language or mix. Prompts cover the current scene, before, characters' thoughts/feelings/wants and ending. A separate persistent hint suggests names or roles where needed. A short story receives one optional invitation to add thoughts or an ending. The lock rule is visible before writing and beside the next button. Guidance v5 records earlier draft history.
 - Drafts are saved in the participant's browser, so they can leave and come back within 7 days.
 - Deviations from the standard protocol (4 minutes per story, one sitting) are recorded but not enforced: writing time per story, time away from the page, and resuming after more than 5 minutes. They appear in the download's research record, with a note that such stories are less standardised.
 - Sentence-level motive coding with the Automated Motive Coder (AMC) along two paths:
@@ -110,9 +113,9 @@ render results       ◀──────────────  counts, agre
 3. **Direct coding.** `automatedMotiveCoder/setfit` (pinned revision, multilingual-e5-large base) returns independent `ach`/`aff`/`pow`/`null` flags per sentence. The model's own `predict()` flags are used as-is. No threshold is invented.
 4. **Translation** (`backend/translation.py`). Workers AI `@cf/qwen/qwen3-30b-a3b-fp8` runs at temperature 0, with a conservative prompt (v3: rules, a glossary of Hong Kong colloquialisms and worked examples) and a JSON schema. Each story is sent as one batch so pronouns and dropped subjects can be resolved; batches that come back truncated are split. `scripts/eval_translation.py` is the regression check for prompt changes (results in `docs/spike-results.md`). Any failure falls back to direct-only results, never to a partial comparison.
 5. **Translated coding.** The English sentences go through AMC too. The response has both label sets, the counts, the agreement (sentences where both paths give the same set of motives), and metadata (model revision, translator, prompt version).
-6. **Headline.** When both paths have the same top motive, or share one of their tied top motives, the page reports it as a shared finding and names the extra tie. Only fully different leaders count as disagreement.
+6. **Technical comparison in the download.** When both paths have the same top motive, or share one of their tied top motives, the page reports it as a shared finding and names the extra tie. Only fully different leaders count as disagreement.
 
-A motive counts at most once per sentence. Counts are raw, never per 1,000 words, because Chinese text has no word spaces.
+A motive counts at most once per sentence. Backend counts are raw. The frontend additionally derives per-1,000-word rates from the English translation when available, for the comparison in analysis details.
 
 ## Pictures
 
