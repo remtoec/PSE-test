@@ -46,8 +46,11 @@ function runWebFixtures() {
   if (previousDraft === null) localStorage.removeItem(KEY);
   else localStorage.setItem(KEY, previousDraft);
   const ph = document.getElementById("story").placeholder;
-  check("full-story guidance sits in the writing box", ["經歷緊咩", "之前發生咗咩事", "感受到咩", "最想要咩", "最後點樣收場"]
+  check("full-story guidance sits in the writing box", ["每個人", "經歷緊咩", "之前發生咗咩事", "感受到咩", "最想要咩", "點樣收場"]
     .every((x) => ph.includes(x)) && document.querySelectorAll("#v-write .arc span:not(.sr-only)").length === 4);
+  check("prompt asks for each character with 他／她", ph.includes("他／她") && ph.includes("「男人」「女人」") && !ph.includes("佢哋"));
+  check("language line above the box", ["英文", "廣東話", "書面語", "夾雜"].every((x) => document.getElementById("lang-note").textContent.includes(x))
+    && document.getElementById("lang-note").compareDocumentPosition(document.getElementById("story")) & Node.DOCUMENT_POSITION_FOLLOWING);
   check("no continuation framing", !document.getElementById("v-write").textContent.includes("然後"));
   S = fresh(); S.mode = "random"; draw();
   check("random draws four", new Set(S.order).size === 4 && S.skipsLeft === MAX_SKIPS);
@@ -126,6 +129,11 @@ function runWebFixtures() {
   const one = (d, t) => ({ direct: sc(...d), translated: t && sc(...t) });
   const u = combined([one([], ["ach"]), one(["aff"], ["aff"]), one(["pow"], []), one(["aff"], null)]);
   check("a theme counts once if either reading finds it", u.ach === 1 && u.aff === 2 && u.pow === 1);
+  const faintOnly = { direct: { motives: [], scores: { ach: 0.31, aff: 0.29, pow: 0.1, null: 0.6 } }, translated: null };
+  check("a faint theme counts, below the floor does not", [...themesOf(faintOnly)].join() === "ach");
+  const lbl = document.createElement("div"); lbl.append(...[labelList(faintOnly.direct)].flat());
+  check("faint theme labelled as such", lbl.textContent === "隱約：成就" && lbl.querySelector(".label.faint.ach"));
+  check("missing scores are tolerated", themesOf({ direct: { motives: ["pow"] }, translated: null }).has("pow"));
   const clubTypical = typicalShares(BOOKCLUB_SET.map(byId));
   check("bookclub typical shares", Math.abs(clubTypical.aff - 4.18 / 11.59) < 1e-9 && Math.abs(clubTypical.ach - 3.42 / 11.59) < 1e-9);
   const even = { ach: 1 / 3, aff: 1 / 3, pow: 1 / 3 };
@@ -134,6 +142,10 @@ function runWebFixtures() {
   check("balanced", reading({ ach: 3, aff: 4, pow: 3 }, clubTypical).kind === "balanced"
     && reading({ ach: 3, aff: 4, pow: 3 }, clubTypical).focus.join() === "aff");
   check("sparse", reading({ ach: 1, aff: 1, pow: 0 }, clubTypical).kind === "sparse");
+  check("slight lean", reading({ ach: 3, aff: 4, pow: 2 }, clubTypical).kind === "tilt"
+    && reading({ ach: 3, aff: 4, pow: 2 }, clubTypical).focus.join() === "aff");
+  check("slight lean is worded softer", insightText(reading({ ach: 3, aff: 4, pow: 2 }, clubTypical), clubTypical, false)[0] === "你嘅故事，有少少偏向「連結」。"
+    && insightText(reading({ ach: 1, aff: 5, pow: 1 }, clubTypical), clubTypical, false)[0] === "你嘅故事，特別著重「連結」。");
   check("tied lean names both", reading({ ach: 3, aff: 3, pow: 0 }, even).focus.join() === "ach,aff");
   check("lab picture pulls two themes", typicalOf(byId("c18")).join() === "ach,pow");
   check("unmatched picture has no typical theme", typicalOf({ pull: null }) === null

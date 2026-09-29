@@ -77,7 +77,9 @@ details.more p { font-size: 14px; }
 .round-progress span.complete { background: var(--binding); }
 .round-progress span.current { background: var(--annotation); }
 .timer { font-size: 15px; color: var(--ink); margin-left: auto; }
-.round-title { font-size: 22px; margin-bottom: 12px; }
+.round-title { font-size: 22px; margin-bottom: 4px; }
+.lang-note { font-size: 13px; color: var(--ink-2); margin: 0 0 10px; }
+#v-view .round-title { margin-bottom: 12px; }
 .stimulus { margin: 0; position: relative; height: min(62vh, 560px); min-height: 260px; background: var(--paper-2); padding: 8px; display: grid; place-items: center; border-radius: 4px; }
 .stimulus img { width: 100%; height: 100%; min-height: 0; object-fit: contain; display: block; }
 .stimulus img:not([src]) { display: none; }
@@ -94,7 +96,8 @@ textarea[readonly] { background: transparent; border: 0; border-left: 2px solid 
 .arc { display: flex; gap: 4px; }
 .arc span { padding: 1px 8px; border: 1px solid var(--rule); border-radius: 999px; color: var(--muted); }
 .over { color: var(--annotation); font-weight: 700; }
-.gentle { border-left: 2px solid var(--annotation); padding: 8px 12px; color: var(--annotation); font-size: 14px; margin: 12px 0 0; }
+.gentle { padding: 4px 0 0; color: var(--ink-2); font-size: 14px; line-height: 1.7; margin: 10px 0 0; animation: appear 400ms var(--ease) both; }
+.gentle small { display: block; font-size: 12px; color: var(--muted); }
 .writing-actions { margin-top: 16px; }
 .lock-note { text-align: center; margin: 8px 0 0; font-size: 12px; }
 
@@ -194,6 +197,8 @@ details.card[open] summary::after { transform: rotate(90deg); }
 .card-body dd { margin: 0; font-size: 14px; overflow-wrap: anywhere; }
 .label { display: inline-block; color: var(--card); padding: 2px 8px; font-size: 12px; border-radius: 3px; margin: 4px 4px 0 0; }
 .label.none { color: var(--ink-2); border: 1px solid #bac3b5; }
+.label.faint { background: transparent; border: 1px dashed currentColor; }
+.label.faint.ach { color: var(--ach); } .label.faint.aff { color: var(--aff); } .label.faint.pow { color: var(--pow); }
 .flag-uncertain { color: var(--annotation); }
 
 .reflection-chapter h2 { margin-bottom: 16px; }

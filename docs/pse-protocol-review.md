@@ -142,3 +142,22 @@ not a norm. Research correlates are phrased as group tendencies ("people with
 more of this theme tend to…"), not statements about the reader. With 4–10
 themes per run, one sentence moves a share by 10–25 points; the page says so when
 there are fewer than 6.
+
+### Follow-up the same day: sensitivity, characters, name
+
+- **Sensitivity over caution.** The owner prefers false positives to silence,
+  because the aim is to intrigue and draw an emotional response. A theme now
+  counts when either reading rates it ≥ 0.30 (`FAINT`), below the model's own
+  0.50 cut-off. The method note and the download state this, and sentence
+  cards label 0.30–0.50 themes 「隱約」. A slight-lean tier (5–12 points above the
+  pictures' share, 「有少少偏向」) makes "close to the pictures" rarer. Neither
+  number is calibrated against human coding; both are constants in `web/app.js`.
+- **Each character, with 他／她.** The placeholder asks about each person and uses
+  他／她, suggesting 男人／女人 or names. Translation prompt v3 renders an
+  unspecified 佢 as "they", which merges characters in two-person stories;
+  explicit pronouns keep who wants what intact for coding.
+- **Gentler nudge.** The short-story note is now a muted invitation
+  ("他／她心入面諗緊咩、最後點樣，往往藏住你自己嘅影子"), not a task list.
+- **Language line** above the box: English, Cantonese, written Chinese or a mix.
+- **Name:** 故事以外 → 畫中有你 ("you are in the picture"), which says what the
+  exercise is about: the wants you write into the characters are yours.

@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>故事以外 · PSE-HK 讀書會練習</title>
-<meta name="description" content="四張圖，四個完整故事。睇吓你嘅故事最常回到邊一種動機。">
-<meta property="og:title" content="故事以外 · 每張圖，都係故事嘅中間">
+<title>畫中有你 · PSE-HK 讀書會練習</title>
+<meta name="description" content="四張圖，四個完整故事。你寫落嘅人物，藏住你自己想要嘅嘢。">
+<meta property="og:title" content="畫中有你 · 每張圖，都係故事嘅中間">
 <meta property="og:description" content="約 20 分鐘嘅圖畫故事練習。冇標準答案。">
 <meta name="theme-color" content="#f6f4ed">
 <meta name="pse-api" content="https://remtoec--pse-hk-scorer-web.modal.run">
@@ -17,14 +17,14 @@
 </head>
 <body>
 <a class="skip-link" href="#app">跳到主要內容</a>
-<header class="masthead"><span class="wordmark"><span class="book-mark" aria-hidden="true">以<br>外</span>故事以外</span></header>
+<header class="masthead"><span class="wordmark"><span class="book-mark" aria-hidden="true">有<br>你</span>畫中有你</span></header>
 <main id="app" tabindex="-1">
   <p id="storage-notice" class="notice" role="status" hidden>呢個瀏覽器唔俾暫存草稿，重新載入會失去內容。請保持頁面開啟直至完成。</p>
 
   <section id="v-intro" class="view" hidden aria-labelledby="intro-title">
     <p class="eyebrow">圖畫故事練習 · PSE</p>
     <h1 id="intro-title" tabindex="-1">每張圖，<br>都係故事嘅<span class="accent-text">中間</span>。</h1>
-    <p class="lede">佢哋經歷緊咩？之前發生過咩？最後點收場？由你寫出成個故事。</p>
+    <p class="lede">圖入面每個人經歷緊咩？之前發生過咩？最後點收場？由你寫出成個故事。</p>
     <ol class="steps" aria-label="點樣玩">
       <li><b>10 秒</b>睇圖</li>
       <li><b>4 分鐘</b>寫故事</li>
@@ -35,7 +35,7 @@
       <button id="btn-resume" class="primary" hidden>繼續上次嘅故事</button>
       <button id="btn-delete" class="quiet" hidden>刪除草稿</button>
     </div>
-    <p class="fine">廣東話、中文、英文都得。冇標準答案，唔使文筆好。</p>
+    <p class="fine">廣東話、書面語、英文，或者夾雜都得。冇標準答案，唔使文筆好。</p>
     <details class="more"><summary>開始之前要知</summary>
       <ul class="plain">
         <li>按「下一張」之後，嗰個故事就定稿，唔會再改。</li>
@@ -59,10 +59,11 @@
   <section id="v-write" class="view exercise-view" hidden aria-labelledby="write-title">
     <div class="round-bar"><span class="round-no"></span><div class="round-progress" aria-hidden="true"></div><span class="timer"><span class="sr-only">建議時間 </span><span id="soft-timer" aria-live="off">4:00</span></span></div>
     <h2 id="write-title" class="round-title" tabindex="-1">寫出成個故事</h2>
+    <p id="lang-note" class="lang-note">英文、廣東話、書面語，或者夾雜都得，點舒服點寫。</p>
     <label for="story" class="sr-only">你嘅故事</label>
-    <textarea id="story" rows="10" spellcheck="false" autocomplete="off" placeholder="佢哋係邊個？而家經歷緊咩？&#10;之前發生咗咩事，令佢哋走到呢一刻？&#10;佢哋心入面諗緊咩、感受到咩、最想要咩？&#10;最後點樣收場？&#10;&#10;唔使逐題答，寫成一個故事就得。"></textarea>
+    <textarea id="story" rows="10" spellcheck="false" autocomplete="off" aria-describedby="lang-note" placeholder="圖入面每個人係邊個？他／她而家經歷緊咩？&#10;之前發生咗咩事，令他／她走到呢一刻？&#10;每個人心入面諗緊咩、感受到咩、最想要咩？&#10;最後，每個人點樣收場？&#10;&#10;用「他」「她」、「男人」「女人」或者畀個名，分清楚邊個係邊個。唔使逐題答。"></textarea>
     <div class="meta-row"><span class="arc"><span class="sr-only">提示：</span><span>此刻</span><span>前因</span><span>內心</span><span>結局</span></span><span><span id="char-count"></span> <span id="save-state" aria-live="polite"></span></span></div>
-    <p id="time-up" class="gentle" hidden>4 分鐘到，幫個故事收個尾。</p>
+    <p id="time-up" class="gentle" hidden>差唔多 4 分鐘喇，可以慢慢幫佢哋收個尾。</p>
     <p id="short-note" class="gentle" role="status" hidden></p>
     <div class="actions writing-actions"><button class="quiet skip" type="button">換一張</button><button id="btn-next" class="primary" disabled>下一張 →</button></div>
     <p class="fine lock-note">按「下一張」之後，呢個故事就定稿。</p>
@@ -120,7 +121,7 @@
     </section>
 
     <section id="reflection" class="chapter reflection-chapter" aria-labelledby="reflection-title">
-      <p class="eyebrow">故事以外</p>
+      <p class="eyebrow">畫外，返到你自己</p>
       <h2 id="reflection-title">故事人物想要嘅，<br>同你想要嘅呢？</h2>
       <p>自我決定論（Self-Determination Theory）認為，人有三種基本心理需要：<strong>勝任</strong>（competence）、<strong>關係</strong>（relatedness）同<strong>自主</strong>（autonomy）。圖畫故事係一個粗略指標，反映你對頭兩種需要有幾敏感；第三種，要問你自己。</p>
       <ol class="reflect-list">
@@ -135,7 +136,7 @@
 
     <details class="more technical"><summary>點樣計？限制同技術資料</summary>
       <h4>點樣計</h4>
-      <p>每一句用兩種方法讀：原文直接分析，同翻譯成英文後再分析，兩者都用自動動機編碼模型 AMC。任何一種讀到嘅主題計一次，每句每種主題最多計一次。上面嘅百分比，係三種主題之間嘅比例。</p>
+      <p>每一句用兩種方法讀：原文直接分析，同翻譯成英文後再分析，兩者都用自動動機編碼模型 AMC。只要其中一種讀法認為一句有某個主題嘅機會達 30%，就計一次（模型本身要 50% 先算），每句每種主題最多計一次。呢個係刻意寧願多計、唔好漏：句子卡入面，未達 50% 嘅會標示「隱約」。上面嘅百分比，係三種主題之間嘅比例。</p>
       <p>「一般」係 Schönbrodt 等人德國研究入面，專家為同一組圖編碼嘅平均主題比例。語言、編碼方法同故事長度都唔同，所以只係粗略參照，唔係常模、百分位或者分數。模型未經驗證適用於廣東話；故事亦唔係你嘅自傳。</p>
       <h4>兩種讀法</h4>
       <div id="tally" class="comparison"></div>

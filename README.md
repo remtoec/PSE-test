@@ -1,4 +1,4 @@
-# PSE-HK · 故事以外
+# PSE-HK · 畫中有你
 
 A small, mobile-first Picture Story Exercise (PSE) for a Hong Kong reading group. Participants look at four pictures, write a short story about each in Cantonese, Chinese, English or a mix, and get an **experimental** automated analysis of achievement, affiliation and power imagery in their stories.
 
@@ -20,12 +20,14 @@ marker of how sensitive someone's imagination is to the **competence** need
 imagery). Autonomy is left to the participant's own reflection.
 
 **Results lead with an interpretation, benchmarked against the pictures' pull.**
-A sentence carries a theme if either reading (original or translated) found it,
-because direct Cantonese coding under-detects. The page compares each theme's
+Detection is deliberately sensitive, because the page's job is to intrigue
+rather than to measure. A sentence carries a theme if either reading
+(original or translated) rates it at least 30% likely. The model's own cut-off
+is 50%, and sentence cards mark the 30–50% themes as 「隱約」. The page compares each theme's
 *share* of the participant's themes with its share in German expert-coded
-stories for the same pictures, then says which theme leans above that (12
-percentage points or more), or that the profile is close to the pictures, or
-that there are too few themes (fewer than 3) to read. Each picture also shows
+stories for the same pictures. It then names a clear lean (12 percentage points
+or more above), a slight lean (5–12), a profile close to the pictures, or too few
+themes (fewer than 3) to read. Each picture also shows
 the theme(s) it usually pulls, and flags themes the participant brought in
 against that pull. Research correlates from McAdams (2015, ch. 6) explain the
 leading theme. The benchmark is only a rough reference: it uses shares, never
@@ -57,7 +59,7 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 - **Random mode:** four pictures from the entire supplied archive (18 classical and 30 newer pictures). Participants may skip up to 4 per run. Skipped pictures are excluded on that browser until fewer than four eligible pictures remain, when the exclusion list resets.
 - No motive category is named before the stories are written. The results page leads with one interpretation (leading theme, balanced, or too few themes), a competence/relatedness profile with the pictures' typical shares marked, and any brought-in themes. Then come research notes on each motive (the leading one open), a picture-by-picture view with sentence cards, and three static SDT reflection questions. Both-path counts, agreement, picture pulls, protocol notes, theory background, credits and model metadata sit in a collapsed "點樣計？限制同技術資料" section.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
-- The writing screen asks for a complete story (「寫出成個故事」), not a continuation. The four standard prompts sit inside the writing box as faint placeholder text on every screen size: who they are and what they are going through, what led up to this, what they think/feel/want, and how it ends. The prompts disappear once the participant types; a row of four small reminders (此刻 · 前因 · 內心 · 結局) stays underneath. Separate answers and polished grammar/punctuation are not required. Returning participants may write similar or different stories. A story of fewer than 2 sentences gets a single optional nudge to add the before, the wants or the ending; it is never blocked.
+- The writing screen asks for a complete story (「寫出成個故事」), not a continuation. A line above the box says English, Cantonese, written Chinese or a mix are all fine. The four standard prompts sit inside the writing box as faint placeholder text on every screen size, asked of each character rather than a collective 佢哋: who each person is and what he or she is going through, what led up to this, what each thinks/feels/wants, and how each ends. The placeholder suggests 他／她, 男人／女人 or names; the translation prompt renders an unspecified 佢 as singular "they", which blurs who is who when a story has two characters. The prompts disappear once the participant types; a row of four small reminders (此刻 · 前因 · 內心 · 結局) stays underneath. Separate answers and polished grammar/punctuation are not required. Returning participants may write similar or different stories. A story of fewer than 2 sentences gets a single quiet invitation to say more (what he or she is thinking, how it ends, "often where your own shadow is"); pressing again continues, and it is never blocked.
 - Drafts are saved in the participant's browser, so they can leave and come back within 7 days.
 - Deviations from the standard protocol (4 minutes per story, one sitting) are recorded but not enforced: writing time per story, time away from the page, and resuming after more than 5 minutes. They appear on the results page and in the download, with a note that such stories are less standardised.
 - Sentence-level motive coding with the Automated Motive Coder (AMC) along two paths:

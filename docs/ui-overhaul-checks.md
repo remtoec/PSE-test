@@ -65,6 +65,7 @@ guardrails: [protocol review, 2026-09-29](pse-protocol-review.md#2026-09-29-revi
 | Horizontal overflow at 390px | None (`scrollWidth` 390 on writing and results) |
 | Results page height at 390px | ~3,200px with sections collapsed, down from ~4,900px |
 | Console | No JavaScript errors (Google Fonts blocked in the sandbox only) |
+| Same-day follow-up | Fixtures `[]` (normal and fallback) with new checks: per-character 他／她 prompt with no 佢哋, language line above the box, ≥ 0.30 faint themes counted and labelled 「隱約」, slight-lean tier and wording, v2 draft resume label; flow and 49 pytest pass |
 
 Screenshots: `artifacts/ui-revision/` (`before-phone-write.png` for comparison).
 Not checked: physical iOS/Android browsers, screen readers, live model service.

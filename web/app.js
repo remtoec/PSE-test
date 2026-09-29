@@ -19,7 +19,11 @@ const SHORT = { ach: "成就", aff: "連結", pow: "影響力" };
 // Self-determination theory: achievement and power sit within competence, affiliation within relatedness.
 const NEEDS = [["勝任", "competence", ["ach", "pow"]], ["關係", "relatedness", ["aff"]]];
 const MIN_THEMES = 3;      // below this many detected themes, no lean is claimed
-const LEAN = 0.12;         // share above the pictures' typical share that counts as a lean
+const LEAN = 0.12;         // share above the pictures' typical share that counts as a clear lean
+const TILT = 0.05;         // ...and as a slight one
+// A theme counts when either reading rates it at least this likely; the model's own cut-off is 0.5.
+// Deliberately sensitive: for this exercise a faint false positive beats saying nothing.
+const FAINT = 0.3;
 const TYPICAL_OF_MAX = 0.75; // a picture "usually" pulls motives within 75% of its strongest pull
 // Boxer, couple by river, women in laboratory, ship captain.
 // German reference pulls: aff 4.18, ach 3.42, pow 3.99. A rough share benchmark, never a score correction.
@@ -322,8 +326,8 @@ function next() {
     S.nudged = pid;
     save();
     const note = $("short-note");
-    note.textContent = "故事好似未講完？可以補一兩句：之前發生咩、佢哋想要咩，或者最後點收場。"
-      + "已經寫完就再按一次。";
+    note.replaceChildren("想講多少少都得。他／她心入面諗緊咩、最後點樣，往往藏住你自己嘅影子。",
+      h("small", {}, "寫完就再按一次。"));
     note.hidden = false;
     return;
   }
@@ -550,9 +554,14 @@ function pathPanel(title, caption, counts) {
 
 // ---------- reading: combined themes against the pictures' pull ----------
 
-/** A sentence carries a theme if either reading found it (direct Cantonese under-detects). */
+/** Themes the model flagged, plus ones it rated at least FAINT likely but below its own cut-off. */
+const faintOf = (score) => MOTIVES.filter((m) => !score.motives.includes(m) && (score.scores?.[m] ?? 0) >= FAINT);
+
+/** A sentence carries a theme if either reading found it, even faintly (direct Cantonese under-detects). */
 function themesOf(s) {
-  return new Set([...s.direct.motives, ...(s.translated ? s.translated.motives : [])]);
+  const out = new Set();
+  for (const r of [s.direct, s.translated]) if (r) for (const m of [...r.motives, ...faintOf(r)]) out.add(m);
+  return out;
 }
 
 function combined(sentences) {
@@ -568,14 +577,16 @@ function typicalShares(pics) {
   return Object.fromEntries(MOTIVES.map((m) => [m, total ? sum[m] / total : 1 / 3]));
 }
 
-/** sparse: too few themes to read a profile; lean: a theme clearly above what the pictures pull; balanced: neither. */
+/** sparse: too few themes to read a profile; lean / tilt: a theme clearly / slightly above what the pictures pull; balanced: neither. */
 function reading(c, typical) {
   const total = MOTIVES.reduce((a, m) => a + c[m], 0);
   const share = Object.fromEntries(MOTIVES.map((m) => [m, total ? c[m] / total : 0]));
   if (total < MIN_THEMES) return { kind: "sparse", total, share, focus: leaders(c) };
   const lift = Object.fromEntries(MOTIVES.map((m) => [m, share[m] - typical[m]]));
   const top = Math.max(...MOTIVES.map((m) => lift[m]));
-  if (top >= LEAN) return { kind: "lean", total, share, focus: MOTIVES.filter((m) => lift[m] >= LEAN && top - lift[m] < 0.02) };
+  const near = (floor) => MOTIVES.filter((m) => lift[m] >= floor && top - lift[m] < 0.02);
+  if (top >= LEAN) return { kind: "lean", total, share, focus: near(LEAN) };
+  if (top >= TILT) return { kind: "tilt", total, share, focus: near(TILT) };
   return { kind: "balanced", total, share, focus: leaders(c) };
 }
 
@@ -598,11 +609,12 @@ function insightText(r, typical, failed) {
       `三種主題嘅比例，同一般人寫呢四張圖時相近，冇一種特別突出。最多嘅係${quote(r.focus)}。`];
   }
   const [m] = r.focus;
+  const verb = r.kind === "lean" ? "特別著重" : "有少少偏向";
   if (r.focus.length > 1) {
-    return [`你嘅故事，特別著重${quote(r.focus)}。`, `兩種主題都比一般人寫呢四張圖時多。`];
+    return [`你嘅故事，${verb}${quote(r.focus)}。`, `兩種主題都比一般人寫呢四張圖時多。`];
   }
   const [need, en] = needOf(m);
-  return [`你嘅故事，特別著重${quote([m])}。`,
+  return [`你嘅故事，${verb}${quote([m])}。`,
     `「${SHORT[m]}」佔你故事主題嘅 ${pct(r.share[m])}；一般人寫呢四張圖，大約係 ${pct(typical[m])}。`
     + `佢對應「${need}」（${en}）呢種心理需要。`];
 }
@@ -642,8 +654,10 @@ function chip(m, text, extra = "") {
 
 function labelList(score) {
   if (!score) return h("span", { class: "label none" }, "未有");
-  if (!score.motives.length) return h("span", { class: "label none" }, "冇主題");
-  return score.motives.map((m) => h("span", { class: `label ${m}-bg` }, NAMES[m]));
+  const faint = faintOf(score);
+  if (!score.motives.length && !faint.length) return h("span", { class: "label none" }, "冇主題");
+  return [...score.motives.map((m) => h("span", { class: `label ${m}-bg` }, NAMES[m])),
+    ...faint.map((m) => h("span", { class: `label faint ${m}` }, `隱約：${NAMES[m]}`))];
 }
 
 function dots(s) {
@@ -785,7 +799,7 @@ function download() {
   const d = lastResult;
   const x = summarise(d);
   const fmtCounts = (c) => MOTIVES.map((m) => `${NAMES[m]} ${c[m]}`).join("，");
-  const lines = ["故事以外 · 故事同結果", new Date().toLocaleString("zh-HK"), "", ...x.text, ""];
+  const lines = ["畫中有你 · 故事同結果", new Date().toLocaleString("zh-HK"), "", ...x.text, ""];
   if (x.r.kind !== "sparse") {
     lines.push("主題比例（你 ／ 一般人寫同一組圖）：");
     for (const [need, en, ms] of NEEDS) {
@@ -799,19 +813,23 @@ function download() {
     const typ = typicalOf(p);
     lines.push(`— 第 ${i + 1} 個故事 —`, `圖片一般引出：${typ ? typ.map((m) => SHORT[m]).join("、") : "未有常模"}`);
     for (const s of x.byPic[i]) {
-      const fmt = (y) => (y ? (y.motives.length ? y.motives.map((m) => NAMES[m]).join("、") : "冇主題") : "未有");
+      const fmt = (y) => {
+        if (!y) return "未有";
+        const all = [...y.motives.map((m) => NAMES[m]), ...faintOf(y).map((m) => `隱約${NAMES[m]}`)];
+        return all.length ? all.join("、") : "冇主題";
+      };
       lines.push(s.source, `  EN: ${s.english ?? "（未有翻譯）"}${s.uncertain ? " ⚑" : ""}`, `  原文：${fmt(s.direct)}｜翻譯後：${fmt(s.translated)}`);
     }
     lines.push("");
   });
-  lines.push("—— 故事以外 ——",
+  lines.push("—— 畫外，返到你自己 ——",
     "自我決定論：勝任（competence）、關係（relatedness）、自主（autonomy）。圖畫故事係一個粗略指標，反映你對頭兩種需要有幾敏感。",
     "1. 勝任：最近有冇一件事，你好想做得更好，或者想有多啲影響？",
     "2. 關係：你而家最想同邊個更親近？",
     "3. 自主：呢啲「想要」，係你自己揀嘅，定係為咗別人嘅期望？",
     "McAdams · The Art and Science of Personality Development (2015), Chapter 6: The Motivational Agenda", "",
     "—— 點樣計 ——",
-    "每句用原文同英文翻譯兩種方法讀（同一個 AMC 模型），任何一種讀到嘅主題計一次。「一般」係德國研究專家為同一組圖編碼嘅平均主題比例，只係粗略參照，唔係常模、百分位或者分數。",
+    `每句用原文同英文翻譯兩種方法讀（同一個 AMC 模型），任何一種讀法認為機會達 ${FAINT * 100}% 就計一次（模型本身要 50%），刻意寧願多計。「一般」係德國研究專家為同一組圖編碼嘅平均主題比例，只係粗略參照，唔係常模、百分位或者分數。`,
     "原文分析：" + fmtCounts(d.summary.direct),
     "英文翻譯後分析：" + (d.summary.translated ? fmtCounts(d.summary.translated) : "翻譯未能完成，唔代表零個主題。"),
     "兩種讀法：" + headline(d).filter(Boolean).join(" "),
