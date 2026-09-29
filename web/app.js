@@ -19,8 +19,8 @@ const LONG_WAIT_MS = 45_000;
 const BREAK_MS = 5 * 60_000; // a resume after this long counts as a break, not crash recovery
 const AWAY_NOTE_MS = 60_000;
 const MOTIVES = ["ach", "aff", "pow"];
-const NAMES = { ach: "成就", aff: "連結／親和", pow: "影響力／權力" };
-const SHORT = { ach: "成就", aff: "連結", pow: "影響力" };
+// One name per theme, on the page and in the download.
+const NAMES = { ach: "成就", aff: "連結", pow: "影響力" };
 // Self-determination theory: achievement and power sit within competence, affiliation within relatedness.
 const NEEDS = [["勝任", "competence", ["ach", "pow"]], ["關係", "relatedness", ["aff"]]];
 const MIN_THEMES = 3;      // label floor; assessReading also checks distinct sentences and pictures
@@ -372,8 +372,8 @@ function next() {
     S.nudged = pid;
     save();
     const note = $("short-note");
-    note.replaceChildren("想講多少少都得：人物心入面諗緊咩？件事最後點收場？",
-      h("small", {}, "寫完就再按一次。"));
+    note.replaceChildren("想再寫多兩句？例如人物心入面諗緊咩、件事點收尾。",
+      h("small", {}, "唔加都得，再按一次就繼續。"));
     note.hidden = false;
     return;
   }
@@ -496,7 +496,7 @@ async function submit() {
   const code = data && data.code;
   if (res.status === 429) {
     const wait = Math.min(60, parseInt(res.headers.get("Retry-After"), 10) || 20);
-    return finish(() => showError("而家有其他人正在分析，請稍等一陣再試。", true, wait));
+    return finish(() => showError("而家有其他人用緊，等一陣再試吓。", true, wait));
   }
   if (res.status === 400 || res.status === 413) {
     const pid = (data && data.picture_id) || null;
@@ -554,7 +554,7 @@ function leaders(c) {
   const max = Math.max(...MOTIVES.map((m) => c[m]));
   return max ? MOTIVES.filter((m) => c[m] === max) : [];
 }
-const joinNames = (ms) => {
+const quote = (ms) => {
   const q = ms.map((m) => `「${NAMES[m]}」`);
   return q.length > 1 ? q.slice(0, -1).join("、") + "同" + q[q.length - 1] : q[0];
 };
@@ -563,25 +563,25 @@ function headline(d) {
   const dl = leaders(d.summary.direct);
   if (d.translation_failed) {
     return [dl.length
-      ? `原文分析：呢四個故事最常出現${joinNames(dl)}主題${dl.length > 1 ? "（數量一樣）" : ""}。`
+      ? `原文分析：呢四個故事最常出現${quote(dl)}主題${dl.length > 1 ? "（數量一樣）" : ""}。`
       : "原文分析：模型喺呢啲故事入面冇識別到呢三種主題。",
-    "今次翻譯步驟未能完成，所以只顯示原文分析。" + (dl.length ? "" : "呢個唔代表你冇呢啲動機。")];
+    "今次翻譯步驟未能完成，所以只顯示原文分析。" + (dl.length ? "" : "呢個唔代表你冇呢啲「想要」。")];
   }
   const tl = leaders(d.summary.translated);
-  if (!dl.length && !tl.length) return ["模型喺呢啲故事入面冇識別到呢三種主題。", "呢個唔代表你冇呢啲動機，只係呢個模型喺呢幾個故事搵唔到明顯嘅例子。"];
+  if (!dl.length && !tl.length) return ["模型喺呢啲故事入面冇識別到呢三種主題。", "呢個唔代表你冇呢啲「想要」，只係呢個模型喺呢幾個故事搵唔到明顯嘅例子。"];
   if (dl.join() === tl.join()) {
-    return [`兩種分析都顯示，呢四個故事最常出現${joinNames(dl)}主題${dl.length > 1 ? "（數量一樣）" : ""}。`, ""];
+    return [`兩種分析都顯示，呢四個故事最常出現${quote(dl)}主題${dl.length > 1 ? "（數量一樣）" : ""}。`, ""];
   }
   const shared = dl.filter((m) => tl.includes(m));
   if (shared.length) {
     // Same leader, one path has an extra tie: that's a partial match, not a disagreement.
     const extra = (a, b, who) => {
       const x = a.filter((m) => !b.includes(m));
-      return x.length ? `${who}分析另外${joinNames(x)}都一樣多。` : "";
+      return x.length ? `${who}分析另外${quote(x)}都一樣多。` : "";
     };
-    return [`兩種分析都顯示，呢四個故事最常出現${joinNames(shared)}主題。`, extra(dl, tl, "原文") + extra(tl, dl, "英文翻譯後")];
+    return [`兩種分析都顯示，呢四個故事最常出現${quote(shared)}主題。`, extra(dl, tl, "原文") + extra(tl, dl, "英文翻譯後")];
   }
-  const describe = (ls) => (ls.length ? `最多係${joinNames(ls)}` : "冇識別到主題");
+  const describe = (ls) => (ls.length ? `最多係${quote(ls)}` : "冇識別到主題");
   return ["兩種分析方法嘅結果唔一致。", `原文分析${describe(dl)}；英文翻譯後分析${describe(tl)}。`];
 }
 
@@ -668,39 +668,37 @@ function assessReading(sentences, pics, failed = false) {
 }
 
 const pct = (x) => `${Math.round(x * 100)}%`;
-const quote = (ms) => {
-  const q = ms.map((m) => `「${SHORT[m]}」`);
-  return q.length > 1 ? q.slice(0, -1).join("、") + "同" + q[q.length - 1] : q[0];
-};
 const needOf = (m) => NEEDS.find(([, , ms]) => ms.includes(m));
 
 /** Words only: the page shows no percentages or counts. `overall` is imagery per word relative to the reference. */
 function insightText(r, typical, failed, overall = null) {
-  const amount = overall == null ? "" : overall >= RICH ? "整體嚟講，你嘅故事寫「想要」嘅筆墨比參照多。"
-    : overall < POOR ? "整體嚟講，你嘅故事寫「想要」嘅筆墨比參照少，較多寫畫面同經過。" : "";
+  // Per 1,000 words is a density, so the wording is 濃／淡 like ink on the page.
+  const amount = overall == null ? "" : overall >= RICH ? "整體嚟講，你寫「想要」嘅筆墨比研究故事濃。"
+    : overall < POOR ? "整體嚟講，你寫「想要」嘅筆墨比研究故事淡，較多寫畫面同經過。" : "";
+  const against = "同研究入面寫同一組圖嘅故事比，";
   if (r.kind === "sparse") {
     return ["你嘅故事，可以先逐句回望。",
-      "今次模型辨認到嘅主題較少，或者集中喺一個故事，未夠材料比較整體比重。唔代表你冇呢啲動機，亦唔係寫得好唔好嘅評分。"
+      "今次模型認到嘅主題較少，或者集中喺一個故事，未夠材料睇整體比重。唔代表你冇呢啲「想要」，亦唔係評你寫得好唔好。"
       + (failed ? "今次翻譯未完成，主題可能偏少。" : "")];
   }
   if (r.kind === "unbenchmarked") {
     return ["你嘅故事，可以由呢啲主題睇起。",
-      `今次較多辨認到${quote(r.focus)}。呢組圖片未有完整研究參照，所以唔作高低比較。`];
+      `今次較多認到${quote(r.focus)}。呢組圖片未有完整研究參照，所以唔同研究故事比較。`];
   }
   if (r.kind === "balanced") {
     return ["你嘅故事，幾種主題都各有位置。",
-      "今次辨認到嘅主題比重，同組圖片嘅研究參照相近。" + amount + "可以由一句令你有感覺嘅故事開始，睇下邊個人物最令你在意。"];
+      against + "幾種主題嘅比重都差唔多。" + amount + "可以由一句你最有感覺嘅句子開始，睇下邊個人物最令你在意。"];
   }
   const title = r.kind === "lean" ? `${quote(r.focus)}反覆出現。`
     : r.kind === "tilt" ? `有少少偏向${quote(r.focus)}。` : `${quote(r.focus)}佔比較多。`;
-  const comparison = `${quote(r.focus)}喺你故事入面嘅比重，${r.kind === "tilt" ? "略高於" : "高於"}同組圖片嘅研究參照。`;
-  return [`今次故事入面，${title}`, comparison + amount
-    + (r.kind === "lean" ? "呢個方向喺幾個故事都有出現。"
-      : r.kind === "tentative" ? "暫時當一條線索就好，睇下啱唔啱你。" : "差距細，可以當作一個回望故事嘅角度。")];
+  const more = r.kind === "lean" ? "明顯多啲" : r.kind === "tilt" ? "多少少" : "多啲";
+  return [`今次故事入面，${title}`, `${against}你筆下嘅${quote(r.focus)}${more}。` + amount
+    + (r.kind === "lean" ? "呢個主題喺幾個故事都有出現。"
+      : r.kind === "tentative" ? "暫時當一條線索就好，睇下啱唔啱你。" : "差距唔大，當係一個回望嘅角度就好。")];
 }
 
 /** A comparison in words; the page shows no numbers. */
-const compareWord = (you, ref) => (you >= ref * 1.25 ? "高過參照" : you <= ref * 0.8 ? "低過參照" : "接近參照");
+const compareWord = (you, ref) => (you >= ref * 1.25 ? "較濃" : you <= ref * 0.8 ? "較淡" : "相若");
 
 /** Bars against reference lines, per 1,000 words when both sides have a length; theme shares otherwise. No numbers. */
 function profile(r, x) {
@@ -714,7 +712,7 @@ function profile(r, x) {
     h("div", { class: "need-head" }, h("span", {}, need, " ", h("small", { lang: "en" }, en)),
       ref && ms.length > 1 ? h("small", {}, compareWord(sum(you, ms), sum(ref, ms))) : null),
     ms.map((m) => h("div", { class: "profile-row" + (r.focus.includes(m) ? " focus" : "") },
-      h("span", { class: "profile-name" }, SHORT[m]),
+      h("span", { class: "profile-name" }, NAMES[m]),
       h("span", { class: "profile-track", "aria-hidden": "true" },
         h("span", { class: `profile-fill ${m}-bg`, style: `width:${at(you[m])}` }),
         ref ? h("span", { class: "profile-typical", style: `left:${at(ref[m])}` }) : null),
@@ -761,12 +759,12 @@ function pictureCard(p, i, ss) {
       h("img", { src: p.file, alt: "" }),
       h("span", { class: "pic-sum" },
         h("span", { class: "pic-title" }, `第 ${i + 1} 張`),
-        h("span", { class: "pic-line" }, h("small", {}, "圖片參照較偏向"),
-          typ ? typ.map((m) => chip(m, SHORT[m], "muted")) : h("span", { class: "chip muted" }, "未有常模"),
+        h("span", { class: "pic-line" }, h("small", {}, "研究故事多寫"),
+          typ ? typ.map((m) => chip(m, NAMES[m], "muted")) : h("span", { class: "chip muted" }, "未有研究參照"),
           typ && p.pull.n_stories < 30 ? h("small", {}, "（樣本少）") : null),
-        h("span", { class: "pic-line" }, h("small", {}, "你寫咗"),
+        h("span", { class: "pic-line" }, h("small", {}, "你寫到"),
           yours.length
-            ? yours.map((m) => chip(m, `${brought.includes(m) ? "✦ " : ""}${SHORT[m]}`, brought.includes(m) ? "brought" : ""))
+            ? yours.map((m) => chip(m, `${brought.includes(m) ? "✦ " : ""}${NAMES[m]}`, brought.includes(m) ? "brought" : ""))
             : h("span", { class: "chip muted" }, "冇明顯主題")))),
     h("div", { class: "pic-body" },
       ss.map((s) => h("details", { class: "card" },
@@ -817,15 +815,15 @@ function broughtText(brought) {
   if (!brought.length) return "";
   const [i, ms] = brought[0];
   return (brought.length === 1
-    ? `✦ 第 ${i + 1} 個故事亦寫到${quote(ms)}，喺呢張圖嘅研究參照入面，佢唔係主要方向。`
-    : `✦ 有幾個故事寫到圖片參照主要方向以外嘅主題，例如第 ${i + 1} 個嘅${quote(ms)}。`)
-    + "可以回望相關句子，睇下呢個角度對你有冇意思。";
+    ? `✦ 第 ${i + 1} 個故事仲寫到${quote(ms)}，呢張圖平時較少引出呢一面。`
+    : `✦ 有幾個故事都寫到圖片平時較少引出嘅主題，例如第 ${i + 1} 個嘅${quote(ms)}。`)
+    + "可以返去睇下嗰幾句，對你有冇意思。";
 }
 
 /** Where the leading theme shows up, in words: which story, not how many. */
 const evidenceLead = (e) => (e.stories > 1
-  ? `「${SHORT[e.motive]}」喺幾個故事都有出現，例如第 ${e.picture} 個：`
-  : `「${SHORT[e.motive]}」出現喺第 ${e.picture} 個故事：`);
+  ? `「${NAMES[e.motive]}」喺幾個故事都有出現，例如第 ${e.picture} 個：`
+  : `「${NAMES[e.motive]}」出現喺第 ${e.picture} 個故事：`);
 
 function renderResults(d) {
   const x = summarise(d);
@@ -863,7 +861,7 @@ function renderResults(d) {
     (pictures.map((p) => p.id).join() === BOOKCLUB_SET.join()
       ? "大家寫嘅係同一組圖。"
       : "今次沿用舊草稿嘅圖片，同新開始嘅讀書會組合可能唔同。")
-    + "揀一句令你有感覺嘅故事帶去就夠；分唔分享，由你決定。";
+    + "揀一句你自己最有感覺嘅句子帶去就夠；分唔分享，由你決定。";
 
   credits($("credits-results"));
   document.querySelectorAll("#v-results details").forEach((detail) => { detail.open = false; });
@@ -879,7 +877,7 @@ function resultText(d) {
   if (x.r.kind !== "sparse" && x.typical) {
     for (const [need, en, ms] of NEEDS) {
       const you = rated ? x.youRates : x.r.share, ref = rated ? x.refRates : x.typical;
-      lines.push(`${need}（${en}）：` + ms.map((m) => `${SHORT[m]}${compareWord(you[m], ref[m])}`).join("，"));
+      lines.push(`${need}（${en}）：` + ms.map((m) => `${NAMES[m]}${compareWord(you[m], ref[m])}`).join("，"));
     }
     lines.push("");
   }
@@ -888,7 +886,7 @@ function resultText(d) {
   if (x.brought.length) lines.push(broughtText(x.brought), "");
   pictures.forEach((p, i) => {
     const typ = typicalOf(p);
-    lines.push(`— 第 ${i + 1} 個故事 —`, `圖片參照較偏向：${typ ? typ.map((m) => SHORT[m]).join("、") : "未有參照"}`);
+    lines.push(`— 第 ${i + 1} 個故事 —`, `研究故事多寫：${typ ? typ.map((m) => NAMES[m]).join("、") : "未有參照"}`);
     for (const s of x.byPic[i]) {
       const fmt = (y) => {
         if (!y) return "未有";
@@ -900,10 +898,10 @@ function resultText(d) {
     lines.push("");
   });
   lines.push("—— 畫外，返到你自己 ——",
-    "自我決定論：勝任（competence）、關係（relatedness）、自主（autonomy）。呢度借用三個角度反思，主題比例唔係心理需要嘅分數。",
+    "自我決定論：想做得到（勝任 competence）、想同人有連繫（關係 relatedness）、想由自己揀（自主 autonomy）。借呢三個角度反思；上面嘅結果唔係呢啲需要嘅分數。",
     "1. 勝任：最近有冇一件事，你好想做得更好，或者想有多啲影響？",
-    "2. 關係：你而家最想同邊個更親近？",
-    "3. 自主：呢啲「想要」，係你自己揀嘅，定係為咗別人嘅期望？",
+    "2. 關係：有冇一個人，你想同佢行近啲？",
+    "3. 自主：呢啲「想要」，有幾多係你自己揀，有幾多係為咗其他人嘅期望？",
     "McAdams · The Art and Science of Personality Development (2015), Chapter 6: The Motivational Agenda", "",
     "—— 技術記錄（研究用）——",
     ...READING_METHOD,
@@ -947,13 +945,17 @@ function pullText(p) {
     + `；${p.pull.words} 字；${p.pull.n_stories} 個故事`;
 }
 
+/** Licensed photos keep their author and licence on their own line; database pictures share one licence note. */
 function credits(ul) {
-  ul.replaceChildren(...pictures.map((p, i) => h("li", {},
-    `第 ${i + 1} 張（${p.pse_id}）：${p.title}。${p.author}。`,
-    h("a", { href: p.source_url, target: "_blank", rel: "noopener" }, "來源"), "；",
-    p.license_url ? h("a", { href: p.license_url, target: "_blank", rel: "noopener" }, p.license) : p.license,
-    p.modified ? "；已縮細及壓縮。" : "")));
-  ul.append(h("li", {}, "圖片選自 Schönbrodt et al. (2020/2021) PSE 圖片資料庫 (osf.io/pqckn)。"));
+  const link = (href, text) => h("a", { href, target: "_blank", rel: "noopener" }, text);
+  ul.replaceChildren(...pictures.map((p, i) => h("li", {}, `第 ${i + 1} 張 · `,
+    p.license_url
+      ? [`${p.title} · ${p.author} · `, link(p.source_url, "來源"), " · ", link(p.license_url, p.license)]
+      : [p.title_zh ? `${p.title_zh}（${p.pse_id}）· ` : `${p.pse_id} · `, link(p.source_url, "來源")])));
+  const notes = ["圖片選自 Schönbrodt 等人（2020/2021）嘅 PSE 圖片資料庫（osf.io/pqckn）。"];
+  if (pictures.some((p) => !p.license_url)) notes.push("資料庫圖片未逐張核實授權，只供今次內部練習使用。");
+  if (pictures.some((p) => p.modified)) notes.push("圖片已縮細及壓縮。");
+  ul.append(h("li", {}, notes.join("")));
 }
 
 function confirmDelete() {

@@ -131,9 +131,9 @@ test('screen wording carries no numbers; long stories are not read as more motiv
     assert.doesNotMatch(x.text.join(''), /[0-9%]/);
   }
   context.data = { sentences: mk(10), translation_failed: false, meta: {}, summary: {} };
-  assert.match(run('summarise(data)').text[1], /筆墨比參照多/);   // 8 themes in 80 words
+  assert.match(run('summarise(data)').text[1], /筆墨比研究故事濃/);   // 8 themes in 80 words
   context.data = { sentences: mk(200), translation_failed: false, meta: {}, summary: {} };
-  assert.match(run('summarise(data)').text[1], /筆墨比參照少/);   // same 8 themes in 1,600 words
+  assert.match(run('summarise(data)').text[1], /筆墨比研究故事淡/);   // same 8 themes in 1,600 words
 });
 test('download keeps the numbers for research use', () => {
   const rows = context.fixturePics.flatMap(p => [row(p.id, [], { english: 'one two three four five', translated: score(['aff']) })]);

@@ -19,6 +19,26 @@ CLASSIC_IDS = {name: f"c{i:02}" for i, name in enumerate((
     "men on ship", "neymar & marcelo", "nightclub scene", "ship captain",
     "sorrow", "trapeze artists", "women in laboratory",
 ), 1)}  # Permanent identities: adding a file must never renumber saved drafts.
+TITLE_ZH = {  # Chinese display titles for the credits, translated from the database names.
+    "applause": "鼓掌",
+    "architect at desk": "伏案建築師",
+    "beachcombers": "海灘拾荒者",
+    "bicycle race": "單車比賽",
+    "boxer": "拳手",
+    "burglars": "竊賊",
+    "couple by river": "河畔情侶",
+    "couple sitting opposite a woman": "情侶與對座女子",
+    "girfriends in cafe with male approaching": "咖啡店女伴，男子走近",
+    "kennedy nixon": "甘迺迪與尼克遜",
+    "lacrosse duel": "長曲棍球對決",
+    "men on ship": "船上男子",
+    "neymar & marcelo": "尼馬與馬些路",
+    "nightclub scene": "夜店一幕",
+    "ship captain": "船長",
+    "sorrow": "哀傷",
+    "trapeze artists": "空中飛人",
+    "women in laboratory": "實驗室女士",
+}
 
 
 def main():
@@ -52,6 +72,8 @@ def main():
                     image.thumbnail((1200, 1200), Image.Resampling.LANCZOS)
                     image.save(ROOT / "web" / picture["file"], quality=88, optimize=True)
                     picture["width"], picture["height"] = image.size
+            if name in TITLE_ZH:
+                picture["title_zh"] = TITLE_ZH[name]
             picture["archive_file"] = source.relative_to(ARCHIVE).as_posix()
             norm_id = re.sub(r"newpic0+(\d+)", r"newpic\1", name)
             if name == "burglars":

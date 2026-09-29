@@ -1,5 +1,51 @@
 # Changelog
 
+## 2026-09-29 (copy edit) — One voice, one name per theme, 濃淡 wording
+
+From a copy review written as a Chinese editor and book-club member. Reading
+rules, gates and numbers are unchanged; only wording and credits changed.
+
+- **Bars and the overall sentence say 較濃／相若／較淡 and 「筆墨比研究故事濃／淡」**
+  (was 高過／接近／低過參照 and 「筆墨比參照多／少」). The legend reads 研究故事嘅濃度.
+  *Why:* the bars are imagery per 1,000 words, which is a density, and 筆墨濃淡
+  fits the book-and-ink framing. 參照 on every row read as jargon, and three
+  「高過參照」 under a headline of only 「有少少偏向」 looked contradictory; with 濃淡
+  the rows agree with the sentence on overall density.
+- **The comparison reads 「同研究入面寫同一組圖嘅故事比，你筆下嘅「X」多少少／多啲／明顯多啲。」**
+  (was 「…嘅比重，略高於／高於同組圖片嘅研究參照」).
+  *Why:* the same claim in plain Cantonese; 略高於 is written Chinese dropped into
+  a Cantonese sentence.
+- **One name per theme: 成就, 連結, 影響力,** on the page and in the download (was
+  also 連結／親和 and 影響力／權力 in sentence labels and the research record).
+  「動機」 is gone from the page; 「想要」 is the plain word for it.
+  *Why:* two names for one theme made readers wonder whether they were
+  different things. Naming 「動機」 before results also primed the construct.
+- **Review screen asks 「四個故事入面，人物反覆想要啲乜？」** (was 「最常回到邊種動機？」).
+  *Why:* results compare against the pictures, not raw frequency, and the
+  construct should not be named before writing is finished.
+- **The lock note says 「按下去之後」**, so it matches the last round's button
+  「完成四個故事」.
+- **Short-story nudge: 「想再寫多兩句？…」 then 「唔加都得，再按一次就繼續。」**
+  *Why:* 「寫完就再按一次」 implied writing more was required; it never was.
+- **✦ is explained as 「呢張圖平時較少引出」**, still without rarity or
+  projection claims, but without the words 罕見 and 投射. Picture cards read
+  研究故事多寫 ／ 你寫到.
+- **Plainer self-determination theory intro and questions.** Autonomy asks 「有幾多係你自己揀」,
+  since autonomy is a matter of degree; relatedness asks 「有冇一個人，你想同佢行近啲？」.
+  The reflection's 「唔會收集任何輸入」 becomes 「呢頁冇地方填，亦唔會記錄」.
+- **Written-Chinese phrases inside Cantonese sentences replaced** (難以 → 好難／唔敢,
+  正在分析 → 用緊, 分析緊 → 細讀緊), eyebrow 「讀書會前嘅小練習」 instead of 「PSE」.
+- **Privacy lines name the cloud services and say 「呢個練習唔會儲存或者記錄你嘅故事」.**
+  *Why:* plainer than 「唔會建立故事資料庫」; the backend stores and logs no story
+  text (docs/operations.md). It does not promise anything on the providers'
+  behalf.
+- **Credits:** 「第 1 張 · 拳手（boxer）· 來源」, with Chinese titles for the 18
+  classic pictures (`title_zh`, also kept by the importer) and one Chinese
+  licence note instead of English boilerplate on every line. Licensed photos
+  keep their author and licence.
+- Tests updated for the new wording, plus checks for one name per theme, the
+  lock note, no 「動機」 on the review screen, and the credits format.
+
 ## 2026-09-29 (last) — Classic set first, new pictures on replay; sound random draws
 
 - **Two visible choices on the intro instead of a small link.** First visit:

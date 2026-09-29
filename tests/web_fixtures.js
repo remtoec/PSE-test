@@ -53,6 +53,8 @@ function runWebFixtures() {
   check("language line above the box", ["英文", "廣東話", "書面語", "夾雜"].every((x) => document.getElementById("lang-note").textContent.includes(x))
     && document.getElementById("lang-note").compareDocumentPosition(document.getElementById("story")) & Node.DOCUMENT_POSITION_FOLLOWING);
   check("no continuation framing", !document.getElementById("v-write").textContent.includes("然後"));
+  check("lock note fits every round's button", !document.querySelector("#v-write .lock-note").textContent.includes("下一張"));
+  check("review does not name motives before results", !document.getElementById("v-review").textContent.includes("動機"));
   const stored = Object.fromEntries([SKIP_KEY, SEEN_KEY, PLAYED_KEY].map((k) => [k, localStorage.getItem(k)]));
   S = fresh(); S.mode = "random"; draw();
   check("random draws four", new Set(S.order).size === 4 && S.skipsLeft === MAX_SKIPS);
@@ -100,7 +102,7 @@ function runWebFixtures() {
   const ten = (d, t) => Array.from({ length: 10 }, () => [d, t]);
   const shared = make(ten(["aff"], ["aff"]));
   render(shared);
-  check("shared leader", H(shared).includes("兩種分析都") && H(shared).includes("親和"));
+  check("shared leader", H(shared).includes("兩種分析都") && H(shared).includes("「連結」"));
   check("source is the sentence entry point", document.querySelector("#cards summary .txt").textContent.includes("句子 0"));
   check("method stays off the page", !document.getElementById("tally") && !document.getElementById("headline")
     && !document.getElementById("reading-method") && !document.querySelector("#v-results details.technical")
@@ -112,12 +114,13 @@ function runWebFixtures() {
     && !document.getElementById("cards").textContent.includes("原文分析"));
   check("insight leads the results", document.getElementById("results-title").textContent.includes("「連結」反覆出現")
     && document.querySelectorAll("#profile .profile-row").length === 3 && !document.getElementById("profile").closest("details"));
-  check("benchmark named in words", document.getElementById("insight-lede").textContent.includes("高於同組圖片嘅研究參照"));
+  check("benchmark named in words", document.getElementById("insight-lede").textContent.includes("同研究入面寫同一組圖嘅故事比")
+    && document.getElementById("profile-legend").textContent.includes("研究故事嘅濃度"));
   check("headline supported by a literal source quote", document.querySelector("#evidence blockquote").textContent === "句子 0"
     && document.getElementById("evidence").textContent.includes("幾個故事都有出現"));
   check("bars are length-adjusted against reference lines", summarise(shared).refRates && summarise(shared).youRates
     && document.querySelectorAll("#profile .profile-typical").length === 3
-    && [...document.querySelectorAll("#profile .profile-word")].every((e) => ["高過參照", "接近參照", "低過參照"].includes(e.textContent)));
+    && [...document.querySelectorAll("#profile .profile-word")].every((e) => ["較濃", "相若", "較淡"].includes(e.textContent)));
   check("leading theme's research note opens first", document.querySelector("#motive-notes > details").dataset.motive === "aff"
     && document.querySelector("#motive-notes > details").open
     && [...document.querySelectorAll("#motive-notes > details")].filter((x) => x.open).length === 1);
@@ -126,11 +129,11 @@ function runWebFixtures() {
     && !document.getElementById("v-results").querySelector("input,textarea"));
 
   const partial = make([...ten(["aff"], ["aff"]), ...ten([], ["ach"])]);
-  check("partial match is not a disagreement", !H(partial).includes("唔一致") && H(partial).includes("親和")
+  check("partial match is not a disagreement", !H(partial).includes("唔一致") && H(partial).includes("「連結」")
     && HN(partial).includes("英文翻譯後分析另外「成就」"));
   check("disagreement", H(make([...ten(["ach"], ["pow"])])).includes("唔一致"));
   const tie = make([[["ach"], ["ach"]], [["pow"], ["pow"]], ...ten([], [])]);
-  check("tie", H(tie).includes("「成就」同「影響力／權力」") && H(tie).includes("數量一樣"));
+  check("tie", H(tie).includes("「成就」同「影響力」") && H(tie).includes("數量一樣"));
   const zero = make(ten([], []));
   check("zero", H(zero).includes("冇識別到") && HN(zero).includes("唔代表"));
 
@@ -248,6 +251,11 @@ function runWebFixtures() {
     && [...document.querySelectorAll("#evidence blockquote")].every(el => exported.includes(el.textContent))
     && READING_METHOD.every((t) => exported.includes(t)) && exported.includes("技術記錄"));
   check("new result closes the about note", !document.querySelector("#v-results details.about").open);
+  check("one name per theme", !/親和|權力/.test([...Object.values(NAMES), exported].join(""))
+    && !document.getElementById("v-results").textContent.includes("親和"));
+  check("credits: Chinese title, one licence note", document.querySelector("#credits-results li").textContent.startsWith("第 1 張 · 拳手（boxer）")
+    && !document.getElementById("credits-results").textContent.includes("Not individually verified")
+    && document.getElementById("credits-results").textContent.includes("未逐張核實授權"));
   check("four classical result cards", document.querySelectorAll("#cards .pic-group").length === 4
     && document.querySelector("#cards .pic-group summary img").getAttribute("src") === "stimuli/c05.jpg");
   return fails;

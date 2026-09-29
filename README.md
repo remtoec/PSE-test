@@ -20,7 +20,7 @@ These are not measured need scores. Autonomy is also a reflection question.
 
 **Results lead with an interpretation in words, benchmarked against the
 pictures' pull.** The page shows no percentages or counts: bars, a reference
-line and words (高過參照 / 接近參照 / 低過參照). Main counts use the **English
+line and words (較濃 / 相若 / 較淡: imagery per 1,000 words is a density). Main counts use the **English
 reading's** model flags, once per theme per sentence; the original-text reading
 is used only when translation fails, because AMC was tested on translated
 English and never on Cantonese. Unflagged scores of at least 0.30 remain exploratory 「隱約」 labels in
