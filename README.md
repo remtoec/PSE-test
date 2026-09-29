@@ -14,9 +14,11 @@ motives.” PSE is one window into the Motivated Agent, which also includes
 conscious goals, plans, projects, values and aspirations. These imagined
 stories are not autobiographical narratives.
 
-Self-determination theory provides reflection lenses: **competence** groups
-achievement and power imagery, and **relatedness** groups affiliation imagery.
-These are not measured need scores. Autonomy is also a reflection question.
+Self-determination theory provides reflection lenses, named in plain words on
+the page: **勝任感** (competence) groups achievement and power imagery, and
+**歸屬感** (relatedness) groups affiliation imagery. These are not measured need
+scores. No theory terms appear on the page; autonomy appears only as a
+reflection question (「我係自己揀嘅」).
 
 **Results lead with an interpretation in words, benchmarked against the
 pictures' pull.** The page shows no percentages or counts: bars, a reference
@@ -49,8 +51,13 @@ credits. The download's research record keeps the method, per-1,000-word
 figures, both paths' labels, agreement, picture means with word counts and
 timing. Neither path is ground truth, and agreement is not a confidence score.
 
-The private reflection asks one competence, one relatedness and one autonomy
-question. It collects no input and transmits no reflection answers.
+Before writing, the intro says only that we will not ask directly what you
+want; no theme is named, so the stories are not primed. After writing, 「點解要寫故事？」
+explains why stories can show what direct questions miss. The private
+reflection separates what you want, why you want it (interest or value versus
+fear or proving yourself) and whether you feel autonomy, competence and
+relatedness while doing it, all in plain Cantonese. It collects no input and
+transmits no reflection answers.
 
 - Site: https://pse-hk.aesopb15254.workers.dev
 - Backend: https://remtoec--pse-hk-scorer-web.modal.run
@@ -69,7 +76,7 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 - **Bookclub mode (default):** new runs show boxer, couple by river, women in laboratory, and ship captain, in that order (`BOOKCLUB_SET`: c05, c07, c18, c15), without skipping. Summed German picture-pull means: aff 4.18, ach 3.42, pow 3.99. Existing drafts keep their original pictures.
 - **Random mode (「換四張新圖」):** four pictures from the 18 outside the classic set whose German reference rests on at least 30 stories (`MIN_NORM_STORIES`; in practice 81–2,316). Pictures with tiny or missing norms stay in the catalogue for old drafts but are not drawn, because a reference from 3–9 stories makes the reference line and picture emphasis noise. Pictures already drawn on this browser are avoided until all 18 have been seen, so about four replays bring only new pictures. Participants may skip up to 4 per run; skipped pictures are avoided too. When too few remain, the seen list is forgotten first, then the skip list, so the activity never blocks.
 - **Choosing a set:** the intro offers two buttons. On a first visit 「開始：經典四張圖」 leads and 「玩過？換四張新圖」 follows; after a completed result the order flips (「換四張新圖再玩」 first, 「再寫一次經典四張」 second). The results page has a visible 「換四張新圖再玩」 button.
-- No motive category is named before writing. Results show a descriptive interpretation in words, a profile of bars against length-adjusted research reference lines when complete, exact supporting sentences, and relative picture emphasis. Balanced motive reflection notes, sentence cards (English and its themes), three SDT questions and a short 「關於呢個練習」 note with credits follow.
+- No motive category is named before writing. Results show a descriptive interpretation in words, a profile of bars against length-adjusted research reference lines when complete, exact supporting sentences, and relative picture emphasis. A line matched to the reading says what it can and cannot mean. Then 「點解要寫故事？」, plain definitions of the three themes (tagged 勝任感／歸屬感), sentence cards (English and its themes), 「故事入面嘅「想要」，同現實一樣嗎？」 with three reflection questions and two closing questions, and a short 「關於呢個練習」 note with credits.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
 - The writing screen asks for a complete story (「寫出成個故事」) in any comfortable language or mix. Placeholder prompts cover the scene, before, characters' inner experience and ending, with optional names or roles for clarity. Participants choose whom to write about; no gendered pronouns or answers for every person are required. Persistent reminders read 此刻 · 前因 · 內心 · 結局. A short story gets one optional, non-judgmental invitation to add thoughts or an ending. No self-revelation claim is made during writing. Guidance v4 preserves earlier draft history.
 - Drafts are saved in the participant's browser, so they can leave and come back within 7 days.

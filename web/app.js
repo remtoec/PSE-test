@@ -21,8 +21,8 @@ const AWAY_NOTE_MS = 60_000;
 const MOTIVES = ["ach", "aff", "pow"];
 // One name per theme, on the page and in the download.
 const NAMES = { ach: "成就", aff: "連結", pow: "影響力" };
-// Self-determination theory: achievement and power sit within competence, affiliation within relatedness.
-const NEEDS = [["勝任", "competence", ["ach", "pow"]], ["關係", "relatedness", ["aff"]]];
+// Self-determination theory: achievement and power sit within competence (勝任感), affiliation within relatedness (歸屬感).
+const NEEDS = [["勝任感", ["ach", "pow"]], ["歸屬感", ["aff"]]];
 const MIN_THEMES = 3;      // label floor; assessReading also checks distinct sentences and pictures
 const LEAN = 0.12;         // share above the pictures' typical share that counts as a clear lean
 const TILT = 0.05;         // ...and as a slight one
@@ -668,7 +668,6 @@ function assessReading(sentences, pics, failed = false) {
 }
 
 const pct = (x) => `${Math.round(x * 100)}%`;
-const needOf = (m) => NEEDS.find(([, , ms]) => ms.includes(m));
 
 /** Words only: the page shows no percentages or counts. `overall` is imagery per word relative to the reference. */
 function insightText(r, typical, failed, overall = null) {
@@ -697,6 +696,13 @@ function insightText(r, typical, failed, overall = null) {
       : r.kind === "tentative" ? "暫時當一條線索就好，睇下啱唔啱你。" : "差距唔大，當係一個回望嘅角度就好。")];
 }
 
+/** What a reading can and cannot say, matched to its kind; shared by the screen and the download. */
+function frameText(r) {
+  if (r.kind === "sparse") return "";
+  if (r.kind === "balanced") return "呢個結果唔代表你係某一種人。只可以話：今次你替人物作故事時，幾種「想要」都有，冇一種特別突出。";
+  return "以上主題喺你四個故事入面比較突出。呢個結果唔代表你係某一種人，亦唔代表呢樣就係你內心最想要嘅嘢。只可以話：今次你替人物作故事時，有啲「想要」比較容易出現。";
+}
+
 /** A comparison in words; the page shows no numbers. */
 const compareWord = (you, ref) => (you >= ref * 1.25 ? "較濃" : you <= ref * 0.8 ? "較淡" : "相若");
 
@@ -708,8 +714,8 @@ function profile(r, x) {
   const max = Math.max(...MOTIVES.flatMap((m) => [you[m], ref ? ref[m] : 0])) * 1.15 || 1;
   const at = (v) => `${Math.min(100, (v / max) * 100).toFixed(1)}%`;
   const sum = (o, ms) => ms.reduce((a, m) => a + o[m], 0);
-  return NEEDS.map(([need, en, ms]) => h("div", { class: "need-group" },
-    h("div", { class: "need-head" }, h("span", {}, need, " ", h("small", { lang: "en" }, en)),
+  return NEEDS.map(([need, ms]) => h("div", { class: "need-group" },
+    h("div", { class: "need-head" }, h("span", {}, need),
       ref && ms.length > 1 ? h("small", {}, compareWord(sum(you, ms), sum(ref, ms))) : null),
     ms.map((m) => h("div", { class: "profile-row" + (r.focus.includes(m) ? " focus" : "") },
       h("span", { class: "profile-name" }, NAMES[m]),
@@ -841,6 +847,8 @@ function renderResults(d) {
   ].join("");
   $("profile-note").textContent = note;
   $("profile-note").hidden = !note;
+  $("reading-frame").textContent = frameText(r);
+  $("reading-frame").hidden = !frameText(r);
   $("evidence").replaceChildren(...x.evidence.map((e) => h("div", {},
     h("p", { class: "fine" }, evidenceLead(e)),
     h("blockquote", {}, e.source))));
@@ -872,12 +880,12 @@ function renderResults(d) {
 function resultText(d) {
   const x = summarise(d);
   const fmtCounts = (c) => MOTIVES.map((m) => `${NAMES[m]} ${c[m]}`).join("，");
-  const lines = ["畫中有你 · 故事同結果", new Date().toLocaleString("zh-HK"), "", ...x.text, ""];
+  const lines = ["畫中有你 · 故事同結果", new Date().toLocaleString("zh-HK"), "", ...x.text, ...(frameText(x.r) ? [frameText(x.r)] : []), ""];
   const rated = x.youRates && x.refRates;
   if (x.r.kind !== "sparse" && x.typical) {
-    for (const [need, en, ms] of NEEDS) {
+    for (const [need, ms] of NEEDS) {
       const you = rated ? x.youRates : x.r.share, ref = rated ? x.refRates : x.typical;
-      lines.push(`${need}（${en}）：` + ms.map((m) => `${NAMES[m]}${compareWord(you[m], ref[m])}`).join("，"));
+      lines.push(`${need}：` + ms.map((m) => `${NAMES[m]}${compareWord(you[m], ref[m])}`).join("，"));
     }
     lines.push("");
   }
@@ -897,11 +905,17 @@ function resultText(d) {
     }
     lines.push("");
   });
-  lines.push("—— 畫外，返到你自己 ——",
-    "自我決定論：想做得到（勝任 competence）、想同人有連繫（關係 relatedness）、想由自己揀（自主 autonomy）。借呢三個角度反思；上面嘅結果唔係呢啲需要嘅分數。",
-    "1. 勝任：最近有冇一件事，你好想做得更好，或者想有多啲影響？",
-    "2. 關係：有冇一個人，你想同佢行近啲？",
-    "3. 自主：呢啲「想要」，有幾多係你自己揀，有幾多係為咗其他人嘅期望？",
+  lines.push("—— 點解要寫故事？——",
+    "如果直接問「成功對你重要嗎？」「你鍾唔鍾意影響其他人？」「你重唔重視關係？」，你大概都答到。但有時，我哋未必會留意自己一再被咩吸引。",
+    "所以今次唔直接問，而係畀你幾張模糊嘅圖，睇下當故事需要一個「想要」去推動時，你自然會加啲乜落去。唔係要搵出一個「真正嘅你」，只係換一個角度睇自己。", "",
+    "—— 畫外，返到你自己 ——",
+    "故事入面嘅「想要」，同現實一樣嗎？未必。你現實可能想轉工、學新嘢、識多啲朋友，但故事入面反覆出現嘅，可能係另一種推動力。兩邊唔一樣都好正常。",
+    "就算兩個人都好想成功：一個可能因為享受挑戰，另一個可能因為好怕輸。表面一樣，背後嘅力量可以完全唔同。",
+    "再諗多一步：揀一樣你最近真係想做到嘅事，問自己：",
+    "1. 我想得到啲乜？做得更好？產生影響？同人更親近？",
+    "2. 我點解想做？本身覺得有趣？真心覺得重要？定係怕失敗、怕令人失望，或者想證明自己？",
+    "3. 做緊嘅時候，有冇呢三種感覺？我係自己揀嘅。我覺得自己做得到。我同其他人有連結。",
+    "點解我會咁樣替故事人物安排佢哋想要嘅嘢？咁我自己而家追緊嘅，又係因為乜？",
     "McAdams · The Art and Science of Personality Development (2015), Chapter 6: The Motivational Agenda", "",
     "—— 技術記錄（研究用）——",
     ...READING_METHOD,

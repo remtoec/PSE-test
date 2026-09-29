@@ -25,6 +25,7 @@
     <p class="eyebrow">讀書會前嘅小練習</p>
     <h1 id="intro-title" tabindex="-1">每張圖，<br>都係故事嘅<span class="accent-text">中間</span>。</h1>
     <p class="lede">圖入面嘅人物經歷緊咩？之前發生過咩？最後點收場？由你寫出成個故事。</p>
+    <p class="intro-why">今次唔直接問你想要乜，只係畀你幾張圖，睇下你會點樣替人物寫故事。</p>
     <ol class="steps" aria-label="點樣玩">
       <li><b>10 秒</b>睇圖</li>
       <li><b>4 分鐘</b>寫故事</li>
@@ -38,10 +39,14 @@
       <button id="btn-resume" class="primary">繼續上次嘅故事</button>
       <button id="btn-delete" class="quiet">刪除草稿</button>
     </div>
-    <p class="fine">廣東話、書面語、英文，或者夾雜都得。冇標準答案，唔使文筆好。</p>
+    <div class="before-writing">
+      <h2>寫故事前</h2>
+      <p>唔使諗定先寫。睇住張圖，跟你第一個自然想到嘅方向寫落去，寫到有頭有尾就得。</p>
+      <p>去到下一張圖，就唔再返轉頭改上一個故事。</p>
+      <p class="fine">廣東話、書面語、英文，或者夾雜都得。</p>
+    </div>
     <details class="more"><summary>開始之前要知</summary>
       <ul class="plain">
-        <li>按「下一張」之後，嗰個故事就定稿，唔會再改。</li>
         <li>唔使寫自己嘅經歷。見過幅圖都冇問題，跟今次諗到嘅寫就得。</li>
         <li>草稿只存喺呢個瀏覽器，七日後清走。提交後，故事會經雲端服務（Modal、Cloudflare）翻譯同分析；呢個練習唔會儲存或者記錄你嘅故事。</li>
         <li>分析服務閒置時會休眠，提交後可能要等一陣。</li>
@@ -85,36 +90,40 @@
 
   <section id="v-results" class="view" hidden aria-labelledby="results-title">
     <div class="insight">
-      <p class="eyebrow">你嘅四個故事</p>
+      <p class="eyebrow">你今次嘅故事</p>
       <h1 id="results-title" tabindex="-1"></h1>
       <p id="insight-lede" class="lede"></p>
       <div id="profile" class="profile"></div>
       <p id="profile-legend" class="legend fine"><span class="key you"></span>你嘅故事<span class="key typical"></span>研究故事嘅濃度（已按長短調整）</p>
       <p id="profile-note" class="fine" hidden></p>
+      <p id="reading-frame" class="reading-frame" hidden></p>
       <div id="evidence" class="reading-evidence" hidden></div>
       <p id="brought" class="brought-line" hidden></p>
     </div>
 
+    <section id="why" class="chapter" aria-labelledby="why-title">
+      <h2 id="why-title">點解要寫故事？</h2>
+      <p>如果直接問「成功對你重要嗎？」「你鍾唔鍾意影響其他人？」「你重唔重視關係？」，你大概都答到。但有時，我哋未必會留意自己一再被咩吸引。</p>
+      <p>所以今次唔直接問，而係畀你幾張模糊嘅圖，睇下當故事需要一個「想要」去推動時，你自然會加啲乜落去。</p>
+      <p>唔係要搵出一個「真正嘅你」，只係換一個角度睇自己。</p>
+    </section>
+
     <section id="meaning" class="chapter" aria-labelledby="meaning-title">
       <h2 id="meaning-title">呢啲主題，可以點理解？</h2>
       <div id="motive-notes">
-        <details class="motive-note" data-motive="ach"><summary><span class="dot ach"></span><b>成就</b>想做得好<span class="need-tag">勝任</span></summary>
-          <p>故事人物想做好一件事、達到或者超越一個標準、克服挑戰。</p>
-          <p>呢個角度關心「我可唔可以做得到？」。想進步，可以令人投入練習；當成敗變得太重要，亦可能好難容許自己失手。</p>
-          <p class="fine">回望故事：人物想做好件事，係享受挑戰，定係好怕做唔到？</p>
+        <details class="motive-note" data-motive="ach"><summary><span class="dot ach"></span><b>成就</b>想做得好<span class="need-tag">勝任感</span></summary>
+          <p>想做好一件事、進步、克服挑戰，或者達到某個標準。</p>
+          <p>重點唔只係「做完」，而係想做好啲。</p>
         </details>
-        <details class="motive-note" data-motive="aff"><summary><span class="dot aff"></span><b>連結</b>想親近<span class="need-tag">關係</span></summary>
-          <p>故事人物想建立、維持或者修補溫暖嘅關係：關心、陪伴、被接納。</p>
-          <p>呢個角度關心「我哋可唔可以靠近？」。重視關係，可以帶來陪伴同照顧；當好怕失去連結，亦可能唔敢講出自己唔同嘅諗法。</p>
-          <p class="fine">回望故事：人物想靠近邊個？靠近嘅同時，有冇留低自己嘅位置？</p>
+        <details class="motive-note" data-motive="aff"><summary><span class="dot aff"></span><b>連結</b>想親近<span class="need-tag">歸屬感</span></summary>
+          <p>想同人建立關係、保持聯繫、得到接納，或者修補一段關係。</p>
+          <p>有人會寫一大班人一齊，有人會寫兩個人慢慢靠近。今次主要睇嘅，都係故事入面對「同人連結」嘅關注。</p>
         </details>
-        <details class="motive-note" data-motive="pow"><summary><span class="dot pow"></span><b>影響力</b>想有份量<span class="need-tag">勝任</span></summary>
-          <p>故事人物想感到強大、影響或者帶領其他人、爭取地位同話語權。</p>
-          <p>呢個角度關心「我可唔可以令事情有所改變？」。想有影響，可以令人帶頭、保護人或者爭取改變；當好需要掌握局面，亦可能少咗空間俾其他人。</p>
-          <p class="fine">回望故事：人物想影響邊個、改變啲乜？其他人又有幾多選擇？</p>
+        <details class="motive-note" data-motive="pow"><summary><span class="dot pow"></span><b>影響力</b>想有份量<span class="need-tag">勝任感</span></summary>
+          <p>想改變事情發展、帶動其他人、令人注意，或者令自己嘅想法真正產生作用。</p>
+          <p>影響力唔一定係控制人。帶領、說服、鼓勵、改變，都可以係其中一種表現。</p>
         </details>
       </div>
-      <p class="fine">以上係理解故事嘅角度同反思問題，唔係由結果推斷你嘅性格。每種主題都有唔同嘅一面。</p>
     </section>
 
     <section id="pictures" class="chapter" aria-labelledby="pictures-title">
@@ -125,13 +134,17 @@
 
     <section id="reflection" class="chapter reflection-chapter" aria-labelledby="reflection-title">
       <p class="eyebrow">畫外，返到你自己</p>
-      <h2 id="reflection-title">故事人物想要嘅，<br>同你想要嘅呢？</h2>
-      <p>心理學入面嘅自我決定論（Self-Determination Theory）話，人有三種基本需要：想做得到（<strong>勝任</strong> competence）、想同人有連繫（<strong>關係</strong> relatedness）、想由自己揀（<strong>自主</strong> autonomy）。借呢三個角度，由故事返到你自己；上面嘅結果唔係呢啲需要嘅分數。</p>
+      <h2 id="reflection-title">故事入面嘅「想要」，<br>同現實一樣嗎？</h2>
+      <p>未必。你現實可能想轉工、學新嘢、識多啲朋友，但故事入面反覆出現嘅，可能係另一種推動力。兩邊唔一樣都好正常。</p>
+      <p>就算兩個人都好想成功：一個可能因為享受挑戰，另一個可能因為好怕輸。表面一樣，背後嘅力量可以完全唔同。</p>
+      <h3 class="reflect-head">再諗多一步</h3>
+      <p>揀一樣你最近真係想做到嘅事，問自己：</p>
       <ol class="reflect-list">
-        <li><span class="need-tag">勝任</span>最近有冇一件事，你好想做得更好，或者想有多啲影響？</li>
-        <li><span class="need-tag">關係</span>有冇一個人，你想同佢行近啲？</li>
-        <li><span class="need-tag">自主</span>呢啲「想要」，有幾多係你自己揀，有幾多係為咗其他人嘅期望？</li>
+        <li><strong>我想得到啲乜？</strong><span>做得更好？產生影響？同人更親近？</span></li>
+        <li><strong>我點解想做？</strong><span>本身覺得有趣？真心覺得重要？定係怕失敗、怕令人失望，或者想證明自己？</span></li>
+        <li><strong>做緊嘅時候，有冇呢三種感覺？</strong><span>我係自己揀嘅。我覺得自己做得到。我同其他人有連結。</span></li>
       </ol>
+      <p class="closing-q">點解我會咁樣替故事人物安排佢哋想要嘅嘢？<br>咁我自己而家追緊嘅，又係因為乜？</p>
       <p class="fine">答案留喺心入面就得，呢頁冇地方填，亦唔會記錄。</p>
     </section>
 

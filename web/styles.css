@@ -58,6 +58,11 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .steps li { background: var(--card); border: 1px solid var(--rule); border-radius: 4px; padding: 10px 8px; text-align: center; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
 .steps b { display: block; font: 600 17px/1.5 var(--display); color: var(--ink); }
 .intro-actions { margin: 20px 0 12px; }
+.intro-why { font-size: 15px; color: var(--ink-2); margin: -12px 0 20px; }
+.before-writing { border-top: 1px solid var(--rule); padding-top: 16px; margin-top: 20px; }
+.before-writing h2 { font-size: 17px; margin-bottom: 6px; }
+.before-writing p { font-size: 15px; margin-bottom: 8px; }
+.before-writing .fine { font-size: 13px; }
 .choices { display: grid; gap: 10px; margin: 20px 0 12px; }
 button.choice { display: grid; gap: 2px; text-align: left; padding: 14px 18px; background: var(--card); border-color: var(--rule); border-radius: 6px; }
 button.choice.primary { background: var(--binding); border-color: var(--binding); color: var(--card); }
@@ -135,6 +140,7 @@ textarea[readonly] { background: transparent; border: 0; border-left: 2px solid 
 .insight { padding: 32px 0 28px; }
 .insight h1 { font-size: clamp(28px, 8vw, 40px); }
 .insight .lede { margin-bottom: 20px; }
+.reading-frame { font-size: 14px; color: var(--ink-2); margin: 12px 0 0; }
 .profile { background: var(--card); border: 1px solid var(--rule); border-radius: 6px; padding: 4px 16px 12px; }
 .need-group { padding-top: 12px; }
 .need-group + .need-group { border-top: 1px solid var(--rule); margin-top: 8px; }
@@ -170,7 +176,6 @@ textarea[readonly] { background: transparent; border: 0; border-left: 2px solid 
 .motive-note ul { padding-left: 18px; margin-top: 0; margin-bottom: 16px; font-size: 15px; }
 .motive-note li { margin-bottom: 6px; }
 .need-tag { display: inline-block; font-size: 11px; line-height: 1.4; padding: 2px 8px; border-radius: 999px; background: var(--paper-2); color: var(--ink-2); margin-left: auto; white-space: nowrap; }
-.reflect-list .need-tag { margin: 0 8px 0 0; vertical-align: 2px; }
 
 .pic-group { border-top: 1px solid var(--rule); }
 .pic-group:last-child { border-bottom: 1px solid var(--rule); }
@@ -214,7 +219,11 @@ details.card[open] summary::after { transform: rotate(90deg); }
 .reflection-chapter h2 { margin-bottom: 16px; }
 .reflection-chapter > p { font-size: 15px; }
 .reflect-list { list-style: none; padding: 0; margin: 20px 0; }
-.reflect-list li { font: 400 18px/1.7 var(--display); padding: 14px 0; border-top: 1px solid var(--rule); }
+.reflect-list li { padding: 14px 0; border-top: 1px solid var(--rule); }
+.reflect-list strong { display: block; font: 600 18px/1.6 var(--display); }
+.reflect-list span { display: block; font-size: 15px; color: var(--ink-2); margin-top: 2px; }
+.reflect-head { font-size: 19px; margin: 28px 0 8px; }
+.closing-q { font: 400 19px/1.8 var(--display); border-left: 2px solid var(--annotation); padding-left: 14px; margin: 24px 0 16px; }
 .reflect-list li:last-child { border-bottom: 1px solid var(--rule); }
 .bookclub-note { padding: 20px; background: var(--paper-2); border-radius: 6px; margin: 8px 0 16px; }
 .bookclub-note h3 { font-size: 18px; margin-bottom: 6px; }

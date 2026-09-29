@@ -1,5 +1,45 @@
 # Changelog
 
+## 2026-09-29 (copy round) — Why stories, plain definitions, 勝任感／歸屬感, story vs life
+
+Owner-proposed copy, reviewed and adjusted together before implementing.
+
+- **Intro: 「寫故事前」** — 「唔使諗定先寫…寫到有頭有尾就得」, and the no-going-back
+  rule moves out of the collapsed notes.
+  *Why:* first-instinct writing is what the PSE scores. The draft's
+  「唔使諗到好完整」 could be read as "the story needn't be complete", which
+  undoes the full-story framing, so 「唔使諗定」 and 「有頭有尾」 keep both points.
+  People should see the lock rule before they start.
+- **「點解要寫故事？」 moves to after writing;** before writing there is only
+  「今次唔直接問你想要乜，只係畀你幾張圖…」.
+  *Why:* the full text names the three themes (成功, 影響其他人, 關係). Read
+  before writing, it primes those themes and breaks the PSE's core design:
+  categories are revealed only after the stories exist. A fixture now fails if
+  any theme name appears on the intro, picture or writing screens.
+- **A frame line under the bars, matched to the reading:** "stands out" wording
+  for a lean, "none stands out" for balanced, nothing for sparse.
+  *Why:* the draft's 「以下主題…出現得比較多」 is only true when a theme stands
+  out. 「比較突出」 fits a comparison with the research stories without
+  explaining the method.
+- **Plain motive definitions** (成就 「想做好啲」, 影響力 「唔一定係控制人」,
+  連結 「一大班人…兩個人慢慢靠近」), replacing the strength/cost notes and the
+  trait disclaimer.
+  *Why:* shorter and plainer; the strength-versus-cost idea now lives in one
+  better example ("enjoys the challenge vs afraid to lose"). All three stay
+  equally warm.
+- **勝任感／歸屬感** name the bar groups and motive tags; no English theory terms
+  on the page.
+  *Why:* owner choice; the terms explain themselves.
+- **One reflection section** merges 「同現實一樣嗎？」 with the closing reminder,
+  followed by 「再諗多一步」 (what I want / why I want it / do I feel chosen,
+  capable and connected) and two closing questions.
+  *Why:* both sections made the same point: story imagery and conscious goals
+  usually diverge (McClelland, Koestner & Weinberger, 1989). The three
+  questions follow self-determination theory's distinctions (what the goal
+  is, why you pursue it, and whether the three needs are met) without naming
+  it, so 「真正嘅你」 now appears once.
+- The download mirrors the page copy.
+
 ## 2026-09-29 (palette) — Pigment theme colours, vermilion accent and seal
 
 Option B from the palette preview. Paper, text, buttons and rules are unchanged.

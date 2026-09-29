@@ -53,6 +53,11 @@ function runWebFixtures() {
   check("language line above the box", ["英文", "廣東話", "書面語", "夾雜"].every((x) => document.getElementById("lang-note").textContent.includes(x))
     && document.getElementById("lang-note").compareDocumentPosition(document.getElementById("story")) & Node.DOCUMENT_POSITION_FOLLOWING);
   check("no continuation framing", !document.getElementById("v-write").textContent.includes("然後"));
+  const beforeWriting = ["v-intro", "v-view", "v-write"].map((id) => document.getElementById(id).textContent).join("")
+    + document.getElementById("story").placeholder;
+  check("no theme is named before writing", !["成就", "連結", "影響力", "成功", "關係", "勝任感", "歸屬感", "動機"].some((t) => beforeWriting.includes(t)));
+  check("before-writing note: first instinct, whole story, no going back", ["唔使諗定先寫", "有頭有尾", "唔再返轉頭"].every((t) => document.getElementById("v-intro").textContent.includes(t))
+    && document.querySelector("#v-intro .intro-why").textContent.includes("唔直接問你想要乜"));
   check("lock note fits every round's button", !document.querySelector("#v-write .lock-note").textContent.includes("下一張"));
   check("review does not name motives before results", !document.getElementById("v-review").textContent.includes("動機"));
   const stored = Object.fromEntries([SKIP_KEY, SEEN_KEY, PLAYED_KEY].map((k) => [k, localStorage.getItem(k)]));
@@ -124,9 +129,21 @@ function runWebFixtures() {
   check("leading theme's research note opens first", document.querySelector("#motive-notes > details").dataset.motive === "aff"
     && document.querySelector("#motive-notes > details").open
     && [...document.querySelectorAll("#motive-notes > details")].filter((x) => x.open).length === 1);
-  check("correct theory bridge", ["competence", "relatedness", "autonomy"].every((x) => document.getElementById("reflection").textContent.includes(x))
-    && document.querySelectorAll("#reflection .reflect-list li").length === 3
+  const reflection = document.getElementById("reflection").textContent;
+  check("reflection: story vs life, three plain questions, closing questions", reflection.includes("同現實一樣嗎")
+    && reflection.includes("好怕輸") && document.querySelectorAll("#reflection .reflect-list li").length === 3
+    && ["我係自己揀嘅", "我覺得自己做得到", "我同其他人有連結", "咁我自己而家追緊嘅"].every((t) => reflection.includes(t))
     && !document.getElementById("v-results").querySelector("input,textarea"));
+  check("no theory jargon on the results page", !/competence|relatedness|autonomy|自我決定論/.test(document.getElementById("v-results").textContent));
+  check("need groups named 勝任感 and 歸屬感", [...document.querySelectorAll("#profile .need-head > span")].map((e) => e.textContent).join() === "勝任感,歸屬感"
+    && [...document.querySelectorAll("#motive-notes .need-tag")].every((e) => ["勝任感", "歸屬感"].includes(e.textContent)));
+  check("why stories comes after writing, with the direct questions", document.getElementById("why").closest("#v-results")
+    && ["成功對你重要嗎", "影響其他人", "重唔重視關係", "真正嘅你"].every((t) => document.getElementById("why").textContent.includes(t)));
+  check("motive notes use the plain definitions", ["想做好啲", "唔一定係控制人", "兩個人慢慢靠近"].every((t) => document.getElementById("motive-notes").textContent.includes(t)));
+  check("frame wording follows the reading", frameText({ kind: "sparse" }) === "" && frameText({ kind: "balanced" }).includes("冇一種特別突出")
+    && ["lean", "tilt", "tentative", "unbenchmarked"].every((kind) => frameText({ kind }).includes("唔代表你係某一種人")));
+  check("frame matches a reading that stands out", document.getElementById("reading-frame").textContent.includes("比較突出")
+    && !document.getElementById("reading-frame").hidden);
 
   const partial = make([...ten(["aff"], ["aff"]), ...ten([], ["ach"])]);
   check("partial match is not a disagreement", !H(partial).includes("唔一致") && H(partial).includes("「連結」")
@@ -198,7 +215,7 @@ function runWebFixtures() {
     && !document.getElementById("brought").hidden && document.getElementById("brought").textContent.includes("第 2 個"));
 
   render(club([[[], []], [["aff"], []], [[], []], [[], []]]));
-  check("sparse hides the profile", document.getElementById("results-title").textContent.includes("逐句回望")
+  check("sparse hides the profile", document.getElementById("reading-frame").hidden && document.getElementById("results-title").textContent.includes("逐句回望")
     && document.getElementById("profile").hidden && document.getElementById("insight-lede").textContent.includes("唔代表")
     && ![...document.querySelectorAll("#motive-notes > details")].some((x) => x.open));
   const unsafe = club(ten(["aff"], ["aff"]));
