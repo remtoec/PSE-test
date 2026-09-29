@@ -175,7 +175,7 @@ test('download keeps the numbers for research use', () => {
   assert.doesNotMatch(text, /undefined|NaN/);
 });
 
-test('interpretations include secondary themes and link them to the correct stories', () => {
+test('excerpts cover actual primary themes without added interpretations', () => {
   context.data = {translation_failed:false, sentences:[
     row('c05',['pow'],{translated:score(['ach'])}), row('c05',[],{translated:score(['ach'])}),
     row('c07',[],{translated:score(['aff'])}), row('c18',[],{translated:score(['ach','aff'])}),
@@ -183,39 +183,26 @@ test('interpretations include secondary themes and link them to the correct stor
   ]};
   run('pictures = ["c05","c07","c18","c15"].map(id => fixturePics.find(p => p.id === id))');
   const x = run('summarise(data)');
-  assert.ok(x.interpretations?.length, 'results need interpretation alongside quotations');
-  assert.equal(x.interpretations.map(t=>t.motive).sort().join(), 'ach,aff');
-  assert.equal(x.interpretations.find(t=>t.motive==='ach').pictures.join(), '1,3');
-  assert.equal(x.interpretations.find(t=>t.motive==='aff').pictures.join(), '2,3');
-  assert.equal(x.connection.pictures.join(), '3');
-  assert.equal(x.connection.kind, 'shared-story');
+  assert.equal(x.evidence.map(e=>e.motive).sort().join(), 'ach,aff');
+  assert.equal(x.evidence.find(e=>e.motive==='ach').picture, 1);
+  assert.equal(x.evidence.find(e=>e.motive==='aff').picture, 2);
+  assert.equal(x.interpretations, undefined);
+  assert.equal(x.connection, undefined);
 });
 
-test('themes in separate stories are compared without claiming they occur together', () => {
-  context.data = {translation_failed:false, sentences:[
-    row('c05',['ach']),row('c05',['ach']),row('c07',['aff']),row('c15',['pow'])
-  ]};
-  const x = run('summarise(data)');
-  assert.equal(x.connection?.kind, 'across-stories');
-  assert.equal(x.connection.pictures.length, 0);
-  assert.equal(x.interpretations.length, 3);
-});
-
-test('sparse and faint-only results do not invent thematic interpretations', () => {
+test('sparse results have no invented excerpts', () => {
   context.data = {translation_failed:true, sentences:[row('c05',['ach','aff','pow'])]};
-  assert.equal(run('summarise(data).interpretations?.length'), 0);
-  assert.equal(run('summarise(data).connection'), null);
+  assert.equal(run('summarise(data).evidence.length'), 0);
 });
 
-test('download includes the same interpretations and connections as the screen model', () => {
+test('download follows analysis, excerpts, stories, book and reflection order', () => {
   const rows = context.fixturePics.flatMap(p=>[row(p.id,['ach','aff']),row(p.id,['ach'])]);
   context.data = {sentences:rows,translation_failed:true,meta:{amc_model:'fixture',amc_revision:'1234567',translator:'fixture',prompt_version:'v1'},summary:{direct:{ach:8,aff:4,pow:0},translated:null,agreement:null}};
   const x = run('summarise(data)');
   const download = run('resultText(data)');
-  assert.ok(x.interpretations?.length);
-  for (const interpretation of x.interpretations) {
-    assert.ok(download.includes(interpretation.body));
-    assert.ok(download.includes(interpretation.location));
-  }
-  assert.ok(download.includes(x.connection.body));
+  const sections = ['—— 分析詳情 ——','—— 從你寫下的句子看起 ——','—— 四個故事 ——','—— 書中的三種追求 ——','—— 為甚麼請你寫故事？——','—— 把問題留給自己 ——'];
+  const positions = sections.map(s=>download.indexOf(s));
+  assert.ok(positions.every((p,i)=>p>=0 && (!i || p>positions[i-1])));
+  for (const e of x.evidence) assert.ok(download.includes(e.source));
+  assert.doesNotMatch(download, /從成就這條線讀|當兩種追求走進同一個故事/);
 });

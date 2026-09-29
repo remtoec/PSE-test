@@ -36,3 +36,11 @@ Run `.venv/Scripts/python.exe scripts/preview_ui.py` and open `http://127.0.0.1:
 - 25 Node tests passed, including secondary-theme coverage, exact story locations, English-first/faint exclusions, sparse handling and page/export parity. Normal and translation-fallback browser fixture reports were both empty.
 - Desktop and 390px iframe preview inspected; the latter is available at `/__test__/phone` on the local preview server (port 8095 in this session). Preview routes and synthetic fixtures are not deployed.
 - Independent review found one overstatement in the power lens; changed it to invite attention rather than claim power is the story's key.
+
+
+## Approved lightweight flow (supersedes the previous follow-up)
+
+- Applied `docs/mockups/results-flow-light.html`: static analysis section before literal quotes, then folded stories, then book material and reflection. Removed the longer interpretation and connection templates.
+- Counted labels appear directly with sentence text. Faint detections remain in expanded details and do not become counted labels. Sparse results offer folded stories without invented excerpts.
+- Reading v6; export section order matches the page. No backend/scoring changes.
+- 24 Node tests passed; normal and translation-fallback browser fixtures returned no failures. Verified stories expand and counted labels are readable without opening sentence details. Desktop layout inspected; independent review found no actionable issues.

@@ -97,18 +97,21 @@
     </div>
 
     <section id="evidence-section" class="chapter" aria-labelledby="evidence-title">
-      <p class="eyebrow">從你寫下的句子看起</p>
       <h2 id="evidence-title">人物在追求甚麼？</h2>
-      <div id="evidence" class="reading-evidence"></div>
-      <p id="evidence-empty" hidden>可以先展開分析詳情，或往下重看故事，找出你覺得最值得細讀的地方。</p>
-      <div id="story-connection" class="story-connection" hidden></div>
-      <details id="analysis-detail" class="more analysis-detail">
-        <summary>看看分析詳情</summary>
+      <section id="analysis-detail" class="analysis-detail" aria-labelledby="analysis-title">
+        <h3 id="analysis-title">看看分析詳情</h3>
         <p id="comparison-note"></p>
         <div id="profile" class="profile"></div>
         <p id="profile-legend" class="legend fine"><span class="key you"></span>你的故事<span class="key typical"></span>同組圖片的研究參照</p>
         <p id="profile-explanation" class="fine"></p>
         <p id="brought" class="brought-line" hidden></p>
+      </section>
+      <div id="evidence" class="reading-evidence"></div>
+      <p id="evidence-empty" hidden>可以展開下面的故事，找出你覺得最值得細讀的地方。</p>
+      <details id="stories-detail" class="more stories-detail">
+        <summary>重看四個故事</summary>
+        <p class="fine">展開故事，看看哪些句子計入了主題；再按句子，可看英文譯文和完整標記。</p>
+        <div id="cards"></div>
       </details>
     </section>
 
@@ -131,11 +134,6 @@
       <p class="eyebrow">把問題留給自己</p>
       <h2 id="reflection-title"></h2>
       <p id="reflection-note"></p>
-      <details id="stories-detail" class="more stories-detail">
-        <summary>重看四個故事</summary>
-        <p class="fine">展開圖片可看原文；再按句子，可看英文譯文和主題標記。</p>
-        <div id="cards"></div>
-      </details>
     </section>
 
     <aside id="bookclub-note" class="bookclub-note" hidden><h3>帶一句話來，讀書會見。</h3><p></p></aside>

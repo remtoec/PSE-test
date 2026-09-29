@@ -22,18 +22,16 @@ Repeated trait disclaimers and the extra 勝任感／歸屬感 grouping have bee
 The relationship category includes affiliation imagery; it does not separately
 measure intimacy. Power retains both helpful and domineering possibilities.
 
-The narrative uses book-based reading lenses selected by the detected themes,
-with an explanation of each pursuit's appeal and possible tensions. A short
-comparison distinguishes themes appearing in the same story from those in
-separate stories; it does not assume they belong to the same character.
-These are fixed thematic interpretations, not generated plot summaries.
-Excerpts are exact source sentences. Analysis details sit within the interpretation
-section, and the original stories follow the reflection question.
-Strong language still requires the existing evidence
-gates; tentative results stay tentative, ties retain both themes, and sparse
-results open the participant's own stories rather than inventing an explanation.
-A balanced reference does not imply equal motives: its copy names only themes
-actually detected. Density does not change the narrative headline.
+Results show the analysis chart directly, followed by verbatim excerpts and
+folded original stories. Opening a story reveals each sentence's counted themes;
+English translation and faint labels remain in sentence details. The expanded
+analysis is followed by optional book definitions, the book bridge and reflection.
+The download follows the same order. Added thematic commentary and connections
+have been removed to match the approved lightweight mock.
+Strong language still requires the existing evidence gates; tentative results
+stay tentative, ties retain both themes, and sparse results offer folded stories
+without invented excerpts. A balanced reference does not imply equal motives:
+its copy names only themes actually detected. Density does not change the headline.
 
 **Scoring is unchanged.** Main counts use English-reading model flags, once
 per theme per sentence; original text is used only if translation fails.
@@ -84,7 +82,7 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 - **Bookclub mode (default):** new runs show boxer, couple by river, women in laboratory, and ship captain, in that order (`BOOKCLUB_SET`: c05, c07, c18, c15), without skipping. Summed German picture-pull means: aff 4.18, ach 3.42, pow 3.99. Existing drafts keep their original pictures.
 - **Random mode (「換四張新圖」):** four pictures from the 18 outside the classic set whose German reference rests on at least 30 stories (`MIN_NORM_STORIES`; in practice 81–2,316). Pictures with tiny or missing norms stay in the catalogue for old drafts but are not drawn, because a reference from 3–9 stories makes the reference line and picture emphasis noise. Pictures already drawn on this browser are avoided until all 18 have been seen, so about four replays bring only new pictures. Participants may skip up to 4 per run; skipped pictures are avoided too. When too few remain, the seen list is forgotten first, then the skip list, so the activity never blocks.
 - **Choosing a set:** first visits lead with 「開始寫故事」 (the bookclub set); returning visits lead with 「換四張新圖再寫」. The fixed set remains available as 「再寫一次讀書會這組圖」.
-- Results show a narrative interpretation, exact source excerpts, expandable definitions, the book bridge and one reflection. Full stories, analysis and method are separate expandable sections. Sparse readings open the stories immediately. The download shares the same prose and adds technical records.
+- Results show analysis directly, then exact excerpts and folded stories with visible sentence labels. Definitions and methodology remain optional; the book bridge leads to one reflection. Downloads share this order and add technical records.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
 - The writing screen asks for a complete story in any comfortable language or mix. Prompts cover the current scene, before, characters' thoughts/feelings/wants and ending. A separate persistent hint suggests names or roles where needed. A short story receives one optional invitation to add thoughts or an ending. The lock rule is visible before writing and beside the next button. Guidance v5 records earlier draft history.
 - Drafts are saved in the participant's browser, so they can leave and come back within 7 days.

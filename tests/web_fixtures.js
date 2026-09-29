@@ -117,22 +117,23 @@ function runWebFixtures() {
   check("sentence cards show English and themes only", document.querySelector("#cards .card-body").textContent.includes("英文")
     && document.querySelector("#cards .card-body").textContent.includes("主題")
     && !document.getElementById("cards").textContent.includes("原文分析"));
-  check("story reading leads; analysis is collapsed", document.getElementById("results-title").textContent.includes("彼此的關係")
-    && document.querySelectorAll("#profile .profile-row").length === 3 && !document.getElementById("analysis-detail").open
+  check("analysis is always visible", document.getElementById("results-title").textContent.includes("彼此的關係")
+    && document.querySelectorAll("#profile .profile-row").length === 3 && document.getElementById("analysis-detail").tagName === "SECTION"
     && document.getElementById("evidence-section").compareDocumentPosition(document.getElementById("meaning")) & Node.DOCUMENT_POSITION_FOLLOWING);
   check("comparison belongs in analysis details", document.getElementById("comparison-note").textContent.includes("研究參照")
     && !document.getElementById("insight-lede").textContent.includes("研究參照"));
   check("analysis belongs with the story interpretation", document.getElementById("analysis-detail").parentElement.id === "evidence-section");
-  check("original stories follow the reflection", document.getElementById("stories-detail").parentElement.id === "reflection"
-    && document.getElementById("reflection-note").nextElementSibling.id === "stories-detail");
+  check("analysis, quotes and folded stories precede the book", document.getElementById("stories-detail").parentElement.id === "evidence-section"
+    && !document.getElementById("stories-detail").open
+    && document.getElementById("analysis-detail").compareDocumentPosition(document.getElementById("evidence")) & Node.DOCUMENT_POSITION_FOLLOWING
+    && document.getElementById("evidence").compareDocumentPosition(document.getElementById("stories-detail")) & Node.DOCUMENT_POSITION_FOLLOWING);
+  check("counted themes are visible without opening a sentence", document.querySelector("#cards .card summary .sentence-counts").textContent === "計入關係");
   check("headline supported by literal source quotes", document.querySelector("#evidence blockquote").textContent === "句子 0"
     && document.querySelectorAll("#evidence blockquote").length === 2);
   check("bars are length-adjusted against reference lines", summarise(shared).refRates && summarise(shared).youRates
     && document.querySelectorAll("#profile .profile-typical").length === 3
     && [...document.querySelectorAll("#profile .profile-word")].every((e) => ["較密集", "相若", "較疏落"].includes(e.textContent)));
-  check("leading theme's research note opens first", document.querySelector("#motive-notes > details").dataset.motive === "aff"
-    && document.querySelector("#motive-notes > details").open
-    && [...document.querySelectorAll("#motive-notes > details")].filter((x) => x.open).length === 1);
+  check("book definitions are optional", [...document.querySelectorAll("#motive-notes > details")].every(x=>!x.open));
   check("reflection uses the reading, without collecting personal answers", document.getElementById("reflection-title").textContent === reflectionText(summarise(shared).r)[0]
     && !document.getElementById("v-results").querySelector("input,textarea"));
   check("book follows themes and stays after writing", document.getElementById("why").closest("#v-results")
@@ -213,11 +214,11 @@ function runWebFixtures() {
     && !document.getElementById("brought").hidden && document.getElementById("brought").textContent.includes("第 2 個"));
 
   render(club([[[], []], [["aff"], []], [[], []], [[], []]]));
-  check("sparse reveals own stories instead of invented evidence", document.getElementById("profile").hidden
+  check("sparse keeps stories accessible and folded without invented evidence", document.getElementById("profile").hidden
     && document.getElementById("evidence").hidden && !document.getElementById("evidence-section").hidden
-    && !document.getElementById("evidence-empty").hidden && document.getElementById("story-connection").hidden
-    && document.getElementById("stories-detail").open
-    && document.querySelector("#cards .pic-group").open
+    && !document.getElementById("evidence-empty").hidden && !document.getElementById("story-connection")
+    && !document.getElementById("stories-detail").open
+    && !document.querySelector("#cards .pic-group").open
     && ![...document.querySelectorAll("#motive-notes > details")].some((x) => x.open));
   const unsafe = club(ten(["aff"], ["aff"]));
   unsafe.sentences[0].source = '<img src=x onerror="window.__xss3=1">';
@@ -234,7 +235,8 @@ function runWebFixtures() {
   render(faintRun);
   check("faint-only result retains exploration but no headline evidence", document.getElementById("profile").hidden
     && document.getElementById("evidence").hidden && document.getElementById("brought").hidden
-    && document.querySelectorAll("#cards .label.faint").length === 10);
+    && document.querySelectorAll("#cards .label.faint").length === 10
+    && [...document.querySelectorAll("#cards .sentence-counts")].every(el=>el.textContent === "未計入三類主題"));
   pictures = ["p1", "p2", "p3", "p4"].map(byId);
 
   // Leave a clearly synthetic, readable debrief for visual QA.
@@ -268,10 +270,8 @@ function runWebFixtures() {
   check("download shares the screen's reading and keeps the method", exported.includes(document.getElementById("insight-lede").textContent)
     && [...document.querySelectorAll("#evidence blockquote")].every(el => exported.includes(el.textContent))
     && READING_METHOD.every((t) => exported.includes(t)) && exported.includes("技術記錄"));
-  check("interpretations and connections are visible and match the download",
-    document.querySelectorAll("#evidence .theme-reading").length === 3
-    && [...document.querySelectorAll("#evidence .theme-reading > p, #story-connection p")].every(el => exported.includes(el.textContent))
-    && !document.getElementById("story-connection").hidden);
+  check("quotes carry only source and caption", document.querySelectorAll("#evidence figure").length === 3
+    && !document.querySelector("#evidence p, #evidence h3, #story-connection"));
   check("new result closes the about note", !document.querySelector("#v-results details.about").open);
   check("consistent theme labels", Object.values(NAMES).join() === "成就,關係,影響"
     && !document.querySelector("#motive-notes").textContent.includes("勝任感"));

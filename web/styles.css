@@ -214,14 +214,16 @@ details.card[open] summary::after { transform: rotate(90deg); }
 .label.faint { background: transparent; border: 1px dashed currentColor; }
 .label.faint.ach { color: var(--ach); } .label.faint.aff { color: var(--aff); } .label.faint.pow { color: var(--pow); }
 .reading-evidence { margin-top: 20px; }
-.theme-reading + .theme-reading { margin-top: 32px; padding-top: 28px; border-top: 1px solid var(--rule); }
-.theme-reading h3, .story-connection h3 { font: 600 21px/1.6 var(--display); margin: 8px 0 12px; }
-.theme-reading > p, .story-connection > p { font-size: 15px; }
-.theme-reading .reading-location, .story-connection .fine { font-size: 13px; color: var(--ink-2); }
-.theme-reading .theme-question { margin-top: 16px; }
-.story-connection { margin-top: 28px; padding: 20px; background: var(--paper-2); }
-.story-connection > :last-child { margin-bottom: 0; }
-#evidence-section > .more, #reflection > .more { margin-top: 24px; }
+.analysis-detail { padding: 4px 0 20px; }
+.analysis-detail h3 { font: 600 16px/1.6 var(--body); margin: 0 0 12px; }
+.analysis-detail > p { font-size: 15px; }
+.analysis-detail .fine { font-size: 12px; }
+.analysis-detail .profile { margin: 4px 0 12px; }
+#evidence { margin-top: 0; padding-top: 22px; border-top: 1px solid var(--rule); }
+#evidence figure:first-child { margin-top: 0; }
+#evidence blockquote { font-size: 20px; }
+#stories-detail { margin-top: 28px; }
+.sentence-counts { display: block; margin-top: 5px; color: var(--ink-2); font-size: 12px; }
 .reading-evidence figure { margin: 24px 0 0; padding-left: 18px; border-left: 2px solid #92a087; }
 .reading-evidence blockquote { margin: 8px 0 0; font: 400 21px/1.9 var(--display); overflow-wrap: anywhere; white-space: pre-wrap; }
 .flag-uncertain { color: var(--annotation); }

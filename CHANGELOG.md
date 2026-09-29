@@ -1,5 +1,11 @@
 # Changelog
 
+## 2026-09-29 — Approved lightweight result flow
+
+- Applied the approved mock: always-visible analysis, plain source excerpts, folded original stories, book concepts and reflection. Removed the added interpretation and connection paragraphs.
+- Each sentence now shows its counted primary themes before opening translation details; faint labels remain separate and uncounted. Stories and definitions default to folded, including sparse results.
+- Downloads follow the same reading order. Reading v6 records the presentation change; backend and scoring remain unchanged.
+
 ## 2026-09-29 — Fuller result interpretation and section placement
 
 - Moved analysis details into the characters' pursuits section, and the four original stories directly below the reflection question.

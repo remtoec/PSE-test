@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-Hant-HK">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>畫中有你｜精簡結果頁 mock</title>
+<link rel="stylesheet" href="../../web/styles.css">
+<style>
+.review-tools{background:#e7e8df;border-bottom:1px solid var(--rule);padding:14px 20px;font-size:13px}
+.review-tools-inner{max-width:900px;margin:auto}.review-tools p{margin:4px 0 0}.review-tools .tools-top{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.review-tools button{min-height:36px;padding:5px 12px;font-size:13px}.review-tools button[aria-pressed=true]{background:var(--binding);color:var(--card)}
+.review-tools .switch{display:flex;gap:6px;margin-left:auto}.review-tools details{margin-top:8px}.review-tools summary{cursor:pointer}
+.mock-analysis{padding:4px 0 20px}.mock-analysis h3{font:600 16px/1.6 var(--body);margin:0 0 12px}.mock-analysis>p{font-size:15px}
+.mock-analysis .fine{font-size:12px}.mock-analysis .profile{margin:4px 0 12px}.mock-quotes{margin-top:0;padding-top:22px;border-top:1px solid var(--rule)}
+.mock-quotes figure:first-child{margin-top:0}.mock-quotes blockquote{font-size:20px}.mock-stories{margin-top:28px!important}
+.mock-stories>summary{font-weight:600}.mock-stories .pic-body{padding:4px 0 12px}.story-line{padding:12px 0;border-top:1px dashed var(--rule)}
+.story-line p{font-size:15px;margin:0 0 5px;overflow-wrap:anywhere}.sentence-tag{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-2);margin-right:12px}.not-counted{color:var(--muted);font-size:12px}
+.phone-frame{display:block;width:390px;max-width:100%;height:844px;border:1px solid #bcc2b7;margin:24px auto;background:var(--paper)}
+.mock-footer-note{margin:12px 0 0;font-size:12px;color:var(--ink-2)}
+@media(max-width:520px){.review-tools .switch{margin-left:0}.mock-quotes blockquote{font-size:19px}.mock-analysis h3{font-size:15px}}
+@media print{.review-tools{display:none}.chapter{break-inside:avoid}}
+</style>
+</head>
+<body>
+<aside class="review-tools" aria-label="Mock 審閱工具">
+ <div class="review-tools-inner">
+  <div class="tools-top"><strong>結果頁 mock · 精簡版</strong><span>示例故事、示意圖表及標記，未經模型分析。</span>
+   <div class="switch"><button id="desktop" aria-pressed="true">整頁</button><button id="phone" aria-pressed="false">手機 390px</button></div>
+  </div>
+  <p>展開分析 → 原句 → 摺疊故事 → 書中概念 → 自我提問</p>
+  <details><summary>這版的取捨</summary><p>分析直接顯示，毋須按開。摘錄只留原句和出處，刪去新增的長解讀及主題關係段落。展開故事後，句子旁直接列出計入的主題。下半頁沿用原有內容，避免同時改動太多。</p></details>
+ </div>
+</aside>
+<iframe id="phone-frame" class="phone-frame" title="390px 手機結果頁預覽" hidden></iframe>
+<div id="page">
+<header class="masthead"><span class="wordmark">畫中有你</span><span class="masthead-note">讀書會 · 看圖寫故事</span></header>
+<main>
+ <div class="insight">
+  <p class="eyebrow">再讀一次，你寫的故事</p>
+  <h1>故事裏，有幾種不同的追求。</h1>
+  <p class="lede">故事裏寫到了「成就」、「關係」和「影響」。</p>
+ </div>
+ <section class="chapter" aria-labelledby="pursuits-title">
+  <h2 id="pursuits-title">人物在追求甚麼？</h2>
+  <section class="mock-analysis" aria-labelledby="analysis-title">
+   <h3 id="analysis-title">看看分析詳情</h3>
+   <p>按故事長短調整後，成就主題出現得較密集。</p>
+   <div class="profile" aria-label="示意分析圖表">
+    <div class="profile-row"><span class="profile-name">成就</span><div class="profile-track" aria-hidden="true"><span class="profile-fill" style="width:74%;background:var(--ach)"></span><span class="profile-typical" style="left:58%"></span></div><span class="profile-word">較密集</span></div>
+    <div class="profile-row"><span class="profile-name">關係</span><div class="profile-track" aria-hidden="true"><span class="profile-fill" style="width:55%;background:var(--aff)"></span><span class="profile-typical" style="left:65%"></span></div><span class="profile-word">相若</span></div>
+    <div class="profile-row"><span class="profile-name">影響</span><div class="profile-track" aria-hidden="true"><span class="profile-fill" style="width:45%;background:var(--pow)"></span><span class="profile-typical" style="left:50%"></span></div><span class="profile-word">相若</span></div>
+   </div>
+   <p class="legend fine"><span class="key you"></span>你的故事<span class="key typical"></span>同組圖片的研究參照</p>
+   <p class="fine">長條按故事長短調整；參照來自德文研究故事，只作粗略對照。</p>
+  </section>
+  <div class="reading-evidence mock-quotes" aria-label="故事原句摘錄">
+   <figure><figcaption class="fine">第 1 個故事 · 成就</figcaption><blockquote>每天收操前，他都請教練指出一個有進步和一個要改的地方。</blockquote></figure>
+   <figure><figcaption class="fine">第 2 個故事 · 關係</figcaption><blockquote>事情還未全部解決，但臨走前，弟弟問她星期日要不要一起吃飯，她立即說好。</blockquote></figure>
+   <figure><figcaption class="fine">第 4 個故事 · 影響</figcaption><blockquote>看着原本不服氣的船員主動來問下一程怎樣走，他感到自己終於站穩了船長的位置。</blockquote></figure>
+  </div>
+  <details id="stories" class="more mock-stories">
+   <summary>重看四個故事</summary>
+   <p class="fine">展開故事，看看哪些句子計入了主題。</p>
+   <p class="fine">Mock：以下標記只示範顯示方式。</p>
+   <div id="story-list"></div>
+  </details>
+ </section>
+ <section class="chapter" aria-labelledby="meaning-title">
+  <p class="eyebrow">書中的三種追求</p>
+  <h2 id="meaning-title">想做好，想靠近，想有影響。</h2>
+  <p class="chapter-intro">這些追求，可以同時出現在一個故事裏。</p>
+  <details class="motive-note"><summary><span class="dot ach" aria-hidden="true"></span><b>成就</b><span>「我想做得更好。」</span></summary><p>練好一首曲、解開一道難題、把工作做到自己滿意。成就的吸引力，在於有一個值得挑戰的標準，想看看自己能走到哪一步。</p><p class="theme-question">對人物來說，怎樣才算「做得好」？那個標準又是誰定的？</p></details>
+  <details class="motive-note"><summary><span class="dot aff" aria-hidden="true"></span><b>關係</b><span>「我想和你親近。」</span></summary><p>想加入一班朋友，也想有一個能說心事的人。有時是一通等了很久的電話，有時是吵架後，仍想找對方吃頓飯。</p><p class="theme-question">人物想要的，是大家接納自己，還是有人真正明白自己？</p></details>
+  <details class="motive-note"><summary><span class="dot pow" aria-hidden="true"></span><b>影響</b><span>「我想有話事權。」</span></summary><p>希望自己的話有分量，能影響別人的決定、改變事情的走向。書中談的「權力動機」，可以是替人出頭，也可以是要別人聽自己的。</p><p class="theme-question">人物爭取到話事權之後，會拿來做甚麼？</p></details>
+ </section>
+ <section class="chapter book-chapter" aria-labelledby="why-title">
+  <p class="eyebrow">由這裏，走進書裏</p><h2 id="why-title">為甚麼請你寫故事？</h2>
+  <p>心理學家 Murray 曾提出一個疑問：我們真的清楚，自己最想要甚麼嗎？他請人看圖編故事，嘗試從人物的願望和遭遇，了解講故事的人所關心的事。</p>
+  <p>McAdams 在書中沿着這條線索，帶我們看人的另一面：除了平日怎樣待人處事，我們還有想得到的東西、想完成的事。這些追求，讓人朝某個方向走下去。</p>
+  <details class="book-more"><summary>這些追求，又從哪裏來？</summary><p>後來，McClelland 和同事把故事中的動機主題整理成研究方法，也追問家庭、學校和社會怎樣影響我們重視的事。他甚至研究兒童讀物：孩子讀着怎樣的故事長大，會學到甚麼才值得追求？</p><p>今次的看圖寫故事，就借用了這個思路。至於我們自己學會了追求甚麼，留待讀書會一起談。</p></details>
+  <p class="fine">改寫自 Dan P. McAdams《The Art and Science of Personality Development》第六章的相關內容。</p>
+ </section>
+ <section class="chapter reflection-chapter" aria-labelledby="reflection-title">
+  <p class="eyebrow">把問題留給自己</p><h2 id="reflection-title">哪一個人物的願望，最令你在意？</h2>
+  <p>可以是你認同的，也可以是你不明白的。先想想，為甚麼是這個人物。</p>
+ </section>
+ <aside class="bookclub-note"><h3>帶一句話來，讀書會見。</h3><p>大家寫的是同一組圖。從自己的故事裏，挑一句你最在意的話。到時一起看看，大家替人物寫下了怎樣的願望。想分享多少，由你決定。</p></aside>
+ <p class="closing-note">人生走到不同階段，想追求的事也會變。這次先看看，此刻甚麼最牽動你。</p>
+ <details class="more about"><summary>關於這份解讀</summary><p>這個讀書會練習借用圖畫故事練習（PSE）的思路，把故事翻譯成英文，再用自動分析整理成就、關係和影響主題。解讀針對今次的四個故事；這套自動分析尚未經驗證適用於廣東話，可能有誤讀，值得對照原文看看。</p><p>「關係」在這裏包括想被接納、維繫關係等內容。書中另有談親密動機；今次的分析沒有把它獨立量度。</p></details>
+ <div class="result-footer"><div class="actions"><button class="primary" disabled>儲存故事和解讀 ↓</button><button class="secondary" disabled>換四張新圖再寫 →</button><button class="quiet" disabled>返回開始</button></div><p class="mock-footer-note">Mock 按鈕僅示意。正式網站尚未修改。</p></div>
+</main>
+</div>
+<script>
+const demoStories = [
+ {title:'拳手',image:'c05',lines:[
+ ['阿健剛輸了一場拳賽，坐在場邊，最不甘心的是自己又犯了同一個錯。',['ach']],
+ ['教練說他已經打得不錯，但他想知道，為甚麼每到第三回合就守不住。',['ach']],
+ ['他回去重看片段，記下每次失分的位置，決定用六個星期練好步法，再找實力相近的拳手試一次。',['ach']],
+ ['每天收操前，他都請教練指出一個有進步和一個要改的地方。',['ach']],
+ ['下一場他仍然輸了，卻第一次撐足全場，沒有亂了節奏。',[]],
+ ['他走下擂台時笑了，因為這次終於知道，自己的苦功用對了地方。',['ach']]]},
+ {title:'河邊二人',image:'c07',lines:[
+ ['兩姊弟約在河邊見面。',[]],
+ ['自從上次為照顧媽媽的事吵架，他們已經一個月沒有好好說話。',['aff']],
+ ['姐姐本來準備了一肚子道理，見到弟弟一臉疲倦，卻只問他最近睡得好不好。',['aff']],
+ ['弟弟沉默了一會，才說自己不是不想幫忙，而是怕做甚麼都不合她心意。',[]],
+ ['她聽完沒有反駁，只說：「原來你一直咁諗，我真係唔知。」',['aff']],
+ ['他們沿着河慢慢走，談起小時候一起放學的事。',['aff']],
+ ['事情還未全部解決，但臨走前，弟弟問她星期日要不要一起吃飯，她立即說好。',['aff']]]},
+ {title:'實驗室',image:'c18',lines:[
+ ['敏儀和同事已經重做了三次實驗，每次的數字都不一樣。',[]],
+ ['明天就要匯報，同事提議先挑最好看的一組，她卻想弄清楚問題出在哪裏，否則交了報告也不安心。',['ach']],
+ ['她把步驟逐項列出，兩人分工檢查溫度、時間和儀器，終於發現其中一部儀器沒有校準。',['ach']],
+ ['這次她們先定好誤差範圍，再重新做一遍，結果終於能夠重複。',['ach']],
+ ['敏儀鬆了一口氣，把同事叫過來一起看。',[]],
+ ['第二天匯報時，她特別提到同事找出的關鍵，因為這份成果是兩個人一起捱出來的。',['ach','aff']]]},
+ {title:'船長',image:'c15',lines:[
+ ['船快要離港，岸上卻傳來天氣轉壞的消息。',[]],
+ ['老船員認為照常出發就可以，新上任的船長知道，如果這次沒有人聽他的，以後每個決定都會被架空。',['pow']],
+ ['他召集各人，把航線和風勢攤開來講，堅持改道，並逐一安排誰負責甚麼。',['pow']],
+ ['有人嫌他小題大做，他當着全體船員說，延誤由他向公司交代，但船上必須有一致的指令。',['pow']],
+ ['最後大家照他的安排工作，船也平安到港。',[]],
+ ['看着原本不服氣的船員主動來問下一程怎樣走，他感到自己終於站穩了船長的位置。',['pow']]]},
+];
+const names={ach:'成就',aff:'關係',pow:'影響'};
+function el(tag,cls,text){const n=document.createElement(tag);if(cls)n.className=cls;if(text)n.textContent=text;return n;}
+demoStories.forEach((story,i)=>{
+ const detail=el('details','pic-group'),summary=el('summary');
+ const img=el('img');img.src='../../web/stimuli/'+story.image+'.jpg';img.alt='';
+ summary.append(img,el('span','pic-title',`第 ${i+1} 個故事 · ${story.title}`));
+ const body=el('div','pic-body');
+ story.lines.forEach(([source,motives])=>{const line=el('div','story-line');line.append(el('p','',source));
+  if(!motives.length)line.append(el('span','not-counted','未計入三類主題'));
+  motives.forEach(m=>{const tag=el('span','sentence-tag');tag.append(el('span','dot '+m),document.createTextNode('計入'+names[m]));line.append(tag);});
+  body.append(line);
+ });detail.append(summary,body);document.getElementById('story-list').append(detail);
+});
+if(new URLSearchParams(location.search).has('embed'))document.querySelector('.review-tools').hidden=true;
+function preview(phone){document.getElementById('page').hidden=phone;const frame=document.getElementById('phone-frame');frame.hidden=!phone;
+ if(phone&&!frame.src)frame.src='results-flow-light.html?embed=1';
+ document.getElementById('desktop').setAttribute('aria-pressed',String(!phone));document.getElementById('phone').setAttribute('aria-pressed',String(phone));}
+document.getElementById('desktop').addEventListener('click',()=>preview(false));document.getElementById('phone').addEventListener('click',()=>preview(true));
+</script>
+</body>
+</html>
