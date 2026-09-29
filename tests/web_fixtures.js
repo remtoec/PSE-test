@@ -38,11 +38,17 @@ function runWebFixtures() {
   localStorage.setItem(KEY, JSON.stringify(oldDraft));
   const recovered = load();
   check("old draft keeps original pictures", recovered.order.join() === "p7,p9,p4,p2"
-    && recovered.guidance === "legacy-guidance-resumed-with-v2");
+    && recovered.guidance === "legacy-guidance-resumed-with-v3");
+  localStorage.setItem(KEY, JSON.stringify({ ...oldDraft, guidance: "pse-hk-guidance-v2" }));
+  check("v2 draft records resuming under v3", load().guidance === "pse-hk-guidance-v2-resumed-with-v3");
+  localStorage.setItem(KEY, JSON.stringify({ ...oldDraft, guidance: "legacy-guidance-resumed-with-v3" }));
+  check("resume label is not stacked", load().guidance === "legacy-guidance-resumed-with-v3");
   if (previousDraft === null) localStorage.removeItem(KEY);
   else localStorage.setItem(KEY, previousDraft);
-  check("guidance is not collapsed", document.querySelector(".prompt-notes .prompts")
-    && !document.querySelector(".prompt-notes").closest("details"));
+  const ph = document.getElementById("story").placeholder;
+  check("full-story guidance sits in the writing box", ["經歷緊咩", "之前發生咗咩事", "感受到咩", "最想要咩", "最後點樣收場"]
+    .every((x) => ph.includes(x)) && document.querySelectorAll("#v-write .arc span:not(.sr-only)").length === 4);
+  check("no continuation framing", !document.getElementById("v-write").textContent.includes("然後"));
   S = fresh(); S.mode = "random"; draw();
   check("random draws four", new Set(S.order).size === 4 && S.skipsLeft === MAX_SKIPS);
   check("random pool covers whole archive", pool.length === 48
@@ -59,13 +65,20 @@ function runWebFixtures() {
   check("shared leader", H().includes("兩種分析都") && H().includes("親和"));
   check("source is the sentence entry point", document.querySelector("#cards summary .txt").textContent.includes("句子 0"));
   check("agreement shown", document.getElementById("agreement").textContent.includes("10 ／ 10"));
-  check("both paths lead the results", document.querySelectorAll("#tally .path-panel").length === 2
-    && !document.getElementById("tally").closest("details"));
+  check("both paths kept in technical detail", document.querySelectorAll("#tally .path-panel").length === 2
+    && document.getElementById("tally").closest("details.technical"));
+  check("insight leads the results", document.getElementById("results-title").textContent.includes("特別著重「連結」")
+    && document.querySelectorAll("#profile .profile-row").length === 3 && !document.getElementById("profile").closest("details"));
+  check("benchmark shown against the pictures", document.getElementById("insight-lede").textContent.includes("一般人寫呢四張圖")
+    && document.getElementById("insight-lede").textContent.includes("關係"));
+  check("leading theme's research note opens first", document.querySelector("#motive-notes > details").dataset.motive === "aff"
+    && document.querySelector("#motive-notes > details").open
+    && [...document.querySelectorAll("#motive-notes > details")].filter((x) => x.open).length === 1);
   check("both paths show sentence counts", document.querySelectorAll("#tally .tally-row .n").length === 6
     && document.getElementById("tally").textContent.includes("10 句"));
-  check("correct theory bridge", document.getElementById("reflection")?.textContent.includes("competence")
-    && document.getElementById("reflection")?.textContent.includes("relatedness")
-    && !document.getElementById("reflection").querySelector("input,textarea"));
+  check("correct theory bridge", ["competence", "relatedness", "autonomy"].every((x) => document.getElementById("reflection").textContent.includes(x))
+    && document.querySelectorAll("#reflection .reflect-list li").length === 3
+    && !document.getElementById("v-results").querySelector("input,textarea"));
 
   render(make([...ten(["aff"], ["aff"]), ...ten([], ["ach"])]));
   check("partial match is not a disagreement", !H().includes("唔一致") && H().includes("親和")
@@ -85,7 +98,7 @@ function runWebFixtures() {
 
   render(make(ten(["aff"], []), true));
   check("fallback headline", H().startsWith("原文分析"));
-  check("fallback not zero", document.getElementById("bars").textContent.includes("翻譯未能完成"));
+  check("fallback reading uses the original text", document.getElementById("profile-note").textContent.includes("翻譯未完成"));
   check("fallback visible in main comparison", document.getElementById("tally").textContent.includes("翻譯未能完成")
     && document.querySelectorAll("#tally .path-panel")[1].querySelectorAll(".tally-row").length === 0);
   check("fallback cards", document.getElementById("cards").textContent.includes("未有翻譯"));
@@ -108,15 +121,37 @@ function runWebFixtures() {
   x.sentences[0].source = '<img src=x onerror="window.__xss2=1">';
   render(x);
   check("no markup", !document.querySelector("#cards img[src='x']") && document.getElementById("cards").textContent.includes("<img"));
-  document.getElementById("reflection-next").click();
-  check("reflection advances", !document.querySelector('[data-reflection="1"]').hidden
-    && document.querySelector('[data-reflection="0"]').hidden);
-  document.getElementById("reflection-prev").click();
-  check("reflection goes back", !document.querySelector('[data-reflection="0"]').hidden);
-  document.getElementById("reflection-next").click();
-  document.getElementById("reflection-next").click();
-  document.getElementById("reflection-next").click();
-  check("reflection closes without collecting answers", !document.getElementById("reflection-closing").hidden);
+
+  // reading logic: either path counts, shares compared with the pictures' pull
+  const one = (d, t) => ({ direct: sc(...d), translated: t && sc(...t) });
+  const u = combined([one([], ["ach"]), one(["aff"], ["aff"]), one(["pow"], []), one(["aff"], null)]);
+  check("a theme counts once if either reading finds it", u.ach === 1 && u.aff === 2 && u.pow === 1);
+  const clubTypical = typicalShares(BOOKCLUB_SET.map(byId));
+  check("bookclub typical shares", Math.abs(clubTypical.aff - 4.18 / 11.59) < 1e-9 && Math.abs(clubTypical.ach - 3.42 / 11.59) < 1e-9);
+  const even = { ach: 1 / 3, aff: 1 / 3, pow: 1 / 3 };
+  check("lean", reading({ ach: 1, aff: 5, pow: 1 }, clubTypical).kind === "lean"
+    && reading({ ach: 1, aff: 5, pow: 1 }, clubTypical).focus.join() === "aff");
+  check("balanced", reading({ ach: 3, aff: 4, pow: 3 }, clubTypical).kind === "balanced"
+    && reading({ ach: 3, aff: 4, pow: 3 }, clubTypical).focus.join() === "aff");
+  check("sparse", reading({ ach: 1, aff: 1, pow: 0 }, clubTypical).kind === "sparse");
+  check("tied lean names both", reading({ ach: 3, aff: 3, pow: 0 }, even).focus.join() === "ach,aff");
+  check("lab picture pulls two themes", typicalOf(byId("c18")).join() === "ach,pow");
+  check("unmatched picture has no typical theme", typicalOf({ pull: null }) === null
+    && broughtIn({ pull: null }, { ach: 1, aff: 1, pow: 1 }).length === 0);
+
+  pictures = BOOKCLUB_SET.map(byId);
+  const club = (rows) => { const d = make(rows); d.sentences.forEach((s, i) => { s.picture_id = pictures[i % 4].id; s.id = `${s.picture_id}-s${i}`; }); return d; };
+  // boxer ach, couple POWER (picture pulls affiliation), lab ach, captain pow
+  render(club([[["ach"], ["ach"]], [[], ["pow"]], [["ach"], ["ach"]], [["pow"], ["pow"]]]));
+  check("brought-in theme is flagged", document.querySelectorAll("#cards .chip.brought").length === 1
+    && document.querySelectorAll("#cards .pic-group")[1].querySelector(".chip.brought").textContent.includes("影響力")
+    && !document.getElementById("brought").hidden && document.getElementById("brought").textContent.includes("第 2 張"));
+
+  render(club([[[], []], [["aff"], []], [[], []], [[], []]]));
+  check("sparse hides the profile", document.getElementById("results-title").textContent.includes("較少寫到")
+    && document.getElementById("profile").hidden && document.getElementById("insight-lede").textContent.includes("唔代表")
+    && ![...document.querySelectorAll("#motive-notes > details")].some((x) => x.open));
+  pictures = ["p1", "p2", "p3", "p4"].map(byId);
 
   // Leave a clearly synthetic, readable debrief for visual QA.
   const demo = make([
@@ -145,11 +180,10 @@ function runWebFixtures() {
   lastProtocol = { times: [240000, 240000, 240000, 240000], notes: [], guidance: GUIDE_VERSION };
   render(demo);
   lastResult = demo;
-  check("new result resets reflection", document.querySelector('[data-reflection="1"]').hidden
-    && document.getElementById("reflection-closing").hidden);
+  check("new result closes technical detail", !document.querySelector("#v-results details.technical").open);
   check("classical results retain original counts", document.getElementById("tally").textContent.includes("3 句")
     || demo.translation_failed);
   check("four classical result cards", document.querySelectorAll("#cards .pic-group").length === 4
-    && document.querySelector("#cards .pic-head img").getAttribute("src") === "stimuli/c05.jpg");
+    && document.querySelector("#cards .pic-group summary img").getAttribute("src") === "stimuli/c05.jpg");
   return fails;
 }

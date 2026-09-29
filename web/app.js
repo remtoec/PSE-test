@@ -15,10 +15,16 @@ const BREAK_MS = 5 * 60_000; // a resume after this long counts as a break, not 
 const AWAY_NOTE_MS = 60_000;
 const MOTIVES = ["ach", "aff", "pow"];
 const NAMES = { ach: "成就", aff: "連結／親和", pow: "影響力／權力" };
+const SHORT = { ach: "成就", aff: "連結", pow: "影響力" };
+// Self-determination theory: achievement and power sit within competence, affiliation within relatedness.
+const NEEDS = [["勝任", "competence", ["ach", "pow"]], ["關係", "relatedness", ["aff"]]];
+const MIN_THEMES = 3;      // below this many detected themes, no lean is claimed
+const LEAN = 0.12;         // share above the pictures' typical share that counts as a lean
+const TYPICAL_OF_MAX = 0.75; // a picture "usually" pulls motives within 75% of its strongest pull
 // Boxer, couple by river, women in laboratory, ship captain.
-// German reference pulls: aff 4.18, ach 3.42, pow 3.99. Context, never a score correction.
+// German reference pulls: aff 4.18, ach 3.42, pow 3.99. A rough share benchmark, never a score correction.
 const BOOKCLUB_SET = ["c05", "c07", "c18", "c15"];
-const GUIDE_VERSION = "pse-hk-guidance-v2";
+const GUIDE_VERSION = "pse-hk-guidance-v3";
 const API = (() => {
   const m = document.querySelector('meta[name="pse-api"]').content.trim();
   if (m) return m.replace(/\/$/, "");
@@ -148,7 +154,8 @@ function load() {
     const d = JSON.parse(raw);
     if (!d.order) Object.assign(d, { order: ["p1", "p2", "p3", "p4"], skipsLeft: MAX_SKIPS }); // drafts from the fixed-order version
     d.awayMs ??= {}; d.breaks ??= 0; d.mode ??= "random"; // drafts from before modes were random draws
-    d.guidance ??= "legacy-guidance-resumed-with-v2";
+    // A draft begun under older guidance keeps that on record; it finishes under the current screens.
+    if (d.guidance !== GUIDE_VERSION && !String(d.guidance).includes("-resumed-with-")) d.guidance = `${d.guidance || "legacy-guidance"}-resumed-with-v3`;
     if (d.v !== 1 || Date.now() - d.savedAt > MAX_AGE_MS || !d.order.every(byId)) {
       localStorage.removeItem(KEY); // cleanup happens on reopen only
       return null;
@@ -169,11 +176,6 @@ const hasWriting = () => Object.values(S.stories).some((t) => t.trim());
 
 function show(id) {
   document.querySelectorAll(".view").forEach((v) => (v.hidden = v.id !== id));
-  const stage = id === "v-intro" ? "intro" : id === "v-results" ? "results" : "write";
-  document.querySelectorAll("[data-stage]").forEach((item) => {
-    if (item.dataset.stage === stage) item.setAttribute("aria-current", "step");
-    else item.removeAttribute("aria-current");
-  });
   window.scrollTo(0, 0);
   $(id).querySelector("h1, h2")?.focus({ preventScroll: true });
 }
@@ -206,7 +208,7 @@ function startRound(i, phase = "view") {
   S.step = "round"; S.round = i; S.phase = phase;
   if (phase === "view" && S.viewLeft <= 0) S.viewLeft = VIEW_MS;
   save();
-  document.querySelectorAll(".round-no").forEach((e) => (e.textContent = `第 ${i + 1} ／ 4 張`));
+  document.querySelectorAll(".round-no").forEach((e) => (e.textContent = `第 ${i + 1}／4 張`));
   document.querySelectorAll(".round-progress").forEach((e) => e.replaceChildren(
     ...Array.from({ length: PER_RUN }, (_, n) => h("span", { class: n < i ? "complete" : n === i ? "current" : "" }))));
   $("btn-next").textContent = i === PER_RUN - 1 ? "完成四個故事 →" : "下一張 →";
@@ -286,7 +288,7 @@ function showWriting() {
     else away(now - last);
     last = now;
     const left = Math.max(0, WRITE_SOFT_MS - (S.writeMs[pid] || 0));
-    $("soft-timer").textContent = left ? mmss(left) : "";
+    $("soft-timer").textContent = left ? mmss(left) : "時間到";
     if (!left) $("time-up").hidden = false; // soft: nothing is locked or submitted
   }, 500);
 }
@@ -295,11 +297,13 @@ function updateWriteMeta() {
   const t = $("story").value;
   const n = cp(t);
   const cc = $("char-count");
-  cc.textContent = `${n} ／ ${MAX_STORY_CHARS} 字`;
+  cc.textContent = charText(n);
   cc.className = n > MAX_STORY_CHARS ? "over" : "";
   $("btn-next").disabled = !t.trim() || n > MAX_STORY_CHARS;
-  $("save-state").textContent = !t ? "" : storageOK ? "已暫存喺呢個瀏覽器" : "未能暫存（重新載入會失去）";
+  $("save-state").textContent = !t ? "" : storageOK ? "· 已暫存" : "· 未能暫存";
 }
+
+const charText = (n) => (n > MAX_STORY_CHARS ? `${n}／${MAX_STORY_CHARS} 字，請刪減` : n ? `${n} 字` : "");
 
 function onStoryInput() {
   S.stories[pictures[S.round].id] = $("story").value;
@@ -318,8 +322,8 @@ function next() {
     S.nudged = pid;
     save();
     const note = $("short-note");
-    note.textContent = "如果故事仲未講完，可以補充之前發生咩事、人物點諗，或者最後點樣。"
-      + "已經寫完就再按一次繼續，唔需要為分析加長或者改標點。";
+    note.textContent = "故事好似未講完？可以補一兩句：之前發生咩、佢哋想要咩，或者最後點收場。"
+      + "已經寫完就再按一次。";
     note.hidden = false;
     return;
   }
@@ -347,7 +351,7 @@ function goReview(notice = "", flagPid = null, editAll = false) {
       S.stories[p.id] = ta.value;
       save();
       const n = cp(ta.value);
-      count.textContent = `${n} ／ ${MAX_STORY_CHARS} 字`;
+      count.textContent = charText(n);
       count.className = n > MAX_STORY_CHARS ? "over" : "";
     };
     ta.addEventListener("input", upd);
@@ -355,7 +359,7 @@ function goReview(notice = "", flagPid = null, editAll = false) {
     ta.addEventListener("compositionend", () => { composing = false; upd(); });
     upd();
     return h("div", { class: "review-item" + (p.id === flagPid ? " flag" : "") },
-      h("label", { for: `rv-${p.id}` }, `第 ${i + 1} 個故事`), ta, h("div", { class: "meta-row" }, count));
+      h("label", { for: `rv-${p.id}` }, `第 ${i + 1} 個故事`), ta, ta.readOnly ? null : h("div", { class: "meta-row" }, count));
   }));
   $("review-notice").textContent = notice;
   $("review-notice").hidden = !notice;
@@ -394,7 +398,7 @@ async function submit() {
   show("v-loading");
   const t0 = Date.now();
   const msg = $("loading-msg");
-  msg.textContent = "正在準備分析你嘅故事。呢個小工具閒置時會休眠，今次可能需要等耐少少。請暫時保持頁面開啟。";
+  msg.textContent = "服務閒置時會休眠，第一次可能要等一分鐘。請保持頁面開啟。";
   $("elapsed").textContent = "0";
   let longShown = false;
   loadTimer = setInterval(() => {
@@ -403,8 +407,8 @@ async function submit() {
     if (!longShown && Date.now() - t0 > LONG_WAIT_MS) {
       longShown = true;
       msg.textContent = stored
-        ? "今次需要嘅時間比平時長。你嘅故事仍然保存喺呢個瀏覽器。"
-        : "今次需要嘅時間比平時長。請保持頁面開啟。";
+        ? "比平時耐，仲處理緊。故事已經存好喺呢個瀏覽器。"
+        : "比平時耐，仲處理緊。請保持頁面開啟。";
     }
   }, 1000);
 
@@ -530,17 +534,6 @@ function headline(d) {
   return ["兩種分析方法嘅結果唔一致。", `原文分析${describe(dl)}；英文翻譯後分析${describe(tl)}。`];
 }
 
-function barsGroup(title, counts, max) {
-  if (!counts) {
-    return h("div", { class: "bars-group" }, h("h4", {}, title), h("p", { class: "bars-missing" }, "翻譯未能完成，今次冇呢部分。"));
-  }
-  return h("div", { class: "bars-group" }, h("h4", {}, title),
-    MOTIVES.map((m) => {
-      const fill = h("div", { class: `bar-fill ${m}-bg`, style: `width:${max ? (counts[m] / max) * 100 : 0}%` });
-      return h("div", { class: "bar-row" }, h("span", {}, NAMES[m]), h("div", { class: "bar-track" }, fill), h("span", { class: "n" }, counts[m]));
-    }));
-}
-
 /** Discrete sentence counts, one dot per sentence: not a score, share or norm. */
 function tally(counts) {
   return MOTIVES.map((m) => h("div", { class: "tally-row" },
@@ -555,20 +548,96 @@ function pathPanel(title, caption, counts) {
     counts ? tally(counts) : h("p", { class: "bars-missing" }, "翻譯未能完成，今次冇呢部分。唔代表零個主題。"));
 }
 
-let reflectionStep = 0;
-function setReflection(step, focus = false) {
-  reflectionStep = Math.max(0, Math.min(2, step));
-  document.querySelectorAll("[data-reflection]").forEach((card, i) => {
-    card.hidden = i !== reflectionStep;
-    if (i === reflectionStep && focus) {
-      const title = card.querySelector("h3");
-      title.setAttribute("tabindex", "-1");
-      title.focus({ preventScroll: true });
-    }
+// ---------- reading: combined themes against the pictures' pull ----------
+
+/** A sentence carries a theme if either reading found it (direct Cantonese under-detects). */
+function themesOf(s) {
+  return new Set([...s.direct.motives, ...(s.translated ? s.translated.motives : [])]);
+}
+
+function combined(sentences) {
+  const c = { ach: 0, aff: 0, pow: 0 };
+  for (const s of sentences) for (const m of themesOf(s)) c[m] += 1;
+  return c;
+}
+
+/** Share of each theme in German expert-coded stories for these pictures (pictures without norms are left out). */
+function typicalShares(pics) {
+  const sum = Object.fromEntries(MOTIVES.map((m) => [m, pics.reduce((a, p) => a + (p.pull ? p.pull[m] : 0), 0)]));
+  const total = MOTIVES.reduce((a, m) => a + sum[m], 0);
+  return Object.fromEntries(MOTIVES.map((m) => [m, total ? sum[m] / total : 1 / 3]));
+}
+
+/** sparse: too few themes to read a profile; lean: a theme clearly above what the pictures pull; balanced: neither. */
+function reading(c, typical) {
+  const total = MOTIVES.reduce((a, m) => a + c[m], 0);
+  const share = Object.fromEntries(MOTIVES.map((m) => [m, total ? c[m] / total : 0]));
+  if (total < MIN_THEMES) return { kind: "sparse", total, share, focus: leaders(c) };
+  const lift = Object.fromEntries(MOTIVES.map((m) => [m, share[m] - typical[m]]));
+  const top = Math.max(...MOTIVES.map((m) => lift[m]));
+  if (top >= LEAN) return { kind: "lean", total, share, focus: MOTIVES.filter((m) => lift[m] >= LEAN && top - lift[m] < 0.02) };
+  return { kind: "balanced", total, share, focus: leaders(c) };
+}
+
+const pct = (x) => `${Math.round(x * 100)}%`;
+const quote = (ms) => {
+  const q = ms.map((m) => `「${SHORT[m]}」`);
+  return q.length > 1 ? q.slice(0, -1).join("、") + "同" + q[q.length - 1] : q[0];
+};
+const needOf = (m) => NEEDS.find(([, , ms]) => ms.includes(m));
+
+function insightText(r, typical, failed) {
+  if (r.kind === "sparse") {
+    return ["你嘅故事，較少寫到人物想要乜。",
+      (r.total ? `模型只喺 ${r.total} 句認到動機主題。` : "模型喺今次故事入面認唔到動機主題。")
+      + "故事多描述畫面、少寫人物想要乜同點收場，通常就會咁。唔代表你冇呢啲動機。"
+      + (failed ? "今次翻譯未完成，只用咗原文分析，主題可能偏少。" : "")];
+  }
+  if (r.kind === "balanced") {
+    return ["你嘅故事，貼近圖片本身。",
+      `三種主題嘅比例，同一般人寫呢四張圖時相近，冇一種特別突出。最多嘅係${quote(r.focus)}。`];
+  }
+  const [m] = r.focus;
+  if (r.focus.length > 1) {
+    return [`你嘅故事，特別著重${quote(r.focus)}。`, `兩種主題都比一般人寫呢四張圖時多。`];
+  }
+  const [need, en] = needOf(m);
+  return [`你嘅故事，特別著重${quote([m])}。`,
+    `「${SHORT[m]}」佔你故事主題嘅 ${pct(r.share[m])}；一般人寫呢四張圖，大約係 ${pct(typical[m])}。`
+    + `佢對應「${need}」（${en}）呢種心理需要。`];
+}
+
+function profile(c, r, typical) {
+  return NEEDS.map(([need, en, ms]) => {
+    const sum = (x) => ms.reduce((a, m) => a + x[m], 0);
+    return h("div", { class: "need-group" },
+      h("div", { class: "need-head" },
+        h("span", {}, need, " ", h("small", { lang: "en" }, en)),
+        h("span", {}, pct(sum(r.share)), h("small", {}, ` · 一般 ${pct(sum(typical))}`))),
+      ms.map((m) => h("div", { class: "profile-row" + (r.focus.includes(m) ? " focus" : "") },
+        h("span", { class: "profile-name" }, SHORT[m], h("small", {}, `${c[m]} 句`)),
+        h("span", { class: "profile-track", "aria-hidden": "true" },
+          h("span", { class: `profile-fill ${m}-bg`, style: `width:${pct(r.share[m])}` }),
+          h("span", { class: "profile-typical", style: `left:${pct(typical[m])}` })),
+        h("span", { class: "profile-n" }, pct(r.share[m]), h("small", {}, `一般 ${pct(typical[m])}`)))));
   });
-  $("reflection-count").textContent = `0${reflectionStep + 1} / 03`;
-  $("reflection-prev").disabled = reflectionStep === 0;
-  $("reflection-next").textContent = reflectionStep === 2 ? "最後，問吓自己 ↗" : "下一個問題 →";
+}
+
+/** Motives a picture usually pulls, or null when it has no verified norms. */
+function typicalOf(p) {
+  if (!p.pull) return null;
+  const max = Math.max(...MOTIVES.map((m) => p.pull[m]));
+  return MOTIVES.filter((m) => p.pull[m] >= max * TYPICAL_OF_MAX);
+}
+
+/** Themes the participant wrote that the picture does not usually pull: the clearest projection cue. */
+function broughtIn(p, c) {
+  const typ = typicalOf(p);
+  return typ ? MOTIVES.filter((m) => c[m] && !typ.includes(m)) : [];
+}
+
+function chip(m, text, extra = "") {
+  return h("span", { class: `chip ${extra}` }, h("span", { class: `dot ${m}` }), text);
 }
 
 function labelList(score) {
@@ -578,8 +647,36 @@ function labelList(score) {
 }
 
 function dots(s) {
-  const ms = new Set([...s.direct.motives, ...(s.translated ? s.translated.motives : [])]);
+  const ms = themesOf(s);
   return ms.size ? MOTIVES.filter((m) => ms.has(m)).map((m) => h("span", { class: `dot ${m}` })) : h("span", { class: "dot none" });
+}
+
+function pictureCard(p, i, ss) {
+  const c = combined(ss);
+  const typ = typicalOf(p);
+  const brought = broughtIn(p, c);
+  const yours = MOTIVES.filter((m) => c[m]);
+  return h("details", { class: "pic-group" },
+    h("summary", {},
+      h("img", { src: p.file, alt: "" }),
+      h("span", { class: "pic-sum" },
+        h("span", { class: "pic-title" }, `第 ${i + 1} 張`),
+        h("span", { class: "pic-line" }, h("small", {}, "圖片一般引出"),
+          typ ? typ.map((m) => chip(m, SHORT[m], "muted")) : h("span", { class: "chip muted" }, "未有常模"),
+          typ && p.pull.n_stories < 30 ? h("small", {}, "（樣本少）") : null),
+        h("span", { class: "pic-line" }, h("small", {}, "你寫咗"),
+          yours.length
+            ? yours.map((m) => chip(m, `${brought.includes(m) ? "✦ " : ""}${SHORT[m]} ${c[m]}`, brought.includes(m) ? "brought" : ""))
+            : h("span", { class: "chip muted" }, "冇明顯主題")))),
+    h("div", { class: "pic-body" },
+      ss.map((s) => h("details", { class: "card" },
+        h("summary", {}, h("span", { class: "chips", "aria-hidden": "true" }, dots(s)),
+          h("div", { class: "txt" }, h("span", {}, s.source))),
+        h("dl", { class: "card-body" },
+          h("dt", {}, "英文翻譯"), h("dd", { class: "en", lang: s.english ? "en" : "zh-Hant-HK" }, s.english ?? "（未有翻譯）"),
+          s.uncertain ? [h("dt", { class: "flag-uncertain" }, "留意翻譯"), h("dd", { class: "flag-uncertain" }, "翻譯可能有歧義，可以對照原句再睇。")] : null,
+          h("dt", {}, "原文分析"), h("dd", {}, labelList(s.direct)),
+          h("dt", {}, "英文翻譯後分析"), h("dd", {}, labelList(s.translated)))))));
 }
 
 const mmss = (ms) => `${Math.floor(ms / 60000)}:${String(Math.floor(ms / 1000) % 60).padStart(2, "0")}`;
@@ -600,52 +697,77 @@ function protocolNotes() {
 function protocolView(pr) {
   if (!pr) return [];
   const times = h("p", {}, "每個故事嘅寫作時間：" + pr.times.map(mmss).join("、"));
-  const adaptation = h("p", {}, "今次係四張圖、10 秒觀看、約 4 分鐘寫作嘅讀書會改編版。可以提早完成或超時，並非標準化測驗。");
+  const adaptation = h("p", {}, "今次係四張圖、10 秒觀看、約 4 分鐘寫作嘅讀書會改編版，並非標準化測驗。");
   if (!pr.notes.length) return [adaptation, times, h("p", {}, "今次冇記錄到超時或較長中斷；唔代表已達到研究標準。")];
   return [adaptation, times, h("p", {}, "今次記錄到嘅時間同中斷："),
     h("ul", {}, pr.notes.map((x) => h("li", {}, x))),
     h("p", {}, "超時或者中途離開嘅故事標準化程度較低，結果更加只可以當參考。")];
 }
 
+/** Everything the results page and the download say about this run. */
+function summarise(d) {
+  const c = combined(d.sentences);
+  const typical = typicalShares(pictures);
+  const r = reading(c, typical);
+  const byPic = pictures.map((p) => d.sentences.filter((s) => s.picture_id === p.id));
+  const brought = pictures.map((p, i) => [i, broughtIn(p, combined(byPic[i]))]).filter(([, ms]) => ms.length);
+  return { c, typical, r, byPic, brought, text: insightText(r, typical, d.translation_failed) };
+}
+
+function broughtText(brought) {
+  if (!brought.length) return "";
+  const [i, ms] = brought[0];
+  return (brought.length === 1
+    ? `✦ 第 ${i + 1} 張圖一般唔會引出${quote(ms)}，你就寫咗出嚟。`
+    : `✦ 你喺 ${brought.length} 張圖寫咗圖片一般唔會引出嘅主題，例如第 ${i + 1} 張嘅${quote(ms)}。`)
+    + "由你帶入嘅主題，最接近你自己嘅投射。";
+}
+
 function renderResults(d) {
-  const [head, note] = headline(d);
   const n = d.sentences.length;
+  const x = summarise(d);
+  const { c, typical, r } = x;
+  const [lead, rest] = x.text[0].split("，"); // break after the comma, never mid-phrase
+  $("results-title").replaceChildren(lead + "，", h("br"), rest);
+  $("insight-lede").textContent = x.text[1];
+  const sparse = r.kind === "sparse";
+  $("profile").replaceChildren(...(sparse ? [] : profile(c, r, typical)));
+  $("profile").hidden = sparse;
+  $("profile-legend").hidden = sparse;
+  $("profile-note").textContent = sparse ? "" : [
+    `${r.total} 個主題，來自 ${n} 句。`,
+    r.total < 6 ? "數目少，比例容易變。" : "",
+    d.translation_failed ? "今次翻譯未完成，只用咗原文分析。" : "",
+    "「一般」係德國研究嘅粗略參照，點樣計見最底。",
+  ].join("");
+  $("brought").textContent = broughtText(x.brought);
+  $("brought").hidden = !x.brought.length;
+
+  // The note on the leading theme opens first; the other two stay one tap away.
+  const notes = $("motive-notes");
+  const order = [...r.focus, ...MOTIVES.filter((m) => !r.focus.includes(m))];
+  notes.replaceChildren(...order.map((m) => notes.querySelector(`[data-motive="${m}"]`)));
+
+  $("cards").replaceChildren(...pictures.map((p, i) => pictureCard(p, i, x.byPic[i])));
+
+  const [head, note] = headline(d);
   $("headline").textContent = head;
   $("headline-note").textContent = [note, n < 8 ? `今次只有 ${n} 句，可以分析嘅材料有限，結果只可以當作參考。` : ""].filter(Boolean).join(" ");
-
   $("tally").replaceChildren(
     pathPanel("原文直接分析", "直接讀你寫落嘅句子。", d.summary.direct),
     pathPanel("英文翻譯後再分析", "先翻譯，再由同一模型閱讀。", d.summary.translated));
-  $("bookclub-note").hidden = lastMode !== "bookclub";
-  $("bookclub-note").querySelector("p").textContent =
-    (pictures.map((p) => p.id).join() === BOOKCLUB_SET.join()
-      ? "大家新開始嘅讀書會練習會用同一組四張圖，順序都一樣。"
-      : "今次沿用舊草稿嘅圖片，同新開始嘅讀書會組合可能唔同。")
-    + "你可以揀一個故事，或者一句令你有感覺嘅說話，留待嗰日傾。分唔分享、分享幾多，完全由你決定。";
-
-  const all = [d.summary.direct, d.summary.translated].filter(Boolean);
-  const max = Math.max(1, ...all.flatMap((c) => MOTIVES.map((m) => c[m])));
-  $("bars").replaceChildren(barsGroup("原文分析", d.summary.direct, max), barsGroup("英文翻譯後分析", d.summary.translated, max));
-
   const ag = d.summary.agreement;
   $("agreement").replaceChildren(ag
     ? h("p", {}, "兩種分析喺 ", h("strong", {}, `${ag.same} ／ ${ag.total}`), " 句得出相同主題。")
     : h("p", {}, "今次冇翻譯，所以冇比較。"),
   h("p", { class: "fine" }, "兩條路線用嘅係同一個模型，一致唔代表準確。"));
 
-  $("cards").replaceChildren(...pictures.map((p, i) => {
-    const ss = d.sentences.filter((s) => s.picture_id === p.id);
-    return h("div", { class: "pic-group" },
-      h("div", { class: "pic-head" }, h("img", { src: p.file, alt: "" }), h("span", {}, `第 ${i + 1} 個故事`)),
-      ss.map((s) => h("details", { class: "card" },
-        h("summary", {}, h("span", { class: "chips", "aria-hidden": "true" }, dots(s)),
-          h("div", { class: "txt" }, h("span", {}, s.source))),
-        h("dl", { class: "card-body" },
-          h("dt", {}, "英文翻譯"), h("dd", { class: "en", lang: s.english ? "en" : "zh-Hant-HK" }, s.english ?? "（未有翻譯）"),
-          s.uncertain ? [h("dt", { class: "flag-uncertain" }, "留意翻譯"), h("dd", { class: "flag-uncertain" }, "翻譯可能有歧義，可以對照原句再睇。")] : null,
-          h("dt", {}, "原文分析"), h("dd", {}, labelList(s.direct)),
-          h("dt", {}, "英文翻譯後分析"), h("dd", {}, labelList(s.translated))))));
-  }));
+  $("bookclub-note").hidden = lastMode !== "bookclub";
+  $("bookclub-note").querySelector("p").textContent =
+    (pictures.map((p) => p.id).join() === BOOKCLUB_SET.join()
+      ? "大家寫嘅係同一組圖。"
+      : "今次沿用舊草稿嘅圖片，同新開始嘅讀書會組合可能唔同。")
+    + "揀一句令你有感覺嘅故事帶去就夠；分唔分享，由你決定。";
 
   const chars = d.summary.total_chars ? Object.values(d.summary.total_chars).reduce((a, b) => a + b, 0) : null;
   $("protocol").replaceChildren(...protocolView(lastProtocol));
@@ -653,46 +775,56 @@ function renderResults(d) {
   credits($("credits-results"));
   renderPicturePull($("picture-pull"));
   $("model-meta").textContent = `模型：${d.meta.amc_model} @ ${String(d.meta.amc_revision).slice(0, 7)} · 翻譯：${d.meta.translator}（prompt ${d.meta.prompt_version}）`;
-  setReflection(0);
-  $("reflection-closing").hidden = true;
   document.querySelectorAll("#v-results details").forEach((detail) => { detail.open = false; });
+  if (!sparse) notes.firstElementChild.open = true;
   show("v-results");
 }
 
 function download() {
   if (!lastResult) return;
   const d = lastResult;
-  const lines = ["故事以外 · 故事同閱讀筆記", new Date().toLocaleString("zh-HK"), "",
-    headline(d).filter(Boolean).join(" "), "",
-    "被辨認到每個主題嘅句子數目（原文分析）：" + MOTIVES.map((m) => `${NAMES[m]} ${d.summary.direct[m]}`).join("，"),
-    "被辨認到每個主題嘅句子數目（英文翻譯後分析）：" + (d.summary.translated ? MOTIVES.map((m) => `${NAMES[m]} ${d.summary.translated[m]}`).join("，") : "翻譯未能完成，唔代表零個主題。"),
-    "原文分析可能漏咗廣東話表達；翻譯亦可能改變意思。兩條路線用同一個模型，一致唔代表準確。",
-    "呢啲係今次故事入面出現嘅主題，唔係人格類型，亦唔係分數。", ""];
+  const x = summarise(d);
+  const fmtCounts = (c) => MOTIVES.map((m) => `${NAMES[m]} ${c[m]}`).join("，");
+  const lines = ["故事以外 · 故事同結果", new Date().toLocaleString("zh-HK"), "", ...x.text, ""];
+  if (x.r.kind !== "sparse") {
+    lines.push("主題比例（你 ／ 一般人寫同一組圖）：");
+    for (const [need, en, ms] of NEEDS) {
+      lines.push(`${need} ${en}`);
+      for (const m of ms) lines.push(`  ${SHORT[m]}：${x.c[m]} 句，${pct(x.r.share[m])} ／ 一般 ${pct(x.typical[m])}`);
+    }
+    lines.push("");
+  }
+  if (x.brought.length) lines.push(broughtText(x.brought), "");
   pictures.forEach((p, i) => {
-    lines.push(`— 第 ${i + 1} 個故事 —`);
-    for (const s of d.sentences.filter((x) => x.picture_id === p.id)) {
-      const fmt = (x) => (x ? (x.motives.length ? x.motives.map((m) => NAMES[m]).join("、") : "冇主題") : "未有");
+    const typ = typicalOf(p);
+    lines.push(`— 第 ${i + 1} 個故事 —`, `圖片一般引出：${typ ? typ.map((m) => SHORT[m]).join("、") : "未有常模"}`);
+    for (const s of x.byPic[i]) {
+      const fmt = (y) => (y ? (y.motives.length ? y.motives.map((m) => NAMES[m]).join("、") : "冇主題") : "未有");
       lines.push(s.source, `  EN: ${s.english ?? "（未有翻譯）"}${s.uncertain ? " ⚑" : ""}`, `  原文：${fmt(s.direct)}｜翻譯後：${fmt(s.translated)}`);
     }
     lines.push("");
   });
-  lines.push("—— 故事以外 ——", "McAdams · The Art and Science of Personality Development (2015), Chapter 6: The Motivational Agenda",
-    "Motivated Agent：我想要乜、重視乜，同埋正追求緊乜？PSE 只係其中一扇窗。",
-    "諗一件你最近真係想做到嘅事。唔需要交答案俾任何人。",
-    "1. Competence / relatedness：做到、掌握、產生影響，定係建立、維持或照顧關係？定係兩樣都有？",
-    "2. Intrinsic / extrinsic：件事本身有意思，定係回報、認同、責任或者其他外在原因？",
-    "3. Promotion / prevention：得到理想結果，定係避免唔想發生嘅結果？",
-    "故事人物想要嘅，同你自己而家最想要嘅，係咪同一回事？冇乜關係都可以，冇一個係更真嘅你。", "",
+  lines.push("—— 故事以外 ——",
+    "自我決定論：勝任（competence）、關係（relatedness）、自主（autonomy）。圖畫故事係一個粗略指標，反映你對頭兩種需要有幾敏感。",
+    "1. 勝任：最近有冇一件事，你好想做得更好，或者想有多啲影響？",
+    "2. 關係：你而家最想同邊個更親近？",
+    "3. 自主：呢啲「想要」，係你自己揀嘅，定係為咗別人嘅期望？",
+    "McAdams · The Art and Science of Personality Development (2015), Chapter 6: The Motivational Agenda", "",
+    "—— 點樣計 ——",
+    "每句用原文同英文翻譯兩種方法讀（同一個 AMC 模型），任何一種讀到嘅主題計一次。「一般」係德國研究專家為同一組圖編碼嘅平均主題比例，只係粗略參照，唔係常模、百分位或者分數。",
+    "原文分析：" + fmtCounts(d.summary.direct),
+    "英文翻譯後分析：" + (d.summary.translated ? fmtCounts(d.summary.translated) : "翻譯未能完成，唔代表零個主題。"),
+    "兩種讀法：" + headline(d).filter(Boolean).join(" "),
+    d.summary.agreement ? `兩種分析一致：${d.summary.agreement.same} ／ ${d.summary.agreement.total} 句（同一模型，一致唔代表準確）` : "今次冇翻譯，所以冇比較。", "",
     "—— 技術資料 ——", `圖片：${lastMode === "bookclub" ? "讀書會固定一組" : "隨機抽出"}`,
     `實際圖片順序：${pictures.map((p) => `${p.id} (${p.pse_id})`).join(" → ")}`,
     `寫作指引：${lastProtocol?.guidance || "未記錄"}`,
-    "四張圖、10 秒觀看、約 4 分鐘寫作；容許提早完成或超時，屬讀書會改編版。",
-    d.summary.agreement ? `兩種分析一致：${d.summary.agreement.same} ／ ${d.summary.agreement.total} 句` : "今次冇翻譯，所以冇比較。");
+    "四張圖、10 秒觀看、約 4 分鐘寫作；容許提早完成或超時，屬讀書會改編版。");
   if (lastProtocol) {
     lines.push("寫作時間：" + lastProtocol.times.map(mmss).join("、"));
-    lines.push(...(lastProtocol.notes.length ? ["時間同中斷：", ...lastProtocol.notes.map((x) => "  " + x)] : ["冇記錄到超時或較長中斷；唔代表已達到研究標準。"]));
+    lines.push(...(lastProtocol.notes.length ? ["時間同中斷：", ...lastProtocol.notes.map((y) => "  " + y)] : ["冇記錄到超時或較長中斷；唔代表已達到研究標準。"]));
   }
-  lines.push("", "圖片 pull 參考：德文故事專家編碼，每個故事平均主題次數。唔係你應該得到嘅數字，亦冇用嚟校正結果。",
+  lines.push("", "圖片 pull：德文故事專家編碼，每個故事平均主題次數。",
     "來源：Schönbrodt et al. (2020/2021), https://osf.io/pqckn/ · picture_pull_norm_table.xlsx");
   pictures.forEach((p) => lines.push(`${p.id} (${p.pse_id})：${pullText(p)}`));
   lines.push(`模型：${d.meta.amc_model} @ ${String(d.meta.amc_revision).slice(0, 7)} · 翻譯：${d.meta.translator}（prompt ${d.meta.prompt_version}）`, "");
@@ -750,15 +882,6 @@ async function init() {
   $("btn-retry").addEventListener("click", submit);
   $("btn-back-review").addEventListener("click", () => goReview());
   $("btn-download").addEventListener("click", download);
-  $("reflection-prev").addEventListener("click", () => setReflection(reflectionStep - 1, true));
-  $("reflection-next").addEventListener("click", () => {
-    if (reflectionStep < 2) setReflection(reflectionStep + 1, true);
-    else {
-      $("reflection-closing").hidden = false;
-      $("reflection-closing").scrollIntoView({ behavior: "auto", block: "center" });
-      $("reflection-closing").focus({ preventScroll: true });
-    }
-  });
   $("btn-restart").addEventListener("click", () => { lastResult = null; lastProtocol = null; S = fresh(); goIntro(); });
 
   try {

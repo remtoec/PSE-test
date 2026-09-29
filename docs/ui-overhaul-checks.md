@@ -50,3 +50,21 @@ The test server and test scripts are outside `web/` and therefore are not deploy
 - Source material was the user-supplied McAdams review. No new claim of psychometric validation was added.
 
 Screenshots: `artifacts/ui-overhaul/desktop-intro.png` and `artifacts/ui-overhaul/phone-results.png`.
+
+## 2026-09-29 revision — mobile, full-story prompt, interpreted results
+
+Local frontend change only; not deployed. Backend unchanged. Rationale and
+guardrails: [protocol review, 2026-09-29](pse-protocol-review.md#2026-09-29-revision-results-with-a-benchmark).
+
+| Check | Outcome |
+|---|---|
+| `node --check` on `web/app.js` and `tests/web_fixtures.js` | Pass |
+| `python -m pytest tests -q -p no:cacheprovider` | 49 passed |
+| `/__test__/` fixtures (headless Chromium, 390×844) | `[]`. New checks: placeholder carries all four prompts and no 「然後」 framing; union counting; typical shares; lean / balanced / sparse / tied lean; lab picture pulls two themes; brought-in theme flagged; sparse hides the profile; leading research note opens alone; SDT reflection has three questions and no inputs; both paths kept in technical detail |
+| Full flow, `/__test__/?mode=flow` | Four fixed pictures; reload + resume keeps the round and exact text; review read-only; busy/retry; back to review keeps story 4 |
+| Horizontal overflow at 390px | None (`scrollWidth` 390 on writing and results) |
+| Results page height at 390px | ~3,200px with sections collapsed, down from ~4,900px |
+| Console | No JavaScript errors (Google Fonts blocked in the sandbox only) |
+
+Screenshots: `artifacts/ui-revision/` (`before-phone-write.png` for comparison).
+Not checked: physical iOS/Android browsers, screen readers, live model service.

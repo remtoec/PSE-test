@@ -4,9 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>故事以外 · PSE-HK 讀書會練習</title>
-<meta name="description" content="四張圖片，四個想像故事。一個 McAdams 讀書會小練習。">
-<meta property="og:title" content="故事以外 · 四張圖，你會點樣寫？">
-<meta property="og:description" content="一個 15–20 分鐘嘅讀書會小練習。冇標準答案，唔係性格測驗。">
+<meta name="description" content="四張圖，四個完整故事。睇吓你嘅故事最常回到邊一種動機。">
+<meta property="og:title" content="故事以外 · 每張圖，都係故事嘅中間">
+<meta property="og:description" content="約 20 分鐘嘅圖畫故事練習。冇標準答案。">
 <meta name="theme-color" content="#f6f4ed">
 <meta name="pse-api" content="https://remtoec--pse-hk-scorer-web.modal.run">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,124 +17,146 @@
 </head>
 <body>
 <a class="skip-link" href="#app">跳到主要內容</a>
-<header class="masthead">
-  <div class="wordmark"><span class="book-mark" aria-hidden="true">以<br>外</span><span>故事以外<small>PSE–HK · READING COMPANION</small></span></div>
-  <span class="edition">讀書會 <span aria-hidden="true">／</span> 01</span>
-</header>
-<nav class="journey" aria-label="活動進度">
-  <ol><li data-stage="intro" aria-current="step"><span>01</span> 留一點想像</li><li data-stage="write"><span>02</span> 寫四個故事</li><li data-stage="results"><span>03</span> 故事以外</li></ol>
-</nav>
+<header class="masthead"><span class="wordmark"><span class="book-mark" aria-hidden="true">以<br>外</span>故事以外</span></header>
 <main id="app" tabindex="-1">
-  <p id="storage-notice" class="notice" role="status" hidden>呢個瀏覽器唔俾暫存草稿，重新載入頁面會失去內容。請保持頁面開啟直至完成。</p>
+  <p id="storage-notice" class="notice" role="status" hidden>呢個瀏覽器唔俾暫存草稿，重新載入會失去內容。請保持頁面開啟直至完成。</p>
 
   <section id="v-intro" class="view" hidden aria-labelledby="intro-title">
-    <div class="intro-layout">
-      <div class="intro-copy">
-        <p class="eyebrow">FOUR PICTURES. FOUR IMAGINED STORIES.</p>
-        <h1 id="intro-title" tabindex="-1">幅圖冇講嘅，<br>你會點樣<span class="accent-text">寫？</span></h1>
-        <p class="lede">同一張圖，可以有完全唔同嘅故事。<br>人物嘅經過同結局，由你想像。</p>
-        <p class="intro-description">睇四張圖片，每張寫一個有開頭、經過同結局嘅想像故事，唔只係描述幅圖。用第一時間諗到嘅情節就得，唔使文筆好，亦冇標準答案。</p>
-        <div class="activity-meta"><span>4 張圖片</span><span>15–20 分鐘</span><span>用你習慣嘅語言</span></div>
-        <div class="actions intro-actions">
-          <button id="btn-start" class="primary">開始第一個故事 <span aria-hidden="true">↗</span></button>
-          <button id="btn-resume" class="primary" hidden>繼續上次嘅故事 <span aria-hidden="true">↗</span></button>
-          <button id="btn-delete" class="quiet" hidden>刪除草稿</button>
-        </div>
-        <p class="fine">一個想像故事小練習。唔係性格測驗。</p>
-      </div>
-      <aside class="folio-art" aria-label="四個故事，由一片留白開始">
-        <div class="folio-back folio-back-one" aria-hidden="true"></div><div class="folio-back folio-back-two" aria-hidden="true"></div>
-        <div class="folio-front"><div class="folio-top"><span>PICTURE STORY EXERCISE</span><span>01—04</span></div>
-          <div class="empty-frame" aria-hidden="true"><span>留白</span><i></i></div>
-          <p>一張圖，<br>好多種可能。</p><div class="folio-bottom"><span>故事由你補上</span><span aria-hidden="true">↗</span></div>
-        </div>
-        <span class="margin-note">先想像，再回望。</span>
-      </aside>
+    <p class="eyebrow">圖畫故事練習 · PSE</p>
+    <h1 id="intro-title" tabindex="-1">每張圖，<br>都係故事嘅<span class="accent-text">中間</span>。</h1>
+    <p class="lede">佢哋經歷緊咩？之前發生過咩？最後點收場？由你寫出成個故事。</p>
+    <ol class="steps" aria-label="點樣玩">
+      <li><b>10 秒</b>睇圖</li>
+      <li><b>4 分鐘</b>寫故事</li>
+      <li><b>× 4</b>然後睇結果</li>
+    </ol>
+    <div class="actions intro-actions">
+      <button id="btn-start" class="primary">開始</button>
+      <button id="btn-resume" class="primary" hidden>繼續上次嘅故事</button>
+      <button id="btn-delete" class="quiet" hidden>刪除草稿</button>
     </div>
-    <div class="intro-bottom">
-      <div class="how-to"><p class="eyebrow">呢個練習點樣玩</p><ol class="instruction-grid">
-        <li><span class="step-number">01</span><div><h3>先望一望</h3><p>每張圖睇 10 秒，之後收起。留意人物同情境，唔使估答案。</p></div></li>
-        <li><span class="step-number">02</span><div><h3>讓故事發生</h3><p>每個故事預留約 4 分鐘，盡量一次過完成四個。時間到會提醒你收尾，唔會刪走內容。</p></div></li>
-        <li><span class="step-number">03</span><div><h3>回望你嘅想像</h3><p>四個故事寫完，再睇具體句子，同埋故事之外可以諗嘅問題。</p></div></li>
-      </ol></div>
-      <div class="intro-notes">
-        <p class="fine">廣東話、中文、英文，或者混合使用都得。每按一次「下一張」，故事就會保留嗰一刻嘅版本，唔再返轉頭修改。</p>
-        <p class="fine">毋須寫自己嘅經歷，唔使擔心文法、拼字或者標點。見過幅圖都冇問題：可以寫相似或者唔同嘅故事，跟今次諗到嘅情節就得。</p>
-        <p class="privacy-brief">草稿只暫存在呢個瀏覽器。提交後，會交由 Modal 同 Cloudflare Workers AI 分析及翻譯；本工具不會建立故事資料庫。</p>
-        <details class="more"><summary>私隱、暫存同等候時間</summary><p>你可以刪除草稿；七日以上嘅草稿會喺下次開啟時清理。同一個瀏覽器可以繼續，另一個瀏覽器未必讀到草稿。</p><p>分析服務閒置時會休眠，提交後可能需要等一陣。等候或者出錯時，草稿會保留；成功顯示結果後先清除。</p><p>寫作時間同中途離開會喺結果細節註明。圖片來源會喺完成後顯示，避免影響想像。</p></details>
-        <p class="fine repeat-play">已經玩過？ <button id="btn-random" class="link" type="button">用隨機圖片再探索</button></p>
-      </div>
-    </div>
+    <p class="fine">廣東話、中文、英文都得。冇標準答案，唔使文筆好。</p>
+    <details class="more"><summary>開始之前要知</summary>
+      <ul class="plain">
+        <li>按「下一張」之後，嗰個故事就定稿，唔會再改。</li>
+        <li>唔使寫自己嘅經歷。見過幅圖都冇問題，跟今次諗到嘅寫就得。</li>
+        <li>草稿只存喺呢個瀏覽器，七日後清走。提交後，故事會交由 Modal 同 Cloudflare Workers AI 分析及翻譯，唔會建立故事資料庫。</li>
+        <li>分析服務閒置時會休眠，提交後可能要等一陣。</li>
+      </ul>
+    </details>
+    <p class="fine repeat-play">玩過？<button id="btn-random" class="link" type="button">用隨機圖片再玩</button></p>
   </section>
 
   <section id="v-view" class="view exercise-view" hidden aria-labelledby="view-title">
-    <div class="round-label"><span class="round-no"></span><div class="round-progress" aria-hidden="true"></div></div>
-    <div class="section-heading"><div><p class="eyebrow">OBSERVE · 望一望</p><h2 id="view-title" tabindex="-1">故事開始之前。</h2></div><span class="view-duration">10 秒，留意眼前嘅情境</span></div>
+    <div class="round-bar"><span class="round-no"></span><div class="round-progress" aria-hidden="true"></div></div>
+    <h2 id="view-title" class="round-title" tabindex="-1">記住呢個畫面</h2>
     <figure class="stimulus"><img id="stim-img" alt=""><div id="img-loading" class="img-state">圖片載入中…</div><div id="img-error" class="img-state" hidden><p>圖片載入唔到。</p><button id="btn-img-retry">再試一次</button></div></figure>
     <div class="countdown" aria-hidden="true"><div id="countdown-bar"></div></div>
-    <p class="hint">留意圖中嘅人同發生緊嘅事。圖片收起之後，就輪到你寫。</p>
+    <p class="hint">10 秒後收起，然後由你寫出成個故事。</p>
     <div class="actions"><button class="quiet skip" type="button">換一張</button></div>
   </section>
 
   <section id="v-write" class="view exercise-view" hidden aria-labelledby="write-title">
-    <div class="round-label"><span class="round-no"></span><div class="round-progress" aria-hidden="true"></div></div>
-    <div class="writing-layout">
-      <aside class="writing-guide"><p class="eyebrow">IMAGINE · 寫落去</p><h2 id="write-title" tabindex="-1">然後，<br>發生咗咩事？</h2><p>唔使估幅圖「真正」講緊乜。<br>我哋有興趣嘅，係你點樣補完佢。</p>
-        <div class="prompt-notes"><p class="fine">寫一個有開頭、經過同結局嘅故事。以下只係提示，唔使逐題答。</p><ul class="prompts"><li>發生緊咩事？邊啲人喺度？</li><li>之前發生過咩事？</li><li>佢哋諗緊咩、感受緊咩、想要啲咩？</li><li>之後會點？最後點樣？</li></ul>
-        <p class="fine">照你習慣嘅方式寫，唔使擔心文法、拼字或者標點。</p></div>
-      </aside>
-      <div class="writing-sheet"><div class="sheet-heading"><label for="story">你嘅故事</label><span class="timer-wrap">建議時間 <span id="soft-timer" class="soft-timer" aria-live="off">4:00</span></span></div>
-        <textarea id="story" rows="10" spellcheck="false" autocomplete="off" placeholder="喺呢度寫你想像到嘅故事……"></textarea>
-        <div class="meta-row"><span id="char-count"></span><span id="save-state" aria-live="polite"></span></div>
-        <p id="time-up" class="gentle" hidden>約 4 分鐘喇，請幫故事收個尾，再繼續。內容會保留，結果細節會註明寫作時間。</p><p id="short-note" class="gentle" role="status" hidden></p>
-        <div class="actions writing-actions"><button class="quiet skip" type="button">換一張</button><button id="btn-next" class="primary" disabled>下一張 →</button></div>
-        <p class="fine lock-note">繼續之後，會保留呢一刻嘅故事版本。</p>
-      </div>
-    </div>
+    <div class="round-bar"><span class="round-no"></span><div class="round-progress" aria-hidden="true"></div><span class="timer"><span class="sr-only">建議時間 </span><span id="soft-timer" aria-live="off">4:00</span></span></div>
+    <h2 id="write-title" class="round-title" tabindex="-1">寫出成個故事</h2>
+    <label for="story" class="sr-only">你嘅故事</label>
+    <textarea id="story" rows="10" spellcheck="false" autocomplete="off" placeholder="佢哋係邊個？而家經歷緊咩？&#10;之前發生咗咩事，令佢哋走到呢一刻？&#10;佢哋心入面諗緊咩、感受到咩、最想要咩？&#10;最後點樣收場？&#10;&#10;唔使逐題答，寫成一個故事就得。"></textarea>
+    <div class="meta-row"><span class="arc"><span class="sr-only">提示：</span><span>此刻</span><span>前因</span><span>內心</span><span>結局</span></span><span><span id="char-count"></span> <span id="save-state" aria-live="polite"></span></span></div>
+    <p id="time-up" class="gentle" hidden>4 分鐘到，幫個故事收個尾。</p>
+    <p id="short-note" class="gentle" role="status" hidden></p>
+    <div class="actions writing-actions"><button class="quiet skip" type="button">換一張</button><button id="btn-next" class="primary" disabled>下一張 →</button></div>
+    <p class="fine lock-note">按「下一張」之後，呢個故事就定稿。</p>
   </section>
 
   <section id="v-review" class="view exercise-view" hidden aria-labelledby="review-title">
-    <p class="eyebrow">FOUR PICTURES, FOUR STORIES</p><h2 id="review-title" tabindex="-1">四個故事，寫好喇。</h2><p class="lede">你為留白補上咗人物、經過同結局。<br>而家可以回望呢四個故事。</p>
-    <p class="fine">以下保留你第一時間寫落嘅版本；只喺內容超出處理限制時，先會開放修改。</p>
+    <h2 id="review-title" tabindex="-1">四個故事，完成。</h2>
+    <p class="lede">準備好就睇結果：你嘅故事，最常回到邊種動機？</p>
     <p id="review-notice" class="notice" role="alert" hidden></p><div id="review-list"></div>
-    <div class="submit-footer"><p class="fine">提交後，故事會交由 Modal 同 Cloudflare Workers AI 分析及翻譯。服務可能需要時間醒過來，期間請保持頁面開啟。</p><div class="actions"><button id="btn-submit" class="primary">睇返故事入面嘅主題 ↗</button><button id="btn-delete-2" class="quiet">刪除草稿</button></div></div>
+    <div class="submit-footer"><div class="actions"><button id="btn-submit" class="primary">睇結果 →</button><button id="btn-delete-2" class="quiet">刪除草稿</button></div>
+      <p class="fine">故事會交由 Modal 同 Cloudflare Workers AI 分析及翻譯，可能要等一陣。</p></div>
   </section>
 
-  <section id="v-loading" class="view center" hidden aria-labelledby="loading-title"><p class="eyebrow">A MOMENT BETWEEN CHAPTERS</p><div class="waiting-book" aria-hidden="true"><span></span><span></span><span></span><span></span></div><h2 id="loading-title" tabindex="-1">故事寫好，等一陣。</h2><p id="loading-msg" role="status" aria-live="polite">正在準備分析你嘅故事。呢個小工具閒置時會休眠，可能需要等耐少少。請暫時保持頁面開啟。</p><p class="elapsed">已等候 <span id="elapsed">0</span> 秒</p><p class="fine">唔使重新提交。完成後，結果會喺呢度出現。</p></section>
+  <section id="v-loading" class="view center" hidden aria-labelledby="loading-title"><div class="waiting-book" aria-hidden="true"><span></span><span></span><span></span><span></span></div><h2 id="loading-title" tabindex="-1">分析緊你嘅故事</h2><p id="loading-msg" role="status" aria-live="polite"></p><p class="elapsed">已等候 <span id="elapsed">0</span> 秒</p></section>
 
-  <section id="v-error" class="view center" hidden aria-labelledby="error-title"><p class="eyebrow">LET’S PAUSE HERE</p><span class="error-mark" aria-hidden="true">⋯</span><h2 id="error-title" tabindex="-1">暫時未能翻到下一頁。</h2><p id="error-msg" role="alert"></p><div class="actions"><button id="btn-retry" class="primary">再試一次</button><button id="btn-back-review" class="quiet">返回故事</button></div></section>
+  <section id="v-error" class="view center" hidden aria-labelledby="error-title"><span class="error-mark" aria-hidden="true">⋯</span><h2 id="error-title" tabindex="-1">暫時未有結果</h2><p id="error-msg" role="alert"></p><div class="actions"><button id="btn-retry" class="primary">再試一次</button><button id="btn-back-review" class="quiet">返回故事</button></div></section>
 
   <section id="v-results" class="view" hidden aria-labelledby="results-title">
-    <div class="results-opening"><p class="eyebrow">READ BETWEEN YOUR LINES</p><h1 id="results-title" tabindex="-1">你寫落嘅，<br>唔止係一個結局。</h1><p class="lede">幅圖冇講明嘅人物、原因同「想要」，<br>頭先都由你補上。依家，一齊回望。</p><span class="result-boundary">只關於今次四個故事 · 唔係人格分數</span></div>
-    <nav class="result-nav" aria-label="結果章節"><a href="#themes">01 故事主題</a><a href="#sentences">02 睇返句子</a><a href="#reflection">03 故事以外</a></nav>
-    <section id="themes" class="chapter"><div class="chapter-label">01 <span>留意故事入面嘅「想要」</span></div><h2>模型喺故事見到啲乜？</h2><p>模型逐句尋找三類動機主題。以下係兩種讀法，各有局限，冇一邊係標準答案。</p><div id="tally" class="comparison"></div><p class="fine">數字係被辨認到主題嘅句子數目。一句可以有多個主題，亦可以冇主題。唔係分數、百分比或者高低評級。</p>
-      <div class="reading-note"><p id="headline"></p><p id="headline-note" class="fine"></p></div>
-      <p class="method-boundary">原文分析可能漏咗廣東話表達；英文翻譯亦可能改變意思。兩條路線用同一個模型，<strong>一致唔代表準確</strong>。有出入嘅句子，正好值得望多眼。</p>
-      <details class="more"><summary>三個主題，分別指啲乜？</summary><dl class="defs"><dt><span class="dot ach"></span>成就</dt><dd>人物想做好一件事、達到標準、改善表現，或者克服挑戰。</dd><dt><span class="dot aff"></span>連結／親和</dt><dd>人物想建立或維持關係、得到接納、照顧對方，或者重新連結。模型編碼親和，唔係 McAdams 特定嘅親密動機量尺。</dd><dt><span class="dot pow"></span>影響力／權力</dt><dd>人物想說服、帶領、產生影響，或者爭取地位同控制。唔一定係負面：老師想改變學生、領袖想帶動團隊，都可以係想產生影響。</dd></dl></details>
-    </section>
-    <section id="sentences" class="chapter"><div class="chapter-label">02 <span>由數目，返到一句說話</span></div><h2>邊一句，令你想停一停？</h2><p>睇返故事人物想要乜。撳開一句，對照英文翻譯同兩種分析：佢有冇讀到你本來嘅意思？</p><div id="cards"></div>
-      <details class="more"><summary>點解心理學會用故事研究動機？</summary><p>模糊嘅圖片冇講明人物嘅目標，寫故事嘅人就要補上想要、衝突同結局。由 Murray 嘅 TAT 到 McClelland 等人發展嘅 PSE，研究者用有規則嘅內容編碼，探索故事中反覆出現嘅動機意象。</p><p>今次只係一個簡化、實驗性嘅體驗。自動模型未經驗證適用於廣東話，故事亦唔係你嘅自傳，唔可以用嚟判斷「真正嘅你」。</p></details>
-    </section>
-    <section id="reflection" class="chapter reflection-chapter"><div class="chapter-label">03 <span>故事以外</span></div><h2>人物想要嘅，<br>同你想要嘅呢？</h2><p class="reflection-intro">一個人唔只係「平時點樣做」，亦有「想將事情帶去邊」。McAdams 將後者放喺 <strong lang="en">Motivated Agent</strong> 呢一層：我想要乜、重視乜，同埋正追求緊乜。</p>
-      <p>圖畫故事只係其中一扇窗。現實生活仲有你知道、講得出口嘅目標、計劃、人生項目同價值。</p>
-      <blockquote>故事入面嘅「想要」同現實生活嘅「想要」未必一樣。兩者唔一致本身都可以好有意思，冇一個係「更真嘅你」。</blockquote>
-      <div class="reflection-deck"><div class="reflection-top"><span>諗一件你最近真係想做到嘅事。</span><span id="reflection-count" aria-live="polite">01 / 03</span></div><p class="fine">答案留俾自己就得。呢度唔需要輸入，亦唔會收集你嘅個人目標。</p>
-        <div class="reflection-card" data-reflection="0"><p class="eyebrow">COMPETENCE / RELATEDNESS</p><h3>你想做到啲乜，<br>又想同邊個連結？</h3><p>呢個目標比較關於<strong>做到、掌握、產生影響</strong>（competence），定係<strong>建立、維持或者照顧關係</strong>（relatedness）？定係兩樣都有？</p><p class="fine">故事主題中，成就同影響力大致較接近前者；連結／親和較接近後者。呢個係理解角度，唔係換算分數。</p></div>
-        <div class="reflection-card" data-reflection="1" hidden><p class="eyebrow">INTRINSIC / EXTRINSIC</p><h3>係件事本身有意思，<br>定係佢帶嚟嘅嘢？</h3><p>你想做，係因為<strong>件事本身對你有意思</strong>，定係主要為咗<strong>回報、認同、責任或者其他外在原因</strong>？</p><p class="fine">同一個目標可以有幾種理由，唔需要揀一個先算答啱。</p></div>
-        <div class="reflection-card" data-reflection="2" hidden><p class="eyebrow">PROMOTION / PREVENTION</p><h3>你想迎向啲乜，<br>又想避免啲乜？</h3><p>你係想<strong>得到一個理想結果</strong>，定係主要想<strong>避免一個唔想發生嘅結果</strong>？</p><p class="fine">追求機會同守護已有嘅嘢，可以同時存在。</p></div>
-        <div class="reflection-controls"><button id="reflection-prev" class="quiet" disabled>← 上一個問題</button><button id="reflection-next" class="secondary">下一個問題 →</button></div>
+    <div class="insight">
+      <p class="eyebrow">你嘅四個故事</p>
+      <h1 id="results-title" tabindex="-1"></h1>
+      <p id="insight-lede" class="lede"></p>
+      <div id="profile" class="profile"></div>
+      <p id="profile-legend" class="legend fine"><span class="key you"></span>你嘅故事<span class="key typical"></span>一般人寫同一組圖</p>
+      <p id="profile-note" class="fine"></p>
+      <p id="brought" class="brought-line" hidden></p>
+    </div>
+
+    <section id="meaning" class="chapter" aria-labelledby="meaning-title">
+      <h2 id="meaning-title">研究點講呢啲動機？</h2>
+      <div id="motive-notes">
+        <details class="motive-note" data-motive="ach"><summary><span class="dot ach"></span><b>成就</b>想做得好<span class="need-tag">勝任</span></summary>
+          <p>故事人物想做好一件事、達到或者超越一個標準、克服挑戰。</p>
+          <p class="fine">研究發現，故事入面呢類主題多嘅人，通常：</p>
+          <ul><li>鍾意唔太難、唔太易嘅挑戰，想即刻知道做得好唔好</li><li>有恆心、講效率，為咗成果有時會走捷徑</li><li>自制力高，眼光放喺將來</li><li>靜唔落嚟，鍾意創新同改變</li></ul>
+        </details>
+        <details class="motive-note" data-motive="aff"><summary><span class="dot aff"></span><b>連結</b>想親近<span class="need-tag">關係</span></summary>
+          <p>故事人物想建立、維持或者修補溫暖嘅關係：關心、陪伴、被接納。</p>
+          <p class="fine">親密動機研究發現，呢類主題多嘅人，通常：</p>
+          <ul><li>同朋友相處時多笑、眼神友善</li><li>成日諗起朋友同友誼</li><li>被身邊人視為細心、真誠、關懷，係好嘅聆聽者</li><li>重視小圈子入面嘅分享同溫暖；整體快樂感同心理健康較高</li></ul>
+        </details>
+        <details class="motive-note" data-motive="pow"><summary><span class="dot pow"></span><b>影響力</b>想有份量<span class="need-tag">勝任</span></summary>
+          <p>故事人物想感到強大、影響或者帶領其他人、爭取地位同話語權。</p>
+          <p class="fine">研究發現，故事入面呢類主題多嘅人，通常：</p>
+          <ul><li>喺唔同場合爭取影響力；較多做老師、治療師、管理層等影響人嘅工作</li><li>為咗被睇見，願意冒大風險</li><li>朋友圈大、吸引注意，被視為有魄力嘅領袖</li><li>權力似火：可以用嚟幫人、做義工，亦可以變成攻擊。處於低位時壓力特別大；人生目標以權力為主嘅人，自尊同快樂感較低</li></ul>
+        </details>
       </div>
-      <div id="reflection-closing" class="reflection-closing" tabindex="-1" hidden><p class="eyebrow">最後，返到你自己</p><h3>你故事入面嘅人物想要嘅，<br>同你而家最想要嘅，係咪同一回事？</h3><p>有呼應，可以諗落去。完全唔同，甚至「冇乜關係」，都係一個可以接受嘅答案。</p></div>
-      <details class="more book-note"><summary>書頁旁註：McAdams 嘅三個角度</summary><dl class="layers"><dt>Social Actor · 社會演員</dt><dd>我平時係點樣嘅人？例如特質同慣常表現。</dd><dt>Motivated Agent · 動機主體</dt><dd>我想要乜？我正追求緊乜？目標、計劃、價值同願望。</dd><dt>Autobiographical Author · 自傳作者</dt><dd>我點樣理解一路走來嘅人生？今次想像故事唔等於你嘅人生敘事。</dd></dl><p class="fine">閱讀脈絡：Dan P. McAdams，<cite lang="en">The Art and Science of Personality Development</cite>（2015），第六章 “The Motivational Agenda”。以上係閱讀提示，唔係量表分類。</p></details>
+      <p class="fine">以上係群體研究嘅傾向，唔係對你嘅判斷。</p>
     </section>
-    <aside id="bookclub-note" class="bookclub-note" hidden><span class="eyebrow">BRING A STORY, NOT A SCORE</span><h3>讀書會見，帶一句故事就夠。</h3><p>大家睇嘅係同一組四張圖，順序都一樣。你可以揀一個故事，或者一句令你有感覺嘅說話，留待嗰日傾。分唔分享、分享幾多，完全由你決定。</p></aside>
-    <details class="more"><summary>幅圖本身，會唔會影響故事主題？</summary><p>會。唔同圖片喺研究中會引出唔同比例嘅主題，稱為 picture pull。以下係德文故事經專家編碼後，每個故事平均出現嘅主題次數。</p><ul id="picture-pull" class="credits"></ul><p class="fine">呢啲係圖片嘅參考資料，唔係你應該得到嘅數字。樣本數目不同，小樣本尤其唔穩定；亦唔係香港常模。系統冇用佢哋扣分、校正、計百分位，或者判斷你嘅動機高低。故事長短同分句方式亦會影響原始次數。</p><p class="fine">來源：<a href="https://osf.io/pqckn/" target="_blank" rel="noopener">Schönbrodt et al. PSE 圖片資料庫</a>，picture_pull_norm_table.xlsx。</p></details>
-    <details class="more technical"><summary>想睇吓系統點樣分析？</summary><div id="bars"></div><div id="agreement" class="agreement"></div><div id="protocol" class="fine"></div><p id="stats" class="fine"></p><h4>圖片來源同模型</h4><ul id="credits-results" class="credits"></ul><p id="model-meta" class="fine"></p></details>
-    <div class="result-footer"><div><h3>留低故事，慢慢再睇。</h3><p class="fine">下載只存到你嘅裝置。重新整理頁面唔會保留結果。</p></div><div class="actions"><button id="btn-download" class="primary">下載故事同閱讀筆記 ↓</button><button id="btn-restart" class="quiet">返回開始</button></div></div>
-    <p class="fine repeat-play"><button id="btn-again-random" class="link">想再探索？用隨機圖片寫另一組故事</button></p>
+
+    <section id="pictures" class="chapter" aria-labelledby="pictures-title">
+      <h2 id="pictures-title">逐張圖睇</h2>
+      <p class="chapter-intro">每張圖本身都會將故事拉去某個方向。<span class="brought-mark" aria-hidden="true">✦</span> 係圖片一般唔會引出、由你帶入嘅主題，最接近你自己嘅投射。</p>
+      <div id="cards"></div>
+    </section>
+
+    <section id="reflection" class="chapter reflection-chapter" aria-labelledby="reflection-title">
+      <p class="eyebrow">故事以外</p>
+      <h2 id="reflection-title">故事人物想要嘅，<br>同你想要嘅呢？</h2>
+      <p>自我決定論（Self-Determination Theory）認為，人有三種基本心理需要：<strong>勝任</strong>（competence）、<strong>關係</strong>（relatedness）同<strong>自主</strong>（autonomy）。圖畫故事係一個粗略指標，反映你對頭兩種需要有幾敏感；第三種，要問你自己。</p>
+      <ol class="reflect-list">
+        <li><span class="need-tag">勝任</span>最近有冇一件事，你好想做得更好，或者想有多啲影響？</li>
+        <li><span class="need-tag">關係</span>你而家最想同邊個更親近？</li>
+        <li><span class="need-tag">自主</span>呢啲「想要」，係你自己揀嘅，定係為咗別人嘅期望？</li>
+      </ol>
+      <p class="fine">答案留俾自己，呢度唔會收集任何輸入。動機會隨人生階段改變，今次只係一張快照。</p>
+    </section>
+
+    <aside id="bookclub-note" class="bookclub-note" hidden><h3>讀書會見</h3><p></p></aside>
+
+    <details class="more technical"><summary>點樣計？限制同技術資料</summary>
+      <h4>點樣計</h4>
+      <p>每一句用兩種方法讀：原文直接分析，同翻譯成英文後再分析，兩者都用自動動機編碼模型 AMC。任何一種讀到嘅主題計一次，每句每種主題最多計一次。上面嘅百分比，係三種主題之間嘅比例。</p>
+      <p>「一般」係 Schönbrodt 等人德國研究入面，專家為同一組圖編碼嘅平均主題比例。語言、編碼方法同故事長度都唔同，所以只係粗略參照，唔係常模、百分位或者分數。模型未經驗證適用於廣東話；故事亦唔係你嘅自傳。</p>
+      <h4>兩種讀法</h4>
+      <div id="tally" class="comparison"></div>
+      <div class="reading-note"><p id="headline"></p><p id="headline-note" class="fine"></p></div>
+      <div id="agreement" class="agreement"></div>
+      <h4>圖片 pull</h4>
+      <p class="fine">德文故事經專家編碼後，每個故事平均出現嘅主題次數；括號係故事數目，小樣本較唔穩定。</p>
+      <ul id="picture-pull" class="credits"></ul>
+      <h4>寫作時間</h4>
+      <div id="protocol" class="fine"></div><p id="stats" class="fine"></p>
+      <h4>理論背景</h4>
+      <p>Murray 喺 1930 年代設計 TAT，相信人會將自己最強嘅渴望投射落想像故事。McClelland 等人將佢標準化成 PSE，建立成就動機嘅編碼；之後再有權力動機（Winter）同親和／親密動機（McAdams）。成就同權力大致落喺「勝任」嘅範圍，親和同親密對應「關係」。</p>
+      <p class="fine">閱讀脈絡：Dan P. McAdams，<cite lang="en">The Art and Science of Personality Development</cite>（2015），第六章 “The Motivational Agenda”。</p>
+      <h4>圖片來源同模型</h4>
+      <ul id="credits-results" class="credits"></ul><p id="model-meta" class="fine"></p>
+    </details>
+
+    <div class="result-footer"><div class="actions"><button id="btn-download" class="primary">下載故事同結果 ↓</button><button id="btn-restart" class="quiet">返回開始</button></div><p class="fine">結果唔會保存，重新整理就會消失。</p></div>
+    <p class="fine repeat-play"><button id="btn-again-random" class="link">用隨機圖片再寫一組</button></p>
   </section>
   <noscript><p class="notice">呢個活動需要 JavaScript。</p></noscript>
 </main>
-<footer class="site-footer"><span>故事以外 <span aria-hidden="true">／</span> PSE–HK</span><span>一個由故事開始嘅讀書會練習。</span></footer>
 </body>
 </html>

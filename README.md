@@ -14,18 +14,30 @@ motives.” PSE is one window into the Motivated Agent, which also includes
 conscious goals, plans, projects, values and aspirations. These imagined
 stories are not autobiographical narratives.
 
-Original-text and translated-text results receive equal visual prominence.
-Neither is ground truth, and agreement is not a confidence score. Counts are
-raw sentence-level detections, not standardized psychological scores,
-percentiles, diagnoses or validated Cantonese norms.
+The results are framed by self-determination theory: the PSE serves as a rough
+marker of how sensitive someone's imagination is to the **competence** need
+(achievement and power imagery) and the **relatedness** need (affiliation
+imagery). Autonomy is left to the participant's own reflection.
 
-**Picture-pull norms inform the fixed bookclub set and appear after writing
-as context about the pictures. They never normalize, percentile, or rank an
-individual participant's result.** See [the protocol review](docs/pse-protocol-review.md).
+**Results lead with an interpretation, benchmarked against the pictures' pull.**
+A sentence carries a theme if either reading (original or translated) found it,
+because direct Cantonese coding under-detects. The page compares each theme's
+*share* of the participant's themes with its share in German expert-coded
+stories for the same pictures, then says which theme leans above that (12
+percentage points or more), or that the profile is close to the pictures, or
+that there are too few themes (fewer than 3) to read. Each picture also shows
+the theme(s) it usually pulls, and flags themes the participant brought in
+against that pull. Research correlates from McAdams (2015, ch. 6) explain the
+leading theme. The benchmark is only a rough reference: it uses shares, never
+z-scores, percentiles, pull subtraction or rankings, and says so on the page.
+See [the protocol review](docs/pse-protocol-review.md#2026-09-29-revision-results-with-a-benchmark).
 
-The private reflection uses competence/relatedness, intrinsic/extrinsic and
-promotion/prevention. It asks for no personal-goal input and transmits no
-reflection answers. The final comparison may simply be “no connection.”
+Both analysis paths, agreement, picture pulls and timing stay available in one
+collapsed technical section. Neither path is ground truth, and agreement is not
+a confidence score.
+
+The private reflection asks one competence, one relatedness and one autonomy
+question. It collects no input and transmits no reflection answers.
 
 - Site: https://pse-hk.aesopb15254.workers.dev
 - Backend: https://remtoec--pse-hk-scorer-web.modal.run
@@ -43,15 +55,15 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 - Four pictures per run. Each is shown for 10 s, followed by a soft 4-minute writing period.
 - **Bookclub mode (default):** new runs show boxer, couple by river, women in laboratory, and ship captain, in that order (`BOOKCLUB_SET`: c05, c07, c18, c15), without skipping. Summed German picture-pull means: aff 4.18, ach 3.42, pow 3.99. Existing drafts keep their original pictures.
 - **Random mode:** four pictures from the entire supplied archive (18 classical and 30 newer pictures). Participants may skip up to 4 per run. Skipped pictures are excluded on that browser until fewer than four eligible pictures remain, when the exclusion list resets.
-- No motive category is named before the stories are written. The results page leads with the story themes as sentence counts (dots, original-language path), what they do and don't mean, the sentence cards, the PSE method, and an optional bridge to McAdams's Motivated Agent (*The Art and Science of Personality Development*, 2015) with three static reflection questions. Both-path counts, agreement, protocol notes, credits and model metadata sit in a collapsed "想睇吓系統點樣分析？" section.
+- No motive category is named before the stories are written. The results page leads with one interpretation (leading theme, balanced, or too few themes), a competence/relatedness profile with the pictures' typical shares marked, and any brought-in themes. Then come research notes on each motive (the leading one open), a picture-by-picture view with sentence cards, and three static SDT reflection questions. Both-path counts, agreement, picture pulls, protocol notes, theory background, credits and model metadata sit in a collapsed "點樣計？限制同技術資料" section.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
-- The same four writing prompts are visible on every screen size: current situation, preceding events, characters' thoughts/feelings/wants, and outcome. They guide a complete imaginative story, without requiring separate answers or polished grammar/punctuation. Returning participants may write similar or different stories. A story of fewer than 2 sentences gets a single optional nudge; it is never blocked.
+- The writing screen asks for a complete story (「寫出成個故事」), not a continuation. The four standard prompts sit inside the writing box as faint placeholder text on every screen size: who they are and what they are going through, what led up to this, what they think/feel/want, and how it ends. The prompts disappear once the participant types; a row of four small reminders (此刻 · 前因 · 內心 · 結局) stays underneath. Separate answers and polished grammar/punctuation are not required. Returning participants may write similar or different stories. A story of fewer than 2 sentences gets a single optional nudge to add the before, the wants or the ending; it is never blocked.
 - Drafts are saved in the participant's browser, so they can leave and come back within 7 days.
 - Deviations from the standard protocol (4 minutes per story, one sitting) are recorded but not enforced: writing time per story, time away from the page, and resuming after more than 5 minutes. They appear on the results page and in the download, with a note that such stories are less standardised.
 - Sentence-level motive coding with the Automated Motive Coder (AMC) along two paths:
   1. **Direct:** the original sentence goes straight to AMC.
   2. **Translated:** the sentence is first translated conservatively into English, then sent to AMC.
-- Results present both paths together, then sentence-level examples, a private three-question McAdams reflection and optional technical detail. The download includes both paths, the stories and reflection prompts before the technical record.
+- The download has the interpretation, profile, per-picture stories with both paths' labels, and the reflection prompts, followed by the method and the technical record.
 
 **Out of scope**
 

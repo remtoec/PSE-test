@@ -95,3 +95,50 @@ images and are marked as having begun with legacy guidance. Downloads record
 actual image order, source identities, guidance version, timing, and picture
 pulls. Existing p1–p9 image bytes and IDs are preserved. Deploy the expanded
 backend allowlist before releasing the new frontend.
+
+## 2026-09-29 revision: results with a benchmark
+
+The owner reviewed the flow and found it too text-heavy for phones, found the
+writing heading (「然後，發生咗咩事？」) framed the task as continuing a story,
+and found the results too neutral to be meaningful. This revision reverses the
+earlier "context only, never a benchmark" rule above, deliberately and with
+narrower guardrails.
+
+**Writing (`pse-hk-guidance-v3`).** The heading asks for a whole story
+(「寫出成個故事」). The standard four guide questions move into the writing box
+as placeholder text, which disappears once the participant types, and are
+worded to invite projection: who they are and what they are going through,
+what led up to this, what they think, feel and want, and how it ends. A
+four-word reminder row (此刻 · 前因 · 內心 · 結局) stays visible. The short-story
+nudge asks for the before, the wants or the ending.
+
+**Framing.** Following McAdams (2015, ch. 6), achievement and power motivation
+fall within the broad domain of competence, and affiliation/intimacy within
+relatedness. The page presents PSE imagery as a rough marker of sensitivity
+to those two self-determination needs, and leaves autonomy to reflection.
+
+**Benchmark.** A sentence carries a theme if either the direct or the
+translated reading finds it. Within a run, each theme's share of all themes is
+compared with its share in the German expert-coded pulls for the same
+pictures. Sharing the unit (sentences with imagery, each motive at most once) makes
+this closer to like-for-like than raw counts would be. Shares also cancel most
+of the story-length difference, though not the language or coder difference.
+
+| Reading | Rule | Headline |
+|---|---|---|
+| Sparse | fewer than 3 themes in total | stories rarely say what characters want; not an absence of motives |
+| Lean | a theme's share is ≥ 12 points above the pictures' share | 「你嘅故事，特別著重…」 with your % vs typical % and the SDT need |
+| Balanced | otherwise | close to what the pictures usually pull; names the most frequent theme |
+
+Per picture, themes within 75% of the picture's strongest pull count as what
+it usually pulls. Any other theme the participant wrote is marked ✦ as brought
+in, the clearest projection cue in a four-story run. Pulls based on fewer than 30
+stories are labelled as small samples.
+
+**Still out of bounds.** No z-scores from the norm SDs, no subtraction of
+means, no percentiles, no ranking between participants, and no claim that a
+share is a trait. The page says that the reference is German, expert-coded and
+not a norm. Research correlates are phrased as group tendencies ("people with
+more of this theme tend to…"), not statements about the reader. With 4–10
+themes per run, one sentence moves a share by 10–25 points; the page says so when
+there are fewer than 6.
