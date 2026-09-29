@@ -70,11 +70,12 @@ guardrails: [protocol review, 2026-09-29](pse-protocol-review.md#2026-09-29-revi
 Screenshots: `artifacts/ui-revision/` (`before-phone-write.png` for comparison).
 Not checked: physical iOS/Android browsers, screen readers, live model service.
 
-### Third revision (English first, length-adjusted, words not numbers)
+### Third revision (English first, length-adjusted, words not numbers), merged onto the evidence review
 
 | Check | Outcome |
 |---|---|
 | OSF `picture_pull_norm_table.xlsx` vs shipped pulls | 47 of 47 rows identical (aff/ach/pow/n); `wc.mean` and `sc.mean` added |
-| `/__test__/` fixtures (normal and fallback) | `[]`. New checks: English reading primary and original only as fallback; faint label; per-1,000-word rates for both sides; balance-only fallback; quiet / balanced / slight / clear / tied readings; no digits or % in the results summary or picture chips; method sections absent; about note with credits; English and themes on sentence cards |
+| `node --test tests/reading.test.cjs` | 18 passed: the review's 14 (faint case moved onto the English reading) plus English-first, reference rates, number-free wording with length-independent lean, research record |
+| `/__test__/` fixtures (normal and fallback) | `[]`. Adds: method off the page, about note with credits, no digits or % in the results summary or picture chips, English and themes on sentence cards, length-adjusted bars against reference lines, download keeps method and shares the screen's reading |
 | Full flow, `?mode=flow` | Pass (resume, locked review, busy/retry, story kept) |
 | `pytest` | 49 passed |

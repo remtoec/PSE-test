@@ -96,6 +96,15 @@ actual image order, source identities, guidance version, timing, and picture
 pulls. Existing p1–p9 image bytes and IDs are preserved. Deploy the expanded
 backend allowlist before releasing the new frontend.
 
+## Current policy
+
+The subsequent [copy and benchmark review](copy-benchmark-rationale.md), as amended
+by the [third revision](#third-revision-story-length-english-first-words-not-numbers)
+(English reading, per-1,000-word amounts, no numbers or method on the page),
+supersedes the rules below: faint detections are exploratory only; stronger
+wording requires cross-story support and omission stability; reference shares
+are explicitly not average-person scores. The following entries are historical.
+
 ## 2026-09-29 revision: results with a benchmark
 
 The owner reviewed the flow and found it too text-heavy for phones, found the
@@ -164,6 +173,11 @@ there are fewer than 6.
 
 ## Third revision: story length, English first, words not numbers
 
+Builds on the [copy and benchmark review](copy-benchmark-rationale.md); its
+evidence gates, faint-label policy, missing-reference rule and neutral copy
+still apply. This section changes the scored reading, the length handling and
+what the page shows.
+
 ### How the PSE handles story length
 
 - **Scoring unit.** Winter's (1994) running-text system codes each motive at
@@ -181,54 +195,43 @@ there are fewer than 6.
      the sample, and it "can easily be compared to average
      images-per-1000-word scores obtained in other samples". The residual
      correlation with word count should stay under |.15|.
-- **AMC practice.** The AMC authors (ICWSM 2025) sum AMC's probabilities per
-  person, which they found more reliable than 0/1 flags. They then correct by
-  robust regression on word count.
+- **AMC practice.** The AMC authors (ICWSM 2025) score people from summed
+  model output, then correct by robust regression on word count.
 - **Where the norm means come from.** `picture_pull_norm_table.xlsx` gives, per
   picture, the mean number of expert-coded images per story across all German
   stories written to it (`aff/ach/pow.mean`, with SDs). Affiliation includes
   intimacy. These are **raw, uncorrected** per-story counts. The same row gives
   mean words (`wc.mean`, ≈ 89–94 for the bookclub four) and sentences
   (`sc.mean`, ≈ 7) per story, and `n.stories`. The pull is therefore partly a
-  product of ~90-word stories written in about 4–5 minutes.
+  product of ~90-word stories written in about 4–5 minutes. The OSF workbook
+  matched all 47 shipped rows; word and sentence means are now in
+  `stimuli.json`.
 
-### What this means here
+### What changed
 
-A single participant has no sample to regress against, so residualising is
-not available. Comparing our raw counts with the per-story means would read
-short phone stories as "less motivated". Shares, the previous approach, cancel
-length but cannot say whether stories carry more or less imagery overall.
-
-The page therefore uses option 2 on both sides:
-
-| | Participant | Typical |
-|---|---|---|
-| Imagery | AMC probabilities summed over sentences, English reading | German expert mean images per story, run's pictures |
-| Length | English words (translation) | German mean words per story, same pictures |
-| Metric | per 1,000 words | per 1,000 words |
-
-The lean compares each theme's rate against the others (a clear lean at 1.35×
-the pictures' usual balance, slight at 1.15×). The overall level gives the
-"more / less wanting" sentence, and below half of typical the stories are
-read as quiet. A uniform bias affects only the overall wording, never which
-theme leans; the German-versus-English word ratio (German stories to the same
-pictures ran ~10% shorter in Schultheiss & Pang's Table 1) is one such bias.
-Without a translation there is no comparable word count, so only the balance
-is shown.
-
-### English first
-
-AMC was trained on German expert-coded sentences and checked on a
-DeepL-translated English holdout. There it replicated the known gender
-difference in affiliation as well as on the German original. Cantonese was
-never tested, and our direct path visibly under-detects. The English reading
-is therefore the one shown and scored; the original is a fallback when
-translation fails. Sentence cards still mark 30–50% themes 「隱約」, so the
-picture view stays sensitive.
-
-### Words, not numbers; method off the page
-
-Participants see bars, a reference line and words, never percentages or
-counts. For them this is a casual exercise, and method is our concern. The
-page keeps one plain sentence and the picture credits under 「關於呢個練習」;
-everything numeric is in the download's technical record.
+- **Which theme stands out** is still judged on shares, with the review's gates.
+  Shares are length-free, so this is unchanged apart from the source reading.
+- **Amounts** are length-adjusted: the bars and reference line show imagery per
+  1,000 words (option 2 above). For the participant this is flagged sentences
+  per English word; for the reference, summed picture means per summed mean
+  words for the same pictures. One participant has no sample to regress
+  against, so residualising is not available. Raw counts against per-story
+  means would read short phone stories as "less motivated".
+- **Overall amount** (per-1,000-word total relative to the reference) becomes one
+  sentence in words: more wanting at ≥ 1.3×, less at < 0.7×, otherwise nothing.
+  A uniform bias, such as German stories running ~10% shorter than US English
+  ones in Schultheiss & Pang's Table 1, shifts only this sentence, never which
+  theme stands out.
+- **English first.** AMC was trained on German expert-coded sentences and
+  checked on a DeepL-translated English holdout. There it replicated the known
+  gender difference in affiliation as well as on the German original.
+  Cantonese was never tested, and our direct path visibly under-detects. The
+  English reading's flags are therefore the main counts (replacing the union of
+  both readings); the original is a fallback when translation fails.
+- **Words, not numbers.** No percentages, counts or "N percentage points" on
+  the page: bars, a reference line, and 高過／接近／低過參照. Evidence says 「喺幾個故事都有出現」
+  rather than a number.
+- **Method off the page.** For participants this is casual, and method is the
+  organisers' concern. The page keeps 「關於呢個練習」 with one plain sentence and
+  the picture credits. `READING_METHOD`, per-1,000-word figures, both paths'
+  labels, agreement, pulls and timing are in the download's research record.

@@ -1,78 +1,68 @@
 # Changelog
 
-Each change is listed with the reason for it. Details of the benchmark and its limits:
+## 2026-09-29 (later) — English first, story length, words not numbers
+
+Builds on the evidence-grounded reading below; its gates, faint-label policy,
+missing-reference rule and neutral copy are kept. Details and sources:
+[protocol review, third revision](docs/pse-protocol-review.md#third-revision-story-length-english-first-words-not-numbers).
+
+- **Main counts use the English reading's flags,** with the original only when
+  translation fails (previously the union of both).
+  *Why:* the owner asked for English as the main source. AMC was tested on
+  translated English and replicated a known effect there; it was never tested
+  on Cantonese, and the direct path under-detects.
+- **Bars, the reference line and the overall amount are per 1,000 words.**
+  Participant: flagged sentences per English word. Reference: summed picture
+  means over summed mean words per story, from the norm workbook (now imported;
+  47/47 rows verified against OSF).
+  *Why:* the owner asked how the original PSE handles length and where the means
+  come from. The means are raw counts from ~90-word stories, and raw motive
+  scores rise with length (r up to .50). Schultheiss & Pang (2007) recommend
+  images per 1,000 words for comparing across samples; one participant cannot
+  be residualised. Which theme stands out is still judged on shares, which are
+  length-free, so the review's gates are unchanged.
+- **One sentence on the overall amount** (more wanting at ≥ 1.3×, less at < 0.7×
+  the reference), in words.
+  *Why:* this is the one comparison that length adjustment newly allows, and it
+  gives the reading some pull without numbers. A uniform bias between German
+  and English word counts can shift this sentence but not the leading theme.
+- **No numbers on the page:** bars, a reference line, 高過／接近／低過參照, and
+  evidence 「喺幾個故事都有出現」 instead of counts, percentages or percentage points.
+  *Why:* owner request. The bar against a line carries the comparison, and
+  numbers read like a test score.
+- **Method off the page.** The technical section is replaced by 「關於呢個練習」:
+  one plain sentence and the picture credits. The method text, per-1,000-word
+  figures, both paths' labels, agreement, pulls with word counts and timing
+  move to the download's 「技術記錄（研究用）」.
+  *Why:* owner request. For participants this is a casual exercise; method is the
+  organisers' concern. Credits stay for attribution.
+- **Sentence cards show the English and its themes** (with 「隱約」 labels) instead
+  of two analysis rows.
+  *Why:* the English is what is scored, so it explains a surprising theme.
+- Reading rules recorded as `pse-hk-reading-v3`. Node tests (18) cover English
+  first, reference rates, number-free wording, length independence of the
+  lean, and the research record.
+
+## 2026-09-29 — Ground interpretations in story evidence
+
+- Keep 畫中有你 and complete-story prompts; make character guidance optional
+  and remove hidden-self claims during writing. Balance all three motive notes.
+- Exclude faint scores from main counts; retain them as exploratory sentence
+  labels. Require distinct sentences across stories before showing a profile.
+- Label the ratio of summed picture means as a research reference. Missing
+  picture means disable overall comparison; no average-person claim is made.
+- Reserve stronger wording for themes recurring across three stories and
+  surviving every story omission with a recalculated matching reference.
+  Other larger differences and translation failures remain tentative.
+- Show exact supporting sentences; replace projection/rarity claims with
+  relative picture emphasis. Share method text and interpretation with export.
+- Record guidance v4 and reading v2. Backend and picture pool unchanged.
+
+Rationale, trade-offs and verification: [independent review](docs/copy-benchmark-rationale.md).
+
+Each change is listed with the reason for it. Commits: `f5fed36` (redesign) and
+`e9c0d2d` (same-day follow-up). Details of the benchmark and its limits:
 [protocol review, 2026-09-29](docs/pse-protocol-review.md#2026-09-29-revision-results-with-a-benchmark).
-
-## 2026-09-29 (later) — Story length, English first, words not numbers
-
-### Why this round happened
-
-The owner asked three things. First, how the original PSE deals with story
-length, and how the picture means are derived. Second, to show words and bars
-with a reference line instead of exact numbers. Third, to use English as the
-main source (the model is not verified on Chinese) and keep methodology off
-the results page: it is our concern, and for participants this is a casual
-exercise. Background and sources: [protocol review, third
-revision](docs/pse-protocol-review.md#third-revision-story-length-english-first-words-not-numbers).
-
-### Scoring
-
-- **English translation is the main reading;** the original text is a fallback
-  only when translation fails.
-  *Why:* AMC was trained on German expert-coded sentences and checked on an
-  English (DeepL) translation of its holdout set, where it replicated a known
-  effect as well as in German. It was never tested on Cantonese, and our
-  direct path visibly under-detects.
-- **Per motive, AMC probabilities are summed over sentences** (for the profile
-  and headline). This replaces counting sentences above 30%.
-  *Why:* it is the AMC authors' own person-level score, which they found more
-  reliable than 0/1 flags. It also keeps faint imagery in proportion, without
-  counting a 31% sentence as a full image.
-- **Length correction: imagery per 1,000 words, on both sides.** You: summed
-  probabilities per English word. Typical: German expert mean images per
-  story ÷ mean words per story, for the same pictures. The workbook's word and
-  sentence means are now imported into `stimuli.json`.
-  *Why:* the norm means are raw per-story counts from ~90-word stories, and raw
-  motive scores rise with length (r up to .50). Schultheiss & Pang (2007)
-  recommend images per 1,000 words when comparing across samples;
-  residualising needs a sample, which one participant does not have. Shares
-  alone cancelled length but could not say whether stories carry more or less
-  imagery overall.
-- **Four readings:** clear lean (1.35× the pictures' usual balance), slight
-  lean (1.15×), balanced, and quiet (under half the typical level). The
-  overall level adds one sentence: more or less 「想要」 than most people.
-  *Why:* the lean uses ratios between themes, so a uniform bias cannot change
-  which theme leads, for example German versus English word counts. The
-  overall comparison is kept as words only, because such a bias does affect it.
-- **Sentence cards still mark themes at ≥ 30% as 「隱約」.**
-  *Why:* the owner prefers sensitivity for the intriguing parts (dots,
-  ✦ brought-in themes); the profile uses the summed probabilities instead.
-
-### Results page
-
-- **No numbers:** bars with a reference line, and words (多過一般 / 同一般相若 /
-  少過一般). Headlines and ledes are in words only; picture chips have no counts.
-  *Why:* owner request. Numbers invite false precision and read like a test
-  score; the bar against a line carries the comparison.
-- **Method taken off the page.** The two-path panels, agreement, pull table,
-  timing, theory and model metadata are gone. A short 「關於呢個練習」 note keeps one
-  plain sentence and the picture credits.
-  *Why:* for participants this is casual; method is the organisers' concern.
-  Credits stay for attribution.
-- **Sentence cards show the English and its themes** instead of two analysis
-  rows.
-  *Why:* the English is what was scored, so it explains a surprising theme.
-- **Download:** the participant part is in words; a 「技術記錄（研究用）」 section keeps
-  the method, per-1,000-word figures, both paths' labels, agreement, pulls
-  with word counts, timing and model metadata.
-  *Why:* the numbers remain available to facilitators and for checking
-  the method, without being on the participant's screen.
-
-### Not changed
-
-Backend, translation prompt, pictures, timing, drafts and privacy. The
-frontend still works with the deployed backend (it already returns
-per-sentence probabilities and English text).
 
 ## 2026-09-29 — Mobile-first redesign and interpreted results
 
