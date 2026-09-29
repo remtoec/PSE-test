@@ -1,5 +1,25 @@
 # Changelog
 
+## 2026-09-29 (palette) — Pigment theme colours, vermilion accent and seal
+
+Option B from the palette preview. Paper, text, buttons and rules are unchanged.
+
+- **Theme colours are Chinese painting pigments:** 赭石 ochre `#8a5526` (成就),
+  石綠 malachite `#2f7466` (連結), 花青 indigo `#3d5a8a` (影響力).
+  *Why:* the old affiliation green sat in the same dark-green family as the
+  buttons, so 連結 read as part of the interface, and the power lavender felt
+  like a dashboard. White label text on the new colours is 5.2–6.6:1 (was
+  4.8–5.5:1), and in a red–green colour-blindness simulation every pair of
+  theme colours is further apart than before.
+- **Accent is 朱砂 vermilion `#a33b2b`** (was terracotta `#9f4c35`), used for the
+  eyebrows, ✦, the current-round marker, flagged chips and the focus ring. 5.9:1
+  on the paper.
+- **The masthead mark is a vermilion 「有你」 seal** instead of a green book spine.
+  *Why:* a seal (印) is the natural partner of a painting (畫), which suits 畫中有你.
+- **Writing prompts are darker: `#697166`, 4.8:1 in the box** (was `#9aa196`,
+  2.5:1). *Why:* the four prompts live in the placeholder, and at 2.5:1 they were
+  hard to read on a phone outdoors.
+
 ## 2026-09-29 (copy edit) — One voice, one name per theme, 濃淡 wording
 
 From a copy review written as a Chinese editor and book-club member. Reading
