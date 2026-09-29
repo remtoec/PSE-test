@@ -69,3 +69,12 @@ guardrails: [protocol review, 2026-09-29](pse-protocol-review.md#2026-09-29-revi
 
 Screenshots: `artifacts/ui-revision/` (`before-phone-write.png` for comparison).
 Not checked: physical iOS/Android browsers, screen readers, live model service.
+
+### Third revision (English first, length-adjusted, words not numbers)
+
+| Check | Outcome |
+|---|---|
+| OSF `picture_pull_norm_table.xlsx` vs shipped pulls | 47 of 47 rows identical (aff/ach/pow/n); `wc.mean` and `sc.mean` added |
+| `/__test__/` fixtures (normal and fallback) | `[]`. New checks: English reading primary and original only as fallback; faint label; per-1,000-word rates for both sides; balance-only fallback; quiet / balanced / slight / clear / tied readings; no digits or % in the results summary or picture chips; method sections absent; about note with credits; English and themes on sentence cards |
+| Full flow, `?mode=flow` | Pass (resume, locked review, busy/retry, story kept) |
+| `pytest` | 49 passed |

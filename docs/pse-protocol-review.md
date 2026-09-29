@@ -161,3 +161,74 @@ there are fewer than 6.
 - **Language line** above the box: English, Cantonese, written Chinese or a mix.
 - **Name:** 故事以外 → 畫中有你 ("you are in the picture"), which says what the
   exercise is about: the wants you write into the characters are yours.
+
+## Third revision: story length, English first, words not numbers
+
+### How the PSE handles story length
+
+- **Scoring unit.** Winter's (1994) running-text system codes each motive at
+  most once per sentence. A person's raw score is the count summed over all
+  stories. Schönbrodt et al.'s German database and AMC both work at sentence
+  level.
+- **Length inflates raw scores.** Schultheiss & Pang (2007, pp. 30–33) call
+  word count "the single most important variable to control for". Motive
+  scores correlate with it, "usually in the positive direction and even up to
+  .50". They give two corrections:
+  1. **Residualise** motive scores on word count by regression. This removes
+     the overlap completely, but the result depends on the sample and has no
+     intuitive meaning.
+  2. **Images per 1,000 words** (score × 1000 ÷ words). This does not depend on
+     the sample, and it "can easily be compared to average
+     images-per-1000-word scores obtained in other samples". The residual
+     correlation with word count should stay under |.15|.
+- **AMC practice.** The AMC authors (ICWSM 2025) sum AMC's probabilities per
+  person, which they found more reliable than 0/1 flags. They then correct by
+  robust regression on word count.
+- **Where the norm means come from.** `picture_pull_norm_table.xlsx` gives, per
+  picture, the mean number of expert-coded images per story across all German
+  stories written to it (`aff/ach/pow.mean`, with SDs). Affiliation includes
+  intimacy. These are **raw, uncorrected** per-story counts. The same row gives
+  mean words (`wc.mean`, ≈ 89–94 for the bookclub four) and sentences
+  (`sc.mean`, ≈ 7) per story, and `n.stories`. The pull is therefore partly a
+  product of ~90-word stories written in about 4–5 minutes.
+
+### What this means here
+
+A single participant has no sample to regress against, so residualising is
+not available. Comparing our raw counts with the per-story means would read
+short phone stories as "less motivated". Shares, the previous approach, cancel
+length but cannot say whether stories carry more or less imagery overall.
+
+The page therefore uses option 2 on both sides:
+
+| | Participant | Typical |
+|---|---|---|
+| Imagery | AMC probabilities summed over sentences, English reading | German expert mean images per story, run's pictures |
+| Length | English words (translation) | German mean words per story, same pictures |
+| Metric | per 1,000 words | per 1,000 words |
+
+The lean compares each theme's rate against the others (a clear lean at 1.35×
+the pictures' usual balance, slight at 1.15×). The overall level gives the
+"more / less wanting" sentence, and below half of typical the stories are
+read as quiet. A uniform bias affects only the overall wording, never which
+theme leans; the German-versus-English word ratio (German stories to the same
+pictures ran ~10% shorter in Schultheiss & Pang's Table 1) is one such bias.
+Without a translation there is no comparable word count, so only the balance
+is shown.
+
+### English first
+
+AMC was trained on German expert-coded sentences and checked on a
+DeepL-translated English holdout. There it replicated the known gender
+difference in affiliation as well as on the German original. Cantonese was
+never tested, and our direct path visibly under-detects. The English reading
+is therefore the one shown and scored; the original is a fallback when
+translation fails. Sentence cards still mark 30–50% themes 「隱約」, so the
+picture view stays sensitive.
+
+### Words, not numbers; method off the page
+
+Participants see bars, a reference line and words, never percentages or
+counts. For them this is a casual exercise, and method is our concern. The
+page keeps one plain sentence and the picture credits under 「關於呢個練習」;
+everything numeric is in the download's technical record.

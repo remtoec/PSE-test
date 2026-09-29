@@ -19,6 +19,8 @@
         "aff": 3.25,
         "ach": 0,
         "pow": 1.25,
+        "words": 118.5,
+        "sentences": 10.5,
         "n_stories": 4,
         "norm_id": "newpic18",
         "source_range": "'Sheet 1'!A4:P4"
@@ -41,6 +43,8 @@
         "aff": 0.77,
         "ach": 1.82,
         "pow": 2.11,
+        "words": 83.67,
+        "sentences": 6.35,
         "n_stories": 198,
         "norm_id": "newpic9",
         "source_range": "'Sheet 1'!A2:P2"
@@ -63,6 +67,8 @@
         "aff": 1.71,
         "ach": 0.68,
         "pow": 0.92,
+        "words": 86.97,
+        "sentences": 6.54,
         "n_stories": 196,
         "norm_id": "newpic10",
         "source_range": "'Sheet 1'!A24:P24"
@@ -85,6 +91,8 @@
         "aff": 0.55,
         "ach": 0.82,
         "pow": 1.27,
+        "words": 82.91,
+        "sentences": 6.33,
         "n_stories": 196,
         "norm_id": "newpic12",
         "source_range": "'Sheet 1'!A36:P36"
@@ -107,6 +115,8 @@
         "aff": 0.49,
         "ach": 0.85,
         "pow": 0.82,
+        "words": 82.48,
+        "sentences": 6,
         "n_stories": 202,
         "norm_id": "newpic1",
         "source_range": "'Sheet 1'!A48:P48"
@@ -129,6 +139,8 @@
         "aff": 0.4,
         "ach": 0.1,
         "pow": 2.3,
+        "words": 87.1,
+        "sentences": 6.8,
         "n_stories": 10,
         "norm_id": "newpic11",
         "source_range": "'Sheet 1'!A32:P32"
@@ -151,6 +163,8 @@
         "aff": 0.46,
         "ach": 1.53,
         "pow": 0.51,
+        "words": 78.2,
+        "sentences": 6.39,
         "n_stories": 200,
         "norm_id": "newpic22",
         "source_range": "'Sheet 1'!A39:P39"
@@ -173,6 +187,8 @@
         "aff": 2.75,
         "ach": 0,
         "pow": 1.12,
+        "words": 105.62,
+        "sentences": 7.75,
         "n_stories": 8,
         "norm_id": "newpic29",
         "source_range": "'Sheet 1'!A12:P12"
@@ -195,6 +211,8 @@
         "aff": 2.45,
         "ach": 0.55,
         "pow": 0.55,
+        "words": 77.18,
+        "sentences": 5.91,
         "n_stories": 11,
         "norm_id": "newpic31",
         "source_range": "'Sheet 1'!A16:P16"
@@ -217,6 +235,8 @@
         "aff": 1.88,
         "ach": 0.81,
         "pow": 1.77,
+        "words": 90.28,
+        "sentences": 6.39,
         "n_stories": 1195,
         "norm_id": "applause",
         "source_range": "'Sheet 1'!A5:P5"
@@ -239,6 +259,8 @@
         "aff": 2.23,
         "ach": 0.48,
         "pow": 0.49,
+        "words": 106.57,
+        "sentences": 7.32,
         "n_stories": 408,
         "norm_id": "architect at desk",
         "source_range": "'Sheet 1'!A28:P28"
@@ -261,6 +283,8 @@
         "aff": 0.62,
         "ach": 0.14,
         "pow": 3.41,
+        "words": 97.07,
+        "sentences": 6.77,
         "n_stories": 797,
         "norm_id": "beachcombers",
         "source_range": "'Sheet 1'!A8:P8"
@@ -283,6 +307,8 @@
         "aff": 0.13,
         "ach": 3.31,
         "pow": 0.8,
+        "words": 98.01,
+        "sentences": 7.59,
         "n_stories": 83,
         "norm_id": "bicycle race",
         "source_range": "'Sheet 1'!A7:P7"
@@ -305,6 +331,8 @@
         "aff": 0.34,
         "ach": 1.68,
         "pow": 0.81,
+        "words": 88.55,
+        "sentences": 7.19,
         "n_stories": 1724,
         "norm_id": "boxer",
         "source_range": "'Sheet 1'!A31:P31"
@@ -327,6 +355,8 @@
         "aff": 2.04,
         "ach": 0.15,
         "pow": 1.25,
+        "words": 92.48,
+        "sentences": 7.33,
         "n_stories": 141,
         "norm_id": "burglar",
         "source_range": "'Sheet 1'!A18:P18"
@@ -349,6 +379,8 @@
         "aff": 3.03,
         "ach": 0.03,
         "pow": 0.34,
+        "words": 94.29,
+        "sentences": 7.08,
         "n_stories": 1854,
         "norm_id": "couple by river",
         "source_range": "'Sheet 1'!A20:P20"
@@ -386,6 +418,8 @@
         "aff": 3.26,
         "ach": 0.02,
         "pow": 0.69,
+        "words": 96.16,
+        "sentences": 7.09,
         "n_stories": 81,
         "norm_id": "girfriends in cafe with male approaching",
         "source_range": "'Sheet 1'!A10:P10"
@@ -408,6 +442,8 @@
         "aff": 0.1,
         "ach": 1.3,
         "pow": 1.82,
+        "words": 84.96,
+        "sentences": 5.94,
         "n_stories": 799,
         "norm_id": "kennedy nixon",
         "source_range": "'Sheet 1'!A27:P27"
@@ -430,6 +466,8 @@
         "aff": 0.2,
         "ach": 1.95,
         "pow": 0.3,
+        "words": 92.34,
+        "sentences": 6.86,
         "n_stories": 97,
         "norm_id": "lacrosse duel",
         "source_range": "'Sheet 1'!A41:P41"
@@ -452,6 +490,8 @@
         "aff": 0.08,
         "ach": 0.31,
         "pow": 0.79,
+        "words": 86.08,
+        "sentences": 5.98,
         "n_stories": 95,
         "norm_id": "men on ship",
         "source_range": "'Sheet 1'!A53:P53"
@@ -474,6 +514,8 @@
         "aff": 0.35,
         "ach": 1.2,
         "pow": 0.86,
+        "words": 58.99,
+        "sentences": 5.1,
         "n_stories": 354,
         "norm_id": "neymar & marcelo",
         "source_range": "'Sheet 1'!A42:P42"
@@ -496,6 +538,8 @@
         "aff": 2.39,
         "ach": 0.14,
         "pow": 1.08,
+        "words": 92.56,
+        "sentences": 6.96,
         "n_stories": 2311,
         "norm_id": "nightclub scene",
         "source_range": "'Sheet 1'!A14:P14"
@@ -518,6 +562,8 @@
         "aff": 0.47,
         "ach": 0.2,
         "pow": 1.56,
+        "words": 93.7,
+        "sentences": 6.57,
         "n_stories": 2612,
         "norm_id": "ship captain",
         "source_range": "'Sheet 1'!A45:P45"
@@ -540,6 +586,8 @@
         "aff": 2.48,
         "ach": 0.16,
         "pow": 1.65,
+        "words": 89.74,
+        "sentences": 7.55,
         "n_stories": 141,
         "norm_id": "sorrow",
         "source_range": "'Sheet 1'!A6:P6"
@@ -562,6 +610,8 @@
         "aff": 0.73,
         "ach": 1.15,
         "pow": 0.84,
+        "words": 90.73,
+        "sentences": 7.08,
         "n_stories": 2316,
         "norm_id": "trapeze artists",
         "source_range": "'Sheet 1'!A34:P34"
@@ -584,6 +634,8 @@
         "aff": 0.34,
         "ach": 1.51,
         "pow": 1.28,
+        "words": 90.67,
+        "sentences": 6.68,
         "n_stories": 2331,
         "norm_id": "women in laboratory",
         "source_range": "'Sheet 1'!A30:P30"
@@ -606,6 +658,8 @@
         "aff": 2.2,
         "ach": 0.1,
         "pow": 0.1,
+        "words": 99.5,
+        "sentences": 9.7,
         "n_stories": 10,
         "norm_id": "newpic3",
         "source_range": "'Sheet 1'!A43:P43"
@@ -628,6 +682,8 @@
         "aff": 0.25,
         "ach": 1.12,
         "pow": 0.62,
+        "words": 93,
+        "sentences": 7.75,
         "n_stories": 8,
         "norm_id": "newpic4",
         "source_range": "'Sheet 1'!A49:P49"
@@ -650,6 +706,8 @@
         "aff": 1.36,
         "ach": 1.73,
         "pow": 1.55,
+        "words": 65.82,
+        "sentences": 6,
         "n_stories": 11,
         "norm_id": "newpic5",
         "source_range": "'Sheet 1'!A3:P3"
@@ -672,6 +730,8 @@
         "aff": 2.38,
         "ach": 0.38,
         "pow": 1.25,
+        "words": 70.12,
+        "sentences": 5.12,
         "n_stories": 8,
         "norm_id": "newpic6",
         "source_range": "'Sheet 1'!A9:P9"
@@ -694,6 +754,8 @@
         "aff": 0.8,
         "ach": 0.87,
         "pow": 0.8,
+        "words": 69.13,
+        "sentences": 5.6,
         "n_stories": 15,
         "norm_id": "newpic7",
         "source_range": "'Sheet 1'!A40:P40"
@@ -716,6 +778,8 @@
         "aff": 0.89,
         "ach": 1.56,
         "pow": 1.44,
+        "words": 73.33,
+        "sentences": 7.11,
         "n_stories": 9,
         "norm_id": "newpic8",
         "source_range": "'Sheet 1'!A11:P11"
@@ -738,6 +802,8 @@
         "aff": 1.18,
         "ach": 0.18,
         "pow": 0.82,
+        "words": 74.73,
+        "sentences": 6.18,
         "n_stories": 11,
         "norm_id": "newpic13",
         "source_range": "'Sheet 1'!A46:P46"
@@ -760,6 +826,8 @@
         "aff": 1.88,
         "ach": 0,
         "pow": 1.38,
+        "words": 100,
+        "sentences": 9.75,
         "n_stories": 8,
         "norm_id": "newpic14",
         "source_range": "'Sheet 1'!A26:P26"
@@ -782,6 +850,8 @@
         "aff": 1.29,
         "ach": 0,
         "pow": 1.43,
+        "words": 84.29,
+        "sentences": 6.29,
         "n_stories": 7,
         "norm_id": "newpic16",
         "source_range": "'Sheet 1'!A35:P35"
@@ -804,6 +874,8 @@
         "aff": 0.09,
         "ach": 2.55,
         "pow": 0.64,
+        "words": 73.73,
+        "sentences": 7.64,
         "n_stories": 11,
         "norm_id": "newpic17",
         "source_range": "'Sheet 1'!A25:P25"
@@ -826,6 +898,8 @@
         "aff": 1.75,
         "ach": 0,
         "pow": 0.75,
+        "words": 73.38,
+        "sentences": 6.25,
         "n_stories": 8,
         "norm_id": "newpic20",
         "source_range": "'Sheet 1'!A38:P38"
@@ -848,6 +922,8 @@
         "aff": 1.89,
         "ach": 0.22,
         "pow": 0.44,
+        "words": 92.22,
+        "sentences": 8.22,
         "n_stories": 9,
         "norm_id": "newpic21",
         "source_range": "'Sheet 1'!A37:P37"
@@ -870,6 +946,8 @@
         "aff": 0.62,
         "ach": 0.25,
         "pow": 1.5,
+        "words": 85.38,
+        "sentences": 7.5,
         "n_stories": 8,
         "norm_id": "newpic23",
         "source_range": "'Sheet 1'!A44:P44"
@@ -892,6 +970,8 @@
         "aff": 0.77,
         "ach": 0.69,
         "pow": 1.69,
+        "words": 103.92,
+        "sentences": 9.46,
         "n_stories": 13,
         "norm_id": "newpic24",
         "source_range": "'Sheet 1'!A29:P29"
@@ -914,6 +994,8 @@
         "aff": 2.18,
         "ach": 0.09,
         "pow": 1.18,
+        "words": 92.09,
+        "sentences": 7.45,
         "n_stories": 11,
         "norm_id": "newpic25",
         "source_range": "'Sheet 1'!A17:P17"
@@ -936,6 +1018,8 @@
         "aff": 0.67,
         "ach": 0,
         "pow": 0.33,
+        "words": 82.67,
+        "sentences": 6.33,
         "n_stories": 3,
         "norm_id": "newpic26",
         "source_range": "'Sheet 1'!A54:P54"
@@ -958,6 +1042,8 @@
         "aff": 2.33,
         "ach": 0.67,
         "pow": 0.33,
+        "words": 113.33,
+        "sentences": 10,
         "n_stories": 3,
         "norm_id": "newpic27",
         "source_range": "'Sheet 1'!A22:P22"
@@ -980,6 +1066,8 @@
         "aff": 1.2,
         "ach": 0.13,
         "pow": 0.6,
+        "words": 86.6,
+        "sentences": 6.93,
         "n_stories": 15,
         "norm_id": "newpic28",
         "source_range": "'Sheet 1'!A50:P50"
@@ -1002,6 +1090,8 @@
         "aff": 0.6,
         "ach": 1.33,
         "pow": 1.47,
+        "words": 87.93,
+        "sentences": 7.07,
         "n_stories": 15,
         "norm_id": "newpic30",
         "source_range": "'Sheet 1'!A21:P21"
@@ -1024,6 +1114,8 @@
         "aff": 1.57,
         "ach": 0.14,
         "pow": 1.86,
+        "words": 119.29,
+        "sentences": 10.57,
         "n_stories": 7,
         "norm_id": "newpic32",
         "source_range": "'Sheet 1'!A15:P15"
@@ -1046,6 +1138,8 @@
         "aff": 1.89,
         "ach": 0.33,
         "pow": 1.11,
+        "words": 87.78,
+        "sentences": 8.11,
         "n_stories": 9,
         "norm_id": "newpic33",
         "source_range": "'Sheet 1'!A23:P23"
@@ -1053,5 +1147,5 @@
     }
   ],
   "pull_source": "picture_pull_norm_table.xlsx, Sheet 1, supplied OSF archive",
-  "pull_note": "German expert-coded mean motive imagery per story; picture context only, never participant norms or a correction to AMC counts. Sample sizes differ. Null means no verified row match."
+  "pull_note": "German expert-coded (Winter 1994, sentence level) mean motive imagery per story, with mean words and sentences per story, from picture_pull_norm_table.xlsx. Used as a rough, length-adjusted reference (images per 1,000 words), never as participant norms. Sample sizes differ. Null means no verified row match."
 }

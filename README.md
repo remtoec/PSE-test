@@ -19,24 +19,32 @@ marker of how sensitive someone's imagination is to the **competence** need
 (achievement and power imagery) and the **relatedness** need (affiliation
 imagery). Autonomy is left to the participant's own reflection.
 
-**Results lead with an interpretation, benchmarked against the pictures' pull.**
-Detection is deliberately sensitive, because the page's job is to intrigue
-rather than to measure. A sentence carries a theme if either reading
-(original or translated) rates it at least 30% likely. The model's own cut-off
-is 50%, and sentence cards mark the 30–50% themes as 「隱約」. The page compares each theme's
-*share* of the participant's themes with its share in German expert-coded
-stories for the same pictures. It then names a clear lean (12 percentage points
-or more above), a slight lean (5–12), a profile close to the pictures, or too few
-themes (fewer than 3) to read. Each picture also shows
-the theme(s) it usually pulls, and flags themes the participant brought in
-against that pull. Research correlates from McAdams (2015, ch. 6) explain the
-leading theme. The benchmark is only a rough reference: it uses shares, never
-z-scores, percentiles, pull subtraction or rankings, and says so on the page.
-See [the protocol review](docs/pse-protocol-review.md#2026-09-29-revision-results-with-a-benchmark).
+**Results lead with an interpretation in words, benchmarked against the
+pictures' pull.** The page shows no numbers: bars, a reference line for the
+typical level, and words (多過一般 / 同一般相若 / 少過一般).
 
-Both analysis paths, agreement, picture pulls and timing stay available in one
-collapsed technical section. Neither path is ground truth, and agreement is not
-a confidence score.
+- **Source.** The English translation is the reading shown and scored, because
+  AMC was checked on English translations (a DeepL-translated holdout) and has
+  never been validated on Cantonese. The original-text reading is used only
+  when translation fails.
+- **Score.** For each motive, AMC's probabilities are summed over sentences.
+  This is the AMC authors' own person-level score (more reliable than
+  thresholded flags), and it picks up faint imagery in proportion.
+- **Length.** Imagery per 1,000 English words, the PSE's between-sample length
+  correction (Schultheiss & Pang, 2007). The typical level uses the same
+  metric: German expert-coded mean images per story over mean words per story,
+  from the norm workbook, for the run's pictures.
+- **Reading.** Which theme outweighs the pictures' usual balance (clear or
+  slight lean, or balanced), and whether the stories carry little imagery at
+  all (quiet). Thresholds are uncalibrated and chosen to name a direction.
+- Each picture shows the themes it usually pulls and flags themes brought in
+  against that pull. Sentence cards show themes at 30% likelihood or more,
+  marking those below the model's 50% cut-off as 「隱約」.
+
+The method stays off the page apart from one plain sentence in 「關於呢個練習」,
+which also holds the picture credits. Both paths, per-1,000-word figures,
+agreement, pulls and timing are in the download's technical record. See
+[the protocol review](docs/pse-protocol-review.md#third-revision-story-length-english-first-words-not-numbers).
 
 The private reflection asks one competence, one relatedness and one autonomy
 question. It collects no input and transmits no reflection answers.
@@ -57,15 +65,15 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 - Four pictures per run. Each is shown for 10 s, followed by a soft 4-minute writing period.
 - **Bookclub mode (default):** new runs show boxer, couple by river, women in laboratory, and ship captain, in that order (`BOOKCLUB_SET`: c05, c07, c18, c15), without skipping. Summed German picture-pull means: aff 4.18, ach 3.42, pow 3.99. Existing drafts keep their original pictures.
 - **Random mode:** four pictures from the entire supplied archive (18 classical and 30 newer pictures). Participants may skip up to 4 per run. Skipped pictures are excluded on that browser until fewer than four eligible pictures remain, when the exclusion list resets.
-- No motive category is named before the stories are written. The results page leads with one interpretation (leading theme, balanced, or too few themes), a competence/relatedness profile with the pictures' typical shares marked, and any brought-in themes. Then come research notes on each motive (the leading one open), a picture-by-picture view with sentence cards, and three static SDT reflection questions. Both-path counts, agreement, picture pulls, protocol notes, theory background, credits and model metadata sit in a collapsed "點樣計？限制同技術資料" section.
+- No motive category is named before the stories are written. The results page leads with one interpretation in words (clear or slight lean, balanced, or quiet), a competence/relatedness profile of bars against the pictures' length-adjusted typical level, and any brought-in themes. Then come research notes on each motive (the leading one open), a picture-by-picture view with sentence cards (English and themes), three static SDT reflection questions, and a short 「關於呢個練習」 note with picture credits.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
 - The writing screen asks for a complete story (「寫出成個故事」), not a continuation. A line above the box says English, Cantonese, written Chinese or a mix are all fine. The four standard prompts sit inside the writing box as faint placeholder text on every screen size, asked of each character rather than a collective 佢哋: who each person is and what he or she is going through, what led up to this, what each thinks/feels/wants, and how each ends. The placeholder suggests 他／她, 男人／女人 or names; the translation prompt renders an unspecified 佢 as singular "they", which blurs who is who when a story has two characters. The prompts disappear once the participant types; a row of four small reminders (此刻 · 前因 · 內心 · 結局) stays underneath. Separate answers and polished grammar/punctuation are not required. Returning participants may write similar or different stories. A story of fewer than 2 sentences gets a single quiet invitation to say more (what he or she is thinking, how it ends, "often where your own shadow is"); pressing again continues, and it is never blocked.
 - Drafts are saved in the participant's browser, so they can leave and come back within 7 days.
-- Deviations from the standard protocol (4 minutes per story, one sitting) are recorded but not enforced: writing time per story, time away from the page, and resuming after more than 5 minutes. They appear on the results page and in the download, with a note that such stories are less standardised.
+- Deviations from the standard protocol (4 minutes per story, one sitting) are recorded but not enforced: writing time per story, time away from the page, and resuming after more than 5 minutes. They appear in the download's technical record, with a note that such stories are less standardised.
 - Sentence-level motive coding with the Automated Motive Coder (AMC) along two paths:
   1. **Direct:** the original sentence goes straight to AMC.
   2. **Translated:** the sentence is first translated conservatively into English, then sent to AMC.
-- The download has the interpretation, profile, per-picture stories with both paths' labels, and the reflection prompts, followed by the method and the technical record.
+- The download has the interpretation, the profile in words, per-picture stories with English and themes, and the reflection prompts, followed by a technical record for research use (method, per-1,000-word figures, both paths' labels, agreement, pulls, timing, model metadata).
 
 **Out of scope**
 
@@ -109,7 +117,7 @@ The default order is:
 | c15 | Ship captain | 0.47 | 0.20 | 1.56 | 2,612 |
 | | Sum of means | 4.18 | 3.42 | 3.99 | — |
 
-These four come from the frequently used standard six, offer varied scenes, and avoid reliance on tiny norm samples. Numerical balance is a selection aid, not proof of equal sensitivity. Pull means are German expert-coded motive imagery per story, not expected AMC counts for a Cantonese participant. Post-writing results and downloads show the actual run's picture pulls, sample sizes and limits; no adjustment is applied to the analysis.
+These four come from the frequently used standard six, offer varied scenes, and avoid reliance on tiny norm samples. Numerical balance is a selection aid, not proof of equal sensitivity. Pull means are German expert-coded motive imagery per story, not expected AMC counts for a Cantonese participant. The workbook also gives mean words and sentences per story (about 89–94 words for these four), which the results use for length adjustment. The download lists the run's pulls, word counts and sample sizes.
 
 47 images have verified workbook matches. `couple sitting opposite a woman` has no verified row and is explicitly shown as unavailable. `burglars` maps to workbook `burglar`; zero-padded `newpic` filenames map to unpadded workbook IDs. The workbook has an incorrect A1-only dimension and a missing drawing reference; the importer reads it in streaming mode with dimensions reset, without altering it.
 
@@ -153,9 +161,10 @@ Drafts stay in the participant's browser (`pse-hk:draft:v1`). Skipped picture id
 ## Known limitations
 
 - **The two paths are not independent.** Both use the same AMC model, so agreement does not mean accuracy.
-- **Direct Cantonese coding under-detects.** In real runs so far, most disagreements are "no motive" on the direct path against a motive on the translated path. Colloquial Cantonese (佢哋, 傾返計, 氹返佢) is far from AMC's training data.
+- **Direct Cantonese coding under-detects**, which is why the English reading is primary. In real runs so far, most disagreements are "no motive" on the direct path against a motive on the translated path. Colloquial Cantonese (佢哋, 傾返計, 氹返佢) is far from AMC's training data.
 - **Translation drift.** Prompt v3 fixed most of the misreadings seen with v1 (dev checks went from 21–23 to 30 of 33), but only for colloquial words in its glossary. Unknown idioms are still translated literally, and a subject omitted midway through a sentence can still be attached to the wrong person. Details are in `docs/spike-results.md`.
 - **Small samples.** A run is about 15–25 sentences, so a difference of 2–3 sentences can change which motive leads.
+- **Rough benchmark.** The typical level is German expert coding per German word; participants are scored by AMC per English word. German stories to the same pictures ran about 10% shorter than US English ones in Schultheiss & Pang's (2007) Table 1, and AMC's summed probabilities are not identical to expert counts. A uniform bias leaves the lean (which theme outweighs the others) unaffected but shifts the "more / less wanting overall" wording.
 - **Norms are German and uneven.** The picture pulls come from German participants, and p9's figures rest on only 11 stories.
 - **Naive sentence splitting.** "Mr. Chan" or "3.5" is split early.
 

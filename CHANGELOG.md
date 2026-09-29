@@ -1,8 +1,78 @@
 # Changelog
 
-Each change is listed with the reason for it. Commits: `f5fed36` (redesign) and
-`e9c0d2d` (same-day follow-up). Details of the benchmark and its limits:
+Each change is listed with the reason for it. Details of the benchmark and its limits:
 [protocol review, 2026-09-29](docs/pse-protocol-review.md#2026-09-29-revision-results-with-a-benchmark).
+
+## 2026-09-29 (later) — Story length, English first, words not numbers
+
+### Why this round happened
+
+The owner asked three things. First, how the original PSE deals with story
+length, and how the picture means are derived. Second, to show words and bars
+with a reference line instead of exact numbers. Third, to use English as the
+main source (the model is not verified on Chinese) and keep methodology off
+the results page: it is our concern, and for participants this is a casual
+exercise. Background and sources: [protocol review, third
+revision](docs/pse-protocol-review.md#third-revision-story-length-english-first-words-not-numbers).
+
+### Scoring
+
+- **English translation is the main reading;** the original text is a fallback
+  only when translation fails.
+  *Why:* AMC was trained on German expert-coded sentences and checked on an
+  English (DeepL) translation of its holdout set, where it replicated a known
+  effect as well as in German. It was never tested on Cantonese, and our
+  direct path visibly under-detects.
+- **Per motive, AMC probabilities are summed over sentences** (for the profile
+  and headline). This replaces counting sentences above 30%.
+  *Why:* it is the AMC authors' own person-level score, which they found more
+  reliable than 0/1 flags. It also keeps faint imagery in proportion, without
+  counting a 31% sentence as a full image.
+- **Length correction: imagery per 1,000 words, on both sides.** You: summed
+  probabilities per English word. Typical: German expert mean images per
+  story ÷ mean words per story, for the same pictures. The workbook's word and
+  sentence means are now imported into `stimuli.json`.
+  *Why:* the norm means are raw per-story counts from ~90-word stories, and raw
+  motive scores rise with length (r up to .50). Schultheiss & Pang (2007)
+  recommend images per 1,000 words when comparing across samples;
+  residualising needs a sample, which one participant does not have. Shares
+  alone cancelled length but could not say whether stories carry more or less
+  imagery overall.
+- **Four readings:** clear lean (1.35× the pictures' usual balance), slight
+  lean (1.15×), balanced, and quiet (under half the typical level). The
+  overall level adds one sentence: more or less 「想要」 than most people.
+  *Why:* the lean uses ratios between themes, so a uniform bias cannot change
+  which theme leads, for example German versus English word counts. The
+  overall comparison is kept as words only, because such a bias does affect it.
+- **Sentence cards still mark themes at ≥ 30% as 「隱約」.**
+  *Why:* the owner prefers sensitivity for the intriguing parts (dots,
+  ✦ brought-in themes); the profile uses the summed probabilities instead.
+
+### Results page
+
+- **No numbers:** bars with a reference line, and words (多過一般 / 同一般相若 /
+  少過一般). Headlines and ledes are in words only; picture chips have no counts.
+  *Why:* owner request. Numbers invite false precision and read like a test
+  score; the bar against a line carries the comparison.
+- **Method taken off the page.** The two-path panels, agreement, pull table,
+  timing, theory and model metadata are gone. A short 「關於呢個練習」 note keeps one
+  plain sentence and the picture credits.
+  *Why:* for participants this is casual; method is the organisers' concern.
+  Credits stay for attribution.
+- **Sentence cards show the English and its themes** instead of two analysis
+  rows.
+  *Why:* the English is what was scored, so it explains a surprising theme.
+- **Download:** the participant part is in words; a 「技術記錄（研究用）」 section keeps
+  the method, per-1,000-word figures, both paths' labels, agreement, pulls
+  with word counts, timing and model metadata.
+  *Why:* the numbers remain available to facilitators and for checking
+  the method, without being on the participant's screen.
+
+### Not changed
+
+Backend, translation prompt, pictures, timing, drafts and privacy. The
+frontend still works with the deployed backend (it already returns
+per-sentence probabilities and English text).
 
 ## 2026-09-29 — Mobile-first redesign and interpreted results
 

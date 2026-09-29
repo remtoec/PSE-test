@@ -131,15 +131,15 @@ textarea[readonly] { background: transparent; border: 0; border-left: 2px solid 
 .need-group { padding-top: 12px; }
 .need-group + .need-group { border-top: 1px solid var(--rule); margin-top: 8px; }
 .need-head { display: flex; justify-content: space-between; align-items: baseline; font: 600 15px/1.6 var(--display); margin-bottom: 4px; }
-.need-head small { font: 400 11px var(--body); color: var(--ink-2); letter-spacing: .04em; }
-.profile-row { display: grid; grid-template-columns: 56px 1fr 56px; gap: 12px; align-items: center; padding: 6px 0; }
+.need-head small { font: 400 12px var(--body); color: var(--ink-2); letter-spacing: .04em; }
+.profile-row { display: grid; grid-template-columns: 52px 1fr 76px; gap: 12px; align-items: center; padding: 8px 0; }
 .profile-name { font-size: 15px; line-height: 1.3; }
-.profile-name small, .profile-n small { display: block; font-size: 11px; color: var(--ink-2); font-weight: 400; }
 .profile-row.focus .profile-name { font-weight: 700; }
 .profile-track { position: relative; height: 12px; background: var(--paper-2); border-radius: 6px; }
 .profile-fill { position: absolute; inset: 0 auto 0 0; border-radius: 6px; }
 .profile-typical { position: absolute; top: -4px; bottom: -4px; width: 2px; margin-left: -1px; background: var(--ink); border-radius: 1px; }
-.profile-n { text-align: right; font: 700 16px/1.3 var(--body); font-variant-numeric: tabular-nums; }
+.profile-word { text-align: right; font-size: 13px; color: var(--ink-2); line-height: 1.4; }
+.profile-row.focus .profile-word { color: var(--ink); font-weight: 700; }
 .legend { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; margin: 10px 0 4px; font-size: 12px; }
 .key { display: inline-block; width: 14px; height: 8px; border-radius: 4px; background: var(--aff); margin-left: 8px; }
 .key.you { margin-left: 0; background: linear-gradient(90deg, var(--ach), var(--aff), var(--pow)); }
@@ -210,25 +210,8 @@ details.card[open] summary::after { transform: rotate(90deg); }
 .bookclub-note h3 { font-size: 18px; margin-bottom: 6px; }
 .bookclub-note p { font-size: 15px; margin: 0; }
 
-.technical h4:first-of-type { margin-top: 4px; }
-.comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0 12px; }
-.path-panel { border: 1px solid var(--rule); padding: 14px 12px; min-width: 0; background: var(--card); border-radius: 4px; }
-.path-panel h3 { font: 500 13px/1.5 var(--body); margin: 0 0 4px; }
-.path-caption { font-size: 11px; color: var(--ink-2); margin-bottom: 8px; }
-.tally-row { display: grid; grid-template-columns: 1fr auto; gap: 4px; margin-top: 10px; font-size: 12px; }
-.tally-row .n { font-variant-numeric: tabular-nums; font-weight: 700; }
-.tally-dots { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 3px; min-height: 6px; }
-.tally-dots .dot { width: 5px; height: 5px; }
-.bars-missing { color: var(--ink-2); font-size: 13px; }
-.reading-note { border-left: 2px solid var(--annotation); margin: 12px 0; padding: 2px 0 2px 14px; }
-#headline { font-weight: 500; margin-bottom: 4px; }
-#headline-note:empty { display: none; }
-.reading-note > p:last-child { margin-bottom: 0; }
-.agreement { padding: 8px 0; }
-.agreement p { margin-bottom: 4px; }
 .credits { padding-left: 18px; font-size: 13px; color: var(--ink-2); }
 .credits li { margin: 8px 0; overflow-wrap: anywhere; }
-#model-meta { overflow-wrap: anywhere; }
 
 .result-footer { padding-top: 24px; }
 .result-footer .actions { margin-top: 0; }
@@ -243,5 +226,5 @@ details.card[open] summary::after { transform: rotate(90deg); }
   .lock-note { text-align: right; }
   .insight { padding-top: 48px; }
 }
-@media (max-width: 360px) { :root { --gutter: 16px; } .profile-row { grid-template-columns: 48px 1fr 50px; gap: 8px; } .arc span { padding: 1px 6px; } }
+@media (max-width: 360px) { :root { --gutter: 16px; } .profile-row { grid-template-columns: 46px 1fr 68px; gap: 8px; } .arc span { padding: 1px 6px; } }
 @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; } .waiting-book span { transform: rotate(var(--tilt)); } }

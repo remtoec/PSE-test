@@ -87,8 +87,8 @@
       <h1 id="results-title" tabindex="-1"></h1>
       <p id="insight-lede" class="lede"></p>
       <div id="profile" class="profile"></div>
-      <p id="profile-legend" class="legend fine"><span class="key you"></span>你嘅故事<span class="key typical"></span>一般人寫同一組圖</p>
-      <p id="profile-note" class="fine"></p>
+      <p id="profile-legend" class="legend fine"><span class="key you"></span>你嘅故事<span class="key typical"></span>一般人寫同一組圖（已按長短調整）</p>
+      <p id="profile-note" class="fine" hidden></p>
       <p id="brought" class="brought-line" hidden></p>
     </div>
 
@@ -134,24 +134,11 @@
 
     <aside id="bookclub-note" class="bookclub-note" hidden><h3>讀書會見</h3><p></p></aside>
 
-    <details class="more technical"><summary>點樣計？限制同技術資料</summary>
-      <h4>點樣計</h4>
-      <p>每一句用兩種方法讀：原文直接分析，同翻譯成英文後再分析，兩者都用自動動機編碼模型 AMC。只要其中一種讀法認為一句有某個主題嘅機會達 30%，就計一次（模型本身要 50% 先算），每句每種主題最多計一次。呢個係刻意寧願多計、唔好漏：句子卡入面，未達 50% 嘅會標示「隱約」。上面嘅百分比，係三種主題之間嘅比例。</p>
-      <p>「一般」係 Schönbrodt 等人德國研究入面，專家為同一組圖編碼嘅平均主題比例。語言、編碼方法同故事長度都唔同，所以只係粗略參照，唔係常模、百分位或者分數。模型未經驗證適用於廣東話；故事亦唔係你嘅自傳。</p>
-      <h4>兩種讀法</h4>
-      <div id="tally" class="comparison"></div>
-      <div class="reading-note"><p id="headline"></p><p id="headline-note" class="fine"></p></div>
-      <div id="agreement" class="agreement"></div>
-      <h4>圖片 pull</h4>
-      <p class="fine">德文故事經專家編碼後，每個故事平均出現嘅主題次數；括號係故事數目，小樣本較唔穩定。</p>
-      <ul id="picture-pull" class="credits"></ul>
-      <h4>寫作時間</h4>
-      <div id="protocol" class="fine"></div><p id="stats" class="fine"></p>
-      <h4>理論背景</h4>
-      <p>Murray 喺 1930 年代設計 TAT，相信人會將自己最強嘅渴望投射落想像故事。McClelland 等人將佢標準化成 PSE，建立成就動機嘅編碼；之後再有權力動機（Winter）同親和／親密動機（McAdams）。成就同權力大致落喺「勝任」嘅範圍，親和同親密對應「關係」。</p>
-      <p class="fine">閱讀脈絡：Dan P. McAdams，<cite lang="en">The Art and Science of Personality Development</cite>（2015），第六章 “The Motivational Agenda”。</p>
-      <h4>圖片來源同模型</h4>
-      <ul id="credits-results" class="credits"></ul><p id="model-meta" class="fine"></p>
+    <details class="more about"><summary>關於呢個練習</summary>
+      <p>靈感來自心理學嘅圖畫故事練習（Picture Story Exercise）。你嘅故事會翻譯成英文，再由一個用專家評分故事訓練嘅模型閱讀。「一般」係研究入面其他人寫同一組圖嘅平均，已按故事長短調整。</p>
+      <p>呢個係輕鬆嘅自我探索，唔係心理測驗；四個故事只係一張快照。</p>
+      <h4>圖片來源</h4>
+      <ul id="credits-results" class="credits"></ul>
     </details>
 
     <div class="result-footer"><div class="actions"><button id="btn-download" class="primary">下載故事同結果 ↓</button><button id="btn-restart" class="quiet">返回開始</button></div><p class="fine">結果唔會保存，重新整理就會消失。</p></div>

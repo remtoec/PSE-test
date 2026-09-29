@@ -60,7 +60,9 @@ def main():
                 row, values = norms[norm_id]
                 picture["pull"] = {
                     "aff": values["aff.mean"], "ach": values["ach.mean"],
-                    "pow": values["pow.mean"], "n_stories": values["n.stories"],
+                    "pow": values["pow.mean"],
+                    "words": values["wc.mean"], "sentences": values["sc.mean"],
+                    "n_stories": values["n.stories"],
                     "norm_id": norm_id, "source_range": f"'Sheet 1'!A{row}:P{row}",
                 }
             else:
@@ -70,7 +72,7 @@ def main():
         "note": "Private internal exercise. Bookclub uses four fixed classical pictures; random mode uses all 48 archive pictures. Legacy p1-p9 images and IDs preserved for draft compatibility. New imports resized without cropping to at most 1200px and recompressed.",
         "collection": "PSE picture database, Schönbrodt et al. (2020/2021), https://osf.io/pqckn/",
         "pull_source": "picture_pull_norm_table.xlsx, Sheet 1, supplied OSF archive",
-        "pull_note": "German expert-coded mean motive imagery per story; picture context only, never participant norms or a correction to AMC counts. Sample sizes differ. Null means no verified row match.",
+        "pull_note": "German expert-coded (Winter 1994, sentence level) mean motive imagery per story, with mean words and sentences per story, from picture_pull_norm_table.xlsx. Used as a rough, length-adjusted reference (images per 1,000 words), never as participant norms. Sample sizes differ. Null means no verified row match.",
         "pictures": sorted(pictures, key=lambda p: (0 if p["id"].startswith("p") else 1, p["id"])),
     })
     CATALOG.write_text(json.dumps(catalog, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
