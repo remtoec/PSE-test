@@ -79,3 +79,11 @@ Not checked: physical iOS/Android browsers, screen readers, live model service.
 | `/__test__/` fixtures (normal and fallback) | `[]`. Adds: method off the page, about note with credits, no digits or % in the results summary or picture chips, English and themes on sentence cards, length-adjusted bars against reference lines, download keeps method and shares the screen's reading |
 | Full flow, `?mode=flow` | Pass (resume, locked review, busy/retry, story kept) |
 | `pytest` | 49 passed |
+
+### Replay choice and random draws
+
+| Check | Outcome |
+|---|---|
+| Pool audit | 26 of 48 pictures had < 30 reference stories (min 3), c08 none; ~96% of old random runs drew one. Eligible pool now 18 (81–2,316 stories), classic four excluded |
+| `/__test__/` fixtures | `[]`. Adds: pool rules; four replays give 16 distinct pictures; fifth starts a new cycle; swaps avoid current, seen and classic; excess skips forgotten; first-visit vs returning choice order; visible results button |
+| Browser run (390×844) | First visit and returning intros render as intended; random run draws from the eligible pool, records seen, offers 換一張; a swap records the skip; with a draft the intro shows resume instead of the choices; no console errors |

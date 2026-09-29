@@ -30,10 +30,13 @@
       <li><b>4 分鐘</b>寫故事</li>
       <li><b>× 4</b>然後睇結果</li>
     </ol>
-    <div class="actions intro-actions">
-      <button id="btn-start" class="primary">開始</button>
-      <button id="btn-resume" class="primary" hidden>繼續上次嘅故事</button>
-      <button id="btn-delete" class="quiet" hidden>刪除草稿</button>
+    <div id="choices" class="choices">
+      <button id="btn-start" class="choice primary" type="button"><span class="choice-title">開始：經典四張圖</span><span class="choice-note">第一次玩就揀呢組；讀書會大家都寫同一組。</span></button>
+      <button id="btn-random" class="choice" type="button"><span class="choice-title">玩過？換四張新圖</span><span class="choice-note">隨機抽研究常用圖片，每次唔同，仲可以換圖。</span></button>
+    </div>
+    <div id="resume-actions" class="actions intro-actions" hidden>
+      <button id="btn-resume" class="primary">繼續上次嘅故事</button>
+      <button id="btn-delete" class="quiet">刪除草稿</button>
     </div>
     <p class="fine">廣東話、書面語、英文，或者夾雜都得。冇標準答案，唔使文筆好。</p>
     <details class="more"><summary>開始之前要知</summary>
@@ -44,7 +47,6 @@
         <li>分析服務閒置時會休眠，提交後可能要等一陣。</li>
       </ul>
     </details>
-    <p class="fine repeat-play">玩過？<button id="btn-random" class="link" type="button">用隨機圖片再玩</button></p>
   </section>
 
   <section id="v-view" class="view exercise-view" hidden aria-labelledby="view-title">
@@ -142,8 +144,7 @@
       <ul id="credits-results" class="credits"></ul>
     </details>
 
-    <div class="result-footer"><div class="actions"><button id="btn-download" class="primary">下載故事同結果 ↓</button><button id="btn-restart" class="quiet">返回開始</button></div><p class="fine">結果唔會保存，重新整理就會消失。</p></div>
-    <p class="fine repeat-play"><button id="btn-again-random" class="link">用隨機圖片再寫一組</button></p>
+    <div class="result-footer"><div class="actions"><button id="btn-download" class="primary">下載故事同結果 ↓</button><button id="btn-again-random" class="secondary">換四張新圖再玩 →</button><button id="btn-restart" class="quiet">返回開始</button></div><p class="fine">結果唔會保存，重新整理就會消失。</p></div>
   </section>
   <noscript><p class="notice">呢個活動需要 JavaScript。</p></noscript>
 </main>

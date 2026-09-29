@@ -57,7 +57,14 @@ button:disabled { opacity: .45; cursor: not-allowed; }
 .steps li { background: var(--card); border: 1px solid var(--rule); border-radius: 4px; padding: 10px 8px; text-align: center; font-size: 13px; color: var(--ink-2); line-height: 1.5; }
 .steps b { display: block; font: 600 17px/1.5 var(--display); color: var(--ink); }
 .intro-actions { margin: 20px 0 12px; }
-.repeat-play { margin: 16px 0 0; }
+.choices { display: grid; gap: 10px; margin: 20px 0 12px; }
+button.choice { display: grid; gap: 2px; text-align: left; padding: 14px 18px; background: var(--card); border-color: var(--rule); border-radius: 6px; }
+button.choice.primary { background: var(--binding); border-color: var(--binding); color: var(--card); }
+.choice-title { font: 600 17px/1.5 var(--body); }
+.choice-note { font-size: 13px; line-height: 1.6; color: var(--ink-2); font-weight: 400; }
+button.choice.primary .choice-note { color: #d6e0d3; }
+button.secondary { background: var(--card); border-color: var(--binding); color: var(--ink); }
+@media (hover: hover) { button.choice:not(.primary):hover, button.secondary:hover { background: var(--paper-2); } }
 ul.plain { padding-left: 18px; margin: 0; font-size: 14px; color: var(--ink-2); }
 ul.plain li { margin-bottom: 8px; }
 details.more { border-top: 1px solid var(--rule); margin-top: 16px; }

@@ -1,7 +1,12 @@
 "use strict";
 
 const KEY = "pse-hk:draft:v1";
-const SKIP_KEY = "pse-hk:skipped:v1"; // pictures skipped in any run; never drawn again
+const SKIP_KEY = "pse-hk:skipped:v1"; // pictures skipped in any run; not drawn again until the pool runs out
+const SEEN_KEY = "pse-hk:seen:v1";    // random-mode pictures already drawn; avoided until all have been seen
+const PLAYED_KEY = "pse-hk:played:v1"; // set after a result, so the intro suggests new pictures next time
+// Random mode draws only pictures whose German reference rests on at least this many stories;
+// smaller samples (down to 3 stories) make the reference line and picture emphasis noise.
+const MIN_NORM_STORIES = 30;
 const PER_RUN = 4;
 const MAX_SKIPS = 4;
 const MAX_AGE_MS = 7 * 24 * 3600 * 1000;
@@ -93,8 +98,31 @@ function fresh() {
 const byId = (id) => pool.find((p) => p.id === id);
 function usePictures() { pictures = S.order.map(byId); }
 
-function skipped() {
-  try { return JSON.parse(localStorage.getItem(SKIP_KEY)) || []; } catch { return []; }
+const readList = (key) => { try { return JSON.parse(localStorage.getItem(key)) || []; } catch { return []; } };
+const skipped = () => readList(SKIP_KEY);
+function remember(key, ids) {
+  try { localStorage.setItem(key, JSON.stringify([...new Set([...readList(key), ...ids])])); } catch { /* storage unavailable */ }
+}
+function forget(key) {
+  try { localStorage.removeItem(key); } catch { /* storage unavailable */ }
+}
+function played() {
+  try { return !!localStorage.getItem(PLAYED_KEY); } catch { return false; }
+}
+
+/** Random mode: pictures with a solid research reference, never the classic set, so a replay means new pictures. */
+const randomPool = () => pool.filter((p) => p.pull && p.pull.n_stories >= MIN_NORM_STORIES && !BOOKCLUB_SET.includes(p.id));
+
+/** Unseen, unskipped pictures; forgets what was seen, then what was skipped, rather than block the activity. */
+function candidates(exclude = [], need = 1) {
+  const pick = (...keys) => {
+    const gone = new Set([...exclude, ...keys.flatMap(readList)]);
+    return randomPool().filter((p) => !gone.has(p.id));
+  };
+  let free = pick(SKIP_KEY, SEEN_KEY);
+  if (free.length < need) { forget(SEEN_KEY); free = pick(SKIP_KEY); }
+  if (free.length < need) { forget(SKIP_KEY); free = pick(); }
+  return free;
 }
 
 function takeRandom(list) {
@@ -108,30 +136,22 @@ function draw() {
     S.stories = Object.fromEntries(S.order.map((id) => [id, ""]));
     return usePictures();
   }
-  const gone = new Set(skipped());
-  let free = pool.filter((p) => !gone.has(p.id));
-  if (free.length < PER_RUN) {
-    // ponytail: pool used up by old skips, so forget them rather than block the activity
-    try { localStorage.removeItem(SKIP_KEY); } catch { /* storage unavailable */ }
-    free = [...pool];
-  }
+  const free = candidates([], PER_RUN);
   S.order = Array.from({ length: PER_RUN }, () => takeRandom(free).id);
+  remember(SEEN_KEY, S.order);
   S.stories = Object.fromEntries(S.order.map((id) => [id, ""]));
   usePictures();
 }
 
-function replacements() {
-  const gone = new Set([...skipped(), ...S.order]);
-  return pool.filter((p) => !gone.has(p.id));
-}
-
 function skip() {
   const pid = S.order[S.round];
-  const left = replacements();
-  if (!S.skipsLeft || !left.length || composing) return;
+  if (!S.skipsLeft || composing) return;
   if (S.stories[pid].trim() && !confirm("換圖會刪除你為呢張圖寫嘅故事，確定？")) return;
-  try { localStorage.setItem(SKIP_KEY, JSON.stringify([...skipped(), pid])); } catch { /* still skipped for this run */ }
+  remember(SKIP_KEY, [pid]);
+  const left = candidates(S.order);
+  if (!left.length) return;
   const next = takeRandom(left).id;
+  remember(SEEN_KEY, [next]);
   S.order[S.round] = next;
   delete S.stories[pid]; delete S.writeMs[pid];
   S.stories[next] = "";
@@ -142,7 +162,8 @@ function skip() {
 }
 
 function updateSkip() {
-  const can = S.skipsLeft > 0 && replacements().length > 0;
+  // candidates() can always refill by forgetting, so any other eligible picture means a swap is possible.
+  const can = S.skipsLeft > 0 && randomPool().some((p) => !S.order.includes(p.id));
   document.querySelectorAll(".skip").forEach((b) => {
     b.hidden = !can;
     b.textContent = `換一張（仲可以換 ${S.skipsLeft} 次）`;
@@ -196,11 +217,26 @@ function show(id) {
 
 function goIntro() {
   const d = load();
-  $("btn-start").hidden = !!d;
-  $("btn-random").hidden = !!d;
-  $("btn-resume").hidden = !d;
-  $("btn-delete").hidden = !d;
+  $("choices").hidden = !!d;
+  $("resume-actions").hidden = !d;
+  setChoices(played());
   show("v-intro");
+}
+
+/** First visit: the classic set leads. After a result: new pictures lead, the classic set stays one tap away. */
+function setChoices(returning) {
+  const classic = $("btn-start"), fresher = $("btn-random");
+  classic.className = returning ? "choice" : "choice primary";
+  fresher.className = returning ? "choice primary" : "choice";
+  const [ct, cn] = returning ? ["再寫一次經典四張", "同一組圖，睇下今次寫得一唔一樣。"]
+    : ["開始：經典四張圖", "第一次玩就揀呢組；讀書會大家都寫同一組。"];
+  const [ft, fn] = returning ? ["換四張新圖再玩", "隨機抽你未寫過嘅圖，唔啱眼仲可以換。"]
+    : ["玩過？換四張新圖", "隨機抽研究常用圖片，每次唔同，仲可以換圖。"];
+  classic.querySelector(".choice-title").textContent = ct;
+  classic.querySelector(".choice-note").textContent = cn;
+  fresher.querySelector(".choice-title").textContent = ft;
+  fresher.querySelector(".choice-note").textContent = fn;
+  $("choices").replaceChildren(...(returning ? [fresher, classic] : [classic, fresher]));
 }
 
 function resume(d) {
@@ -452,6 +488,7 @@ async function submit() {
         return showError("收到嘅結果唔完整，未能顯示。你嘅故事仍然保存喺呢度。");
       }
       lastResult = data;
+      try { localStorage.setItem(PLAYED_KEY, "1"); } catch { /* storage unavailable */ }
       clearDraft(); // only after a validated result has rendered
       S = fresh();
     });

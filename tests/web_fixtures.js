@@ -53,11 +53,39 @@ function runWebFixtures() {
   check("language line above the box", ["英文", "廣東話", "書面語", "夾雜"].every((x) => document.getElementById("lang-note").textContent.includes(x))
     && document.getElementById("lang-note").compareDocumentPosition(document.getElementById("story")) & Node.DOCUMENT_POSITION_FOLLOWING);
   check("no continuation framing", !document.getElementById("v-write").textContent.includes("然後"));
+  const stored = Object.fromEntries([SKIP_KEY, SEEN_KEY, PLAYED_KEY].map((k) => [k, localStorage.getItem(k)]));
   S = fresh(); S.mode = "random"; draw();
   check("random draws four", new Set(S.order).size === 4 && S.skipsLeft === MAX_SKIPS);
   check("random pool covers whole archive", pool.length === 48
     && pool.filter(p => p.archive_file.startsWith("classic images/")).length === 18
     && pool.filter(p => p.archive_file.startsWith("new images/")).length === 30);
+  // Random mode: solid references only, never the classic set, no repeats until every eligible picture is seen.
+  [SKIP_KEY, SEEN_KEY].forEach((k) => localStorage.removeItem(k));
+  const eligible = randomPool();
+  check("random pool: solid references outside the classic set", eligible.length === 18
+    && eligible.every((p) => p.pull && p.pull.n_stories >= MIN_NORM_STORIES && !BOOKCLUB_SET.includes(p.id))
+    && !eligible.some((p) => p.id === "c08" || p.id === "n26"));
+  const runs = Array.from({ length: 4 }, () => { S = fresh(); S.mode = "random"; draw(); return [...S.order]; });
+  check("four replays never repeat a picture", new Set(runs.flat()).size === 16
+    && runs.flat().every((id) => eligible.some((p) => p.id === id)));
+  S = fresh(); S.mode = "random"; draw();
+  check("pool exhausted: seen list starts a new cycle", new Set(S.order).size === 4 && readList(SEEN_KEY).length === 4);
+  const swap = candidates(S.order);
+  check("swaps avoid the current, seen and classic pictures", swap.length === 14
+    && !swap.some((p) => S.order.includes(p.id) || BOOKCLUB_SET.includes(p.id)));
+  localStorage.setItem(SKIP_KEY, JSON.stringify(eligible.slice(0, 16).map((p) => p.id)));
+  S = fresh(); S.mode = "random"; draw();
+  check("too many skips are forgotten rather than blocking", new Set(S.order).size === 4);
+  setChoices(false);
+  check("first visit leads with the classic set", document.getElementById("choices").firstElementChild.id === "btn-start"
+    && document.getElementById("btn-start").classList.contains("primary") && !document.getElementById("btn-random").classList.contains("primary")
+    && document.getElementById("btn-random").textContent.includes("玩過？"));
+  setChoices(true);
+  check("returning players are offered new pictures first", document.getElementById("choices").firstElementChild.id === "btn-random"
+    && document.getElementById("btn-random").classList.contains("primary") && document.getElementById("btn-start").textContent.includes("經典"));
+  setChoices(false);
+  check("results offer new pictures visibly", document.getElementById("btn-again-random").classList.contains("secondary"));
+  Object.entries(stored).forEach(([k, v]) => (v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v)));
   S = fresh();
 
   pictures = ["p1", "p2", "p3", "p4"].map(byId); // results render against the run's pictures

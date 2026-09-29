@@ -1,5 +1,31 @@
 # Changelog
 
+## 2026-09-29 (last) — Classic set first, new pictures on replay; sound random draws
+
+- **Two visible choices on the intro instead of a small link.** First visit:
+  「開始：經典四張圖」 leads, 「玩過？換四張新圖」 follows. After a completed result the
+  order flips: 「換四張新圖再玩」 leads, 「再寫一次經典四張」 follows. The results page
+  gets a visible 「換四張新圖再玩」 button next to the download.
+  *Why:* owner request; the replay option was easy to miss. First-timers should
+  write the shared classic set (the bookclub discusses the same pictures);
+  returning players mostly want something new. A local `pse-hk:played:v1` flag
+  records a completed result so the intro can tell the two apart.
+- **Random mode draws only the 18 non-classic pictures with a reference of at
+  least 30 stories** (in practice 81–2,316).
+  *Why:* checking the pool showed that 26 of 48 pictures have norms from fewer
+  than 30 stories (some from 3), and c08 has none. About 96% of random runs
+  included such a picture, so the reference line, 「圖片參照較偏向」 and ✦ were
+  largely noise, and about 8% lost the comparison entirely. Those pictures stay
+  in the catalogue so old drafts still load.
+- **The classic four are never drawn in random mode.**
+  *Why:* about 30% of replays previously included a classic picture, which
+  defeats "try different pictures".
+- **Pictures already drawn on this browser are avoided until all 18 have been
+  seen;** swaps follow the same rule. When too few remain, the seen list is
+  forgotten first, then the skip list.
+  *Why:* without memory, a replay could repeat the previous run's pictures.
+  Forgetting instead of blocking keeps the activity available.
+
 ## 2026-09-29 (later) — English first, story length, words not numbers
 
 Builds on the evidence-grounded reading below; its gates, faint-label policy,

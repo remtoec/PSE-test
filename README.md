@@ -67,7 +67,8 @@ Doing it at home also spreads the load. The backend scores one story set at a ti
 
 - Four pictures per run. Each is shown for 10 s, followed by a soft 4-minute writing period.
 - **Bookclub mode (default):** new runs show boxer, couple by river, women in laboratory, and ship captain, in that order (`BOOKCLUB_SET`: c05, c07, c18, c15), without skipping. Summed German picture-pull means: aff 4.18, ach 3.42, pow 3.99. Existing drafts keep their original pictures.
-- **Random mode:** four pictures from the entire supplied archive (18 classical and 30 newer pictures). Participants may skip up to 4 per run. Skipped pictures are excluded on that browser until fewer than four eligible pictures remain, when the exclusion list resets.
+- **Random mode (「換四張新圖」):** four pictures from the 18 outside the classic set whose German reference rests on at least 30 stories (`MIN_NORM_STORIES`; in practice 81–2,316). Pictures with tiny or missing norms stay in the catalogue for old drafts but are not drawn, because a reference from 3–9 stories makes the reference line and picture emphasis noise. Pictures already drawn on this browser are avoided until all 18 have been seen, so about four replays bring only new pictures. Participants may skip up to 4 per run; skipped pictures are avoided too. When too few remain, the seen list is forgotten first, then the skip list, so the activity never blocks.
+- **Choosing a set:** the intro offers two buttons. On a first visit 「開始：經典四張圖」 leads and 「玩過？換四張新圖」 follows; after a completed result the order flips (「換四張新圖再玩」 first, 「再寫一次經典四張」 second). The results page has a visible 「換四張新圖再玩」 button.
 - No motive category is named before writing. Results show a descriptive interpretation in words, a profile of bars against length-adjusted research reference lines when complete, exact supporting sentences, and relative picture emphasis. Balanced motive reflection notes, sentence cards (English and its themes), three SDT questions and a short 「關於呢個練習」 note with credits follow.
 - A story is final once the participant presses「下一張」, so later pictures cannot change earlier stories. The review screen is read-only, except for a story the length checks reject.
 - The writing screen asks for a complete story (「寫出成個故事」) in any comfortable language or mix. Placeholder prompts cover the scene, before, characters' inner experience and ending, with optional names or roles for clarity. Participants choose whom to write about; no gendered pronouns or answers for every person are required. Persistent reminders read 此刻 · 前因 · 內心 · 結局. A short story gets one optional, non-judgmental invitation to add thoughts or an ending. No self-revelation claim is made during writing. Guidance v4 preserves earlier draft history.
@@ -108,7 +109,7 @@ A motive counts at most once per sentence. Counts are raw, never per 1,000 words
 
 ## Pictures
 
-The private exercise uses the supplied `assets/pqckn-osfstorage-archive`: 18 classical pictures and 30 newer pictures. `web/stimuli.json` records the archive filename, source, dimensions and workbook row for each verified pull match. All 48 are eligible for random mode. The historical nine web images/IDs remain unchanged to preserve saved drafts; the other 39 are resized without cropping and compressed for web use. Existing licence records are retained; newly imported files are identified as supplied for private use without inventing individual licence claims.
+The private exercise uses the supplied `assets/pqckn-osfstorage-archive`: 18 classical pictures and 30 newer pictures. `web/stimuli.json` records the archive filename, source, dimensions and workbook row for each verified pull match. Random mode draws only the 18 non-classic pictures with at least 30 reference stories; all 48 remain loadable for existing drafts. The historical nine web images/IDs remain unchanged to preserve saved drafts; the other 39 are resized without cropping and compressed for web use. Existing licence records are retained; newly imported files are identified as supplied for private use without inventing individual licence claims.
 
 The default order is:
 
@@ -159,7 +160,7 @@ The frontend and backend must be deployed together whenever the picture pool cha
 
 ## Data
 
-Drafts stay in the participant's browser (`pse-hk:draft:v1`). Skipped picture ids (random mode only) are stored under `pse-hk:skipped:v1`. The reflection questions on the results page are static text: nothing the participant thinks about their own goals is typed, stored or sent. On submit, the stories go to Modal for coding and to Cloudflare Workers AI for translation. Nothing is stored server-side, and logs contain only ids, counts, timings and error codes. See `docs/launch-checks.md`.
+Drafts stay in the participant's browser (`pse-hk:draft:v1`). Random mode keeps skipped and already-drawn picture ids (`pse-hk:skipped:v1`, `pse-hk:seen:v1`), and a completed result sets `pse-hk:played:v1` so the intro can suggest new pictures next time. None of these leave the browser. The reflection questions on the results page are static text: nothing the participant thinks about their own goals is typed, stored or sent. On submit, the stories go to Modal for coding and to Cloudflare Workers AI for translation. Nothing is stored server-side, and logs contain only ids, counts, timings and error codes. See `docs/launch-checks.md`.
 
 ## Known limitations
 
