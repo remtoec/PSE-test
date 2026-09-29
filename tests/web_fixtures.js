@@ -101,7 +101,7 @@ function runWebFixtures() {
   const HN = (d) => headline(d)[1];
   const summaryText = () => ["results-title", "insight-lede", "profile", "profile-legend", "profile-note"]
     .map((id) => document.getElementById(id).textContent).join("")
-    + [...document.querySelectorAll("#evidence p, #brought")].map((e) => e.textContent.replace(/第 \d+ 個/g, "")).join("");
+    + [...document.querySelectorAll("#evidence p, #brought")].map((e) => e.textContent.replace(/第 [\d、]+ 個/g, "")).join("");
   const render = (d) => { validateResult(d); renderResults(d); };
 
   const ten = (d, t) => Array.from({ length: 10 }, () => [d, t]);
@@ -122,6 +122,9 @@ function runWebFixtures() {
     && document.getElementById("evidence-section").compareDocumentPosition(document.getElementById("meaning")) & Node.DOCUMENT_POSITION_FOLLOWING);
   check("comparison belongs in analysis details", document.getElementById("comparison-note").textContent.includes("研究參照")
     && !document.getElementById("insight-lede").textContent.includes("研究參照"));
+  check("analysis belongs with the story interpretation", document.getElementById("analysis-detail").parentElement.id === "evidence-section");
+  check("original stories follow the reflection", document.getElementById("stories-detail").parentElement.id === "reflection"
+    && document.getElementById("reflection-note").nextElementSibling.id === "stories-detail");
   check("headline supported by literal source quotes", document.querySelector("#evidence blockquote").textContent === "句子 0"
     && document.querySelectorAll("#evidence blockquote").length === 2);
   check("bars are length-adjusted against reference lines", summarise(shared).refRates && summarise(shared).youRates
@@ -211,7 +214,9 @@ function runWebFixtures() {
 
   render(club([[[], []], [["aff"], []], [[], []], [[], []]]));
   check("sparse reveals own stories instead of invented evidence", document.getElementById("profile").hidden
-    && document.getElementById("evidence-section").hidden && document.getElementById("stories-detail").open
+    && document.getElementById("evidence").hidden && !document.getElementById("evidence-section").hidden
+    && !document.getElementById("evidence-empty").hidden && document.getElementById("story-connection").hidden
+    && document.getElementById("stories-detail").open
     && document.querySelector("#cards .pic-group").open
     && ![...document.querySelectorAll("#motive-notes > details")].some((x) => x.open));
   const unsafe = club(ten(["aff"], ["aff"]));
@@ -263,6 +268,10 @@ function runWebFixtures() {
   check("download shares the screen's reading and keeps the method", exported.includes(document.getElementById("insight-lede").textContent)
     && [...document.querySelectorAll("#evidence blockquote")].every(el => exported.includes(el.textContent))
     && READING_METHOD.every((t) => exported.includes(t)) && exported.includes("技術記錄"));
+  check("interpretations and connections are visible and match the download",
+    document.querySelectorAll("#evidence .theme-reading").length === 3
+    && [...document.querySelectorAll("#evidence .theme-reading > p, #story-connection p")].every(el => exported.includes(el.textContent))
+    && !document.getElementById("story-connection").hidden);
   check("new result closes the about note", !document.querySelector("#v-results details.about").open);
   check("consistent theme labels", Object.values(NAMES).join() === "成就,關係,影響"
     && !document.querySelector("#motive-notes").textContent.includes("勝任感"));

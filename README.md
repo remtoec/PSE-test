@@ -22,9 +22,14 @@ Repeated trait disclaimers and the extra 勝任感／歸屬感 grouping have bee
 The relationship category includes affiliation imagery; it does not separately
 measure intimacy. Power retains both helpful and domineering possibilities.
 
-The narrative uses fixed category templates, not a generated interpretation
-of each plot. Excerpts are exact source sentences, selected from different
-stories where possible. Strong language still requires the existing evidence
+The narrative uses book-based reading lenses selected by the detected themes,
+with an explanation of each pursuit's appeal and possible tensions. A short
+comparison distinguishes themes appearing in the same story from those in
+separate stories; it does not assume they belong to the same character.
+These are fixed thematic interpretations, not generated plot summaries.
+Excerpts are exact source sentences. Analysis details sit within the interpretation
+section, and the original stories follow the reflection question.
+Strong language still requires the existing evidence
 gates; tentative results stay tentative, ties retain both themes, and sparse
 results open the participant's own stories rather than inventing an explanation.
 A balanced reference does not imply equal motives: its copy names only themes

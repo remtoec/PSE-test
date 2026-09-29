@@ -174,3 +174,48 @@ test('download keeps the numbers for research use', () => {
   assert.match(text, /技術記錄/);
   assert.doesNotMatch(text, /undefined|NaN/);
 });
+
+test('interpretations include secondary themes and link them to the correct stories', () => {
+  context.data = {translation_failed:false, sentences:[
+    row('c05',['pow'],{translated:score(['ach'])}), row('c05',[],{translated:score(['ach'])}),
+    row('c07',[],{translated:score(['aff'])}), row('c18',[],{translated:score(['ach','aff'])}),
+    row('c15',[],{translated:score([],{pow:.45})}),
+  ]};
+  run('pictures = ["c05","c07","c18","c15"].map(id => fixturePics.find(p => p.id === id))');
+  const x = run('summarise(data)');
+  assert.ok(x.interpretations?.length, 'results need interpretation alongside quotations');
+  assert.equal(x.interpretations.map(t=>t.motive).sort().join(), 'ach,aff');
+  assert.equal(x.interpretations.find(t=>t.motive==='ach').pictures.join(), '1,3');
+  assert.equal(x.interpretations.find(t=>t.motive==='aff').pictures.join(), '2,3');
+  assert.equal(x.connection.pictures.join(), '3');
+  assert.equal(x.connection.kind, 'shared-story');
+});
+
+test('themes in separate stories are compared without claiming they occur together', () => {
+  context.data = {translation_failed:false, sentences:[
+    row('c05',['ach']),row('c05',['ach']),row('c07',['aff']),row('c15',['pow'])
+  ]};
+  const x = run('summarise(data)');
+  assert.equal(x.connection?.kind, 'across-stories');
+  assert.equal(x.connection.pictures.length, 0);
+  assert.equal(x.interpretations.length, 3);
+});
+
+test('sparse and faint-only results do not invent thematic interpretations', () => {
+  context.data = {translation_failed:true, sentences:[row('c05',['ach','aff','pow'])]};
+  assert.equal(run('summarise(data).interpretations?.length'), 0);
+  assert.equal(run('summarise(data).connection'), null);
+});
+
+test('download includes the same interpretations and connections as the screen model', () => {
+  const rows = context.fixturePics.flatMap(p=>[row(p.id,['ach','aff']),row(p.id,['ach'])]);
+  context.data = {sentences:rows,translation_failed:true,meta:{amc_model:'fixture',amc_revision:'1234567',translator:'fixture',prompt_version:'v1'},summary:{direct:{ach:8,aff:4,pow:0},translated:null,agreement:null}};
+  const x = run('summarise(data)');
+  const download = run('resultText(data)');
+  assert.ok(x.interpretations?.length);
+  for (const interpretation of x.interpretations) {
+    assert.ok(download.includes(interpretation.body));
+    assert.ok(download.includes(interpretation.location));
+  }
+  assert.ok(download.includes(x.connection.body));
+});

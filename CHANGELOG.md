@@ -1,5 +1,12 @@
 # Changelog
 
+## 2026-09-29 — Fuller result interpretation and section placement
+
+- Moved analysis details into the characters' pursuits section, and the four original stories directly below the reflection question.
+- Added concise reading lenses for every detected theme, including secondary themes, and a comparison based on which stories contain each theme. Same-story themes do not imply the same character or an actual conflict.
+- Page and download share interpretations, exact excerpts and section order. Reading v5 records the presentation change; scoring and backend remain unchanged.
+- Added regression coverage for secondary themes, story locations, English-first/faint exclusions, sparse handling and export consistency, plus a local 390px preview route.
+
 ## 2026-09-29 — Bookclub narrative copy and booklet styling
 
 - Applied the approved copy direction across entry, picture/writing prompts, review, waiting/error states, results, and text downloads. Natural Hong Kong written Chinese replaces translated phrasing and repeated disclaimers.

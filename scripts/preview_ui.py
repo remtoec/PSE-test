@@ -18,6 +18,13 @@ class Preview(SimpleHTTPRequestHandler):
             elif name == '/__test__/harness.js':
                 body = (ROOT / 'tests/ui_harness.js').read_bytes()
                 mime = 'text/javascript; charset=utf-8'
+            elif name == '/__test__/phone':
+                body = ('<!doctype html><html lang="zh-HK"><meta charset="utf-8">'
+                        '<title>Phone result preview</title><body style="margin:0;background:#ddd">'
+                        '<iframe title="390px phone preview" src="/__test__/" '
+                        'style="display:block;width:390px;height:844px;border:0;margin:auto"></iframe>'
+                        '</body></html>').encode()
+                mime = 'text/html; charset=utf-8'
             elif name == '/__test__/':
                 html = (ROOT / 'web/index.html').read_text(encoding='utf-8')
                 html = html.replace('<head>', '<head><base href="/">')

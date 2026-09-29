@@ -67,6 +67,30 @@ const RESULT_COPY = {
     "「關係」在這裏包括想被接納、維繫關係等內容。書中另有談親密動機；今次的分析沒有把它獨立量度。",
   ],
 };
+// Book-based reading lenses selected from actual flags. They describe possible
+// stakes of a pursuit; they do not infer a character's plot or the writer's traits.
+const INTERPRETATION_COPY = {
+  ach: {
+    title: "做好一件事，也在回答「我能做到甚麼」。",
+    body: "從成就這條線讀，事情的難度、付出的功夫、最後是否進步，都有了分量。達到一個標準，可以讓人肯定自己；但若標準愈推愈高，也可能一直覺得還未夠好。",
+    question: "回到這段故事：人物想跨過的是自己的限制，還是別人定下的標準？",
+  },
+  aff: {
+    title: "有人願意靠近，事情才有了不同的意義。",
+    body: "從關係這條線讀，一次回應、一份接納，都可以改變人物眼前的處境。靠近別人可以帶來支持；但維繫關係時，也可能要面對自己的需要和對方期望之間的距離。",
+    question: "回到這段故事：怎樣的相處，才算是人物真正想要的親近？",
+  },
+  pow: {
+    title: "想有影響，也是在爭取一個由自己決定的位置。",
+    body: "從影響這條線讀，可以留意誰能作主、誰的話有人聽。影響力可以讓人保護別人、推動改變，也可以用來要求別人服從；願望的分別，在於人物怎樣使用它。",
+    question: "回到這段故事：人物想改變甚麼，又希望別人怎樣看自己？",
+  },
+};
+const CONNECTION_COPY = {
+  "ach,aff": "做好事情和維繫關係，可以互相支持：有人同行，可能更有勇氣迎接挑戰。但若兩者不能兼得，人物願意為哪一邊讓步？這是重讀時值得留意的選擇。",
+  "ach,pow": "把事情做好，和讓自己的話有分量，有時會走在一起。值得分辨的是：人物在意事情本身做得怎樣，還是在意誰能決定、誰得到認同？兩者會把故事帶往不同方向。",
+  "aff,pow": "靠近別人和影響別人，有時只隔着一個決定。替對方着想，可能是支持，也可能變成替對方作主。可以留意故事有沒有讓彼此保留選擇的空間。",
+};
 const MIN_THEMES = 3;      // label floor; assessReading also checks distinct sentences and pictures
 const LEAN = 0.12;         // share above the pictures' typical share that counts as a clear lean
 const TILT = 0.05;         // ...and as a slight one
@@ -80,7 +104,7 @@ const TYPICAL_OF_MAX = 0.75; // a picture "usually" pulls motives within 75% of 
 // German reference pulls: aff 4.18, ach 3.42, pow 3.99. A rough share benchmark, never a score correction.
 const BOOKCLUB_SET = ["c05", "c07", "c18", "c15"];
 const GUIDE_VERSION = "pse-hk-guidance-v5";
-const READING_VERSION = "pse-hk-reading-v4";
+const READING_VERSION = "pse-hk-reading-v5";
 // Shared verbatim by the screen and download to keep method claims in sync.
 const READING_METHOD = [
   "分析以英文翻譯為主：AMC 曾在翻譯成英文的研究故事上測試，廣東話則未有驗證；翻譯失敗時才用原文。主題只計模型正式標記，每句每種主題最多一次。未有正式標記、模型分值達 0.30 的，會在句子詳情標示「隱約」，不計入主題比例、重點句或 ✦。分值並非經核實的正確機率。",
@@ -861,6 +885,45 @@ function protocolNotes() {
   return { times, notes, guidance: S.guidance };
 }
 
+const storyLocations = (numbers) => `第 ${numbers.join("、")} 個故事`;
+
+/** Keep thematic interpretation distinct from quotations and plot-level claims. */
+function interpretStories(sentences, pics, r) {
+  if (r.kind === "sparse") return { interpretations: [], connection: null };
+  const present = MOTIVES.filter((m) => r.support[m] > 0);
+  const focused = r.kind === "balanced" ? [] : r.focus;
+  const order = [...focused, ...present.filter((m) => !focused.includes(m))];
+  const interpretations = order.map((motive) => {
+    const numbers = pics.flatMap((p, i) => sentences.some((s) => s.picture_id === p.id && themesOf(s).has(motive)) ? [i + 1] : []);
+    const excerpts = numbers.slice(0, present.length === 1 ? 2 : 1).map((picture) => ({
+      motive, picture, stories: numbers.length,
+      source: sentences.find((s) => s.picture_id === pics[picture - 1].id && themesOf(s).has(motive)).source,
+    }));
+    return { motive, pictures: numbers, location: `${storyLocations(numbers)}出現了「${NAMES[motive]}」的線索。`,
+      ...INTERPRETATION_COPY[motive], excerpts };
+  });
+  if (present.length < 2) return { interpretations, connection: null };
+  const pairs = present.flatMap((a, i) => present.slice(i + 1).map((b) => ({
+    motives: [a, b], pictures: pics.flatMap((p, n) => {
+      const themes = new Set(sentences.filter((s) => s.picture_id === p.id).flatMap((s) => [...themesOf(s)]));
+      return themes.has(a) && themes.has(b) ? [n + 1] : [];
+    }),
+  }))).sort((a, b) => b.pictures.length - a.pictures.length);
+  const shared = pairs[0];
+  const connection = shared.pictures.length ? {
+    kind: "shared-story", pictures: shared.pictures, title: "當兩種追求走進同一個故事",
+    location: `${storyLocations(shared.pictures)}同時有${quote(shared.motives)}的線索；它們可能屬於同一人物，也可能分別落在不同人物身上。`,
+    body: CONNECTION_COPY[shared.motives.join(",")],
+  } : {
+    kind: "across-stories", pictures: [], title: "換一個故事，也換一種在意",
+    location: `${quote(present)}的線索，分別出現在不同故事。`,
+    body: present.length === 3
+      ? "把故事放在一起看，滿足可以來自做好一件事、與人親近，或讓自己的決定產生影響。可以比較幾個結局：你讓哪一種願望實現了，又把哪一種願望留了下來？"
+      : CONNECTION_COPY[present.join(",")],
+  };
+  return { interpretations, connection };
+}
+
 /** Everything the results page and the download say about this run. */
 function summarise(d) {
   const c = combined(d.sentences);
@@ -873,19 +936,9 @@ function summarise(d) {
   const overall = youRates && refRates && total(refRates) ? total(youRates) / total(refRates) : null;
   const byPic = pictures.map((p) => d.sentences.filter((s) => s.picture_id === p.id));
   const brought = pictures.map((p, i) => [i, broughtIn(p, combined(byPic[i]))]).filter(([, ms]) => ms.length);
-  const evidence = [];
-  const used = new Set();
-  const motives = r.kind === "balanced" ? MOTIVES.filter((m) => c[m]) : r.focus;
-  if (r.kind !== "sparse") for (const motive of motives) {
-    const seenPictures = new Set();
-    for (const s of d.sentences) {
-      if (!themesOf(s).has(motive) || used.has(s) || seenPictures.has(s.picture_id)) continue;
-      evidence.push({ motive, source: s.source, picture: pictures.findIndex((p) => p.id === s.picture_id) + 1, stories: r.support[motive] });
-      used.add(s); seenPictures.add(s.picture_id);
-      if (seenPictures.size >= (r.kind === "balanced" ? 1 : 2)) break;
-    }
-  }
-  return { c, typical, r, byPic, brought, evidence, words, refRates, youRates, overall,
+  const { interpretations, connection } = interpretStories(d.sentences, pictures, r);
+  const evidence = interpretations.flatMap((item) => item.excerpts);
+  return { c, typical, r, byPic, brought, evidence, interpretations, connection, words, refRates, youRates, overall,
     text: insightText(r), reflection: reflectionText(r) };
 }
 
@@ -911,10 +964,16 @@ function renderResults(d) {
   $("profile-legend").hidden = sparse || !x.typical;
   $("comparison-note").textContent = comparisonText(x);
   $("profile-explanation").textContent = profileExplanation(x);
-  $("evidence").replaceChildren(...x.evidence.map((e) => h("figure", {},
-    h("figcaption", { class: "fine" }, evidenceLead(e)), h("blockquote", {}, e.source))));
-  $("evidence-section").hidden = !x.evidence.length;
+  $("evidence").replaceChildren(...x.interpretations.map((item) => h("article", { class: "theme-reading" },
+    h("p", { class: "fine reading-location" }, item.location), h("h3", {}, item.title),
+    h("p", {}, item.body),
+    ...item.excerpts.map((e) => h("figure", {}, h("figcaption", { class: "fine" }, evidenceLead(e)), h("blockquote", {}, e.source))),
+    h("p", { class: "theme-question" }, item.question))));
   $("evidence").hidden = !x.evidence.length;
+  $("evidence-empty").hidden = !!x.evidence.length;
+  $("story-connection").replaceChildren(...(x.connection ? [h("h3", {}, x.connection.title),
+    h("p", { class: "fine" }, x.connection.location), h("p", {}, x.connection.body)] : []));
+  $("story-connection").hidden = !x.connection;
   $("brought").textContent = broughtText(x.brought);
   $("brought").hidden = !x.brought.length;
 
@@ -954,8 +1013,21 @@ function resultText(d) {
     ...(d.translation_failed ? [resultNotice(true)] : []), ""];
   if (x.evidence.length) {
     lines.push("—— 從你寫下的句子看起 ——");
-    for (const e of x.evidence) lines.push(evidenceLead(e), e.source, "");
+    for (const item of x.interpretations) {
+      lines.push(item.location, item.title, item.body);
+      for (const e of item.excerpts) lines.push(evidenceLead(e), e.source);
+      lines.push(item.question, "");
+    }
+    if (x.connection) lines.push(x.connection.title, x.connection.location, x.connection.body, "");
   }
+  lines.push("—— 分析詳情 ——", comparisonText(x), profileExplanation(x));
+  if (x.r.kind !== "sparse" && x.typical) {
+    const rated = x.youRates && x.refRates;
+    const you = rated ? x.youRates : x.r.share, ref = rated ? x.refRates : x.typical;
+    lines.push(...MOTIVES.map((m) => `${NAMES[m]}：${compareWord(you[m], ref[m], !!rated)}`));
+  }
+  if (x.brought.length) lines.push(broughtText(x.brought));
+  lines.push("");
   lines.push("—— 書中的三種追求 ——");
   const focus = x.r.kind === "sparse" || x.r.kind === "balanced" ? [] : x.r.focus;
   for (const m of [...focus, ...MOTIVES.filter((m) => !focus.includes(m))]) {
@@ -965,8 +1037,7 @@ function resultText(d) {
   lines.push("—— 為甚麼請你寫故事？——", ...RESULT_COPY.why,
     "", "這些追求，又從哪裏來？", ...RESULT_COPY.origins, RESULT_COPY.source, "",
     "—— 把問題留給自己 ——", ...x.reflection, "");
-  if (lastMode === "bookclub") lines.push("帶一句話來，讀書會見。", clubText(), "");
-  lines.push(RESULT_COPY.closing, "", "—— 四個故事 ——");
+  lines.push("—— 四個故事 ——");
   pictures.forEach((p, i) => {
     const typ = typicalOf(p);
     lines.push(`— 第 ${i + 1} 個故事 —`, `研究中的主要方向：${typ ? typ.map((m) => NAMES[m]).join("、") : "未有參照"}`);
@@ -978,13 +1049,8 @@ function resultText(d) {
     }
     lines.push("");
   });
-  lines.push("—— 分析詳情 ——", comparisonText(x), profileExplanation(x));
-  if (x.r.kind !== "sparse" && x.typical) {
-    const rated = x.youRates && x.refRates;
-    const you = rated ? x.youRates : x.r.share, ref = rated ? x.refRates : x.typical;
-    lines.push(...MOTIVES.map((m) => `${NAMES[m]}：${compareWord(you[m], ref[m], !!rated)}`));
-  }
-  if (x.brought.length) lines.push(broughtText(x.brought));
+  if (lastMode === "bookclub") lines.push("帶一句話來，讀書會見。", clubText(), "");
+  lines.push(RESULT_COPY.closing);
   lines.push("", "—— 關於這份解讀 ——", ...RESULT_COPY.about, "",
     "—— 技術記錄（研究用）——",
     ...READING_METHOD,

@@ -27,3 +27,12 @@ Implemented the approved direction in `web/index.html`, `web/app.js` and `web/st
 - No live model request, production deployment or physical-phone test was performed. Local test routes intercept model requests and visibly identify the data as synthetic.
 
 Run `.venv/Scripts/python.exe scripts/preview_ui.py` and open `http://127.0.0.1:8081/__test__/` for synthetic results, `?outcome=fallback` for translation failure, or `?mode=flow` for the writing flow. During this session an additional preview server used port 8094.
+
+## Follow-up: result depth and placement
+
+- Analysis details now sit in the pursuits section; original stories immediately follow the reflection. Downloads use the same order.
+- Each detected theme gets a concise book-based reading lens, exact source evidence and a question. A separate comparison uses actual story-level co-occurrence, without assuming the same character or claiming a conflict occurred. These are thematic templates, not generated plot interpretations.
+- Reading v5; scoring, translation and backend unchanged.
+- 25 Node tests passed, including secondary-theme coverage, exact story locations, English-first/faint exclusions, sparse handling and page/export parity. Normal and translation-fallback browser fixture reports were both empty.
+- Desktop and 390px iframe preview inspected; the latter is available at `/__test__/phone` on the local preview server (port 8095 in this session). Preview routes and synthetic fixtures are not deployed.
+- Independent review found one overstatement in the power lens; changed it to invite attention rather than claim power is the story's key.
