@@ -144,6 +144,7 @@ The frontend and backend must be deployed together whenever the picture pool cha
 | `tests/` | pytest suites; `web_fixtures.js` checks result rendering in the browser |
 | `scripts/` | AMC spike, translation probe, and `eval_translation.py` (live translation regression check) |
 | `docs/` | Plan, spike results, operations guide, launch checks |
+| `CHANGELOG.md` | What changed and why |
 
 ## Data
 
