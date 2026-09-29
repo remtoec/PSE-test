@@ -10,8 +10,8 @@ Owner-proposed copy, reviewed and adjusted together before implementing.
   「唔使諗到好完整」 could be read as "the story needn't be complete", which
   undoes the full-story framing, so 「唔使諗定」 and 「有頭有尾」 keep both points.
   People should see the lock rule before they start.
-- **「點解要寫故事？」 moves to after writing;** before writing there is only
-  「今次唔直接問你想要乜，只係畀你幾張圖…」.
+- **「點解要寫故事？」 moves to after writing,** with nothing in its place before
+  writing (a one-line version was tried and cut as long-winded).
   *Why:* the full text names the three themes (成功, 影響其他人, 關係). Read
   before writing, it primes those themes and breaks the PSE's core design:
   categories are revealed only after the stories exist. A fixture now fails if

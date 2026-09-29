@@ -51,8 +51,8 @@ credits. The download's research record keeps the method, per-1,000-word
 figures, both paths' labels, agreement, picture means with word counts and
 timing. Neither path is ground truth, and agreement is not a confidence score.
 
-Before writing, the intro says only that we will not ask directly what you
-want; no theme is named, so the stories are not primed. After writing, 「點解要寫故事？」
+Before writing, no theme is named, so the stories are not primed. After
+writing, 「點解要寫故事？」
 explains why stories can show what direct questions miss. The private
 reflection separates what you want, why you want it (interest or value versus
 fear or proving yourself) and whether you feel autonomy, competence and

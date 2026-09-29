@@ -57,7 +57,7 @@ function runWebFixtures() {
     + document.getElementById("story").placeholder;
   check("no theme is named before writing", !["成就", "連結", "影響力", "成功", "關係", "勝任感", "歸屬感", "動機"].some((t) => beforeWriting.includes(t)));
   check("before-writing note: first instinct, whole story, no going back", ["唔使諗定先寫", "有頭有尾", "唔再返轉頭"].every((t) => document.getElementById("v-intro").textContent.includes(t))
-    && document.querySelector("#v-intro .intro-why").textContent.includes("唔直接問你想要乜"));
+    && !document.querySelector("#v-intro .intro-why"));
   check("lock note fits every round's button", !document.querySelector("#v-write .lock-note").textContent.includes("下一張"));
   check("review does not name motives before results", !document.getElementById("v-review").textContent.includes("動機"));
   const stored = Object.fromEntries([SKIP_KEY, SEEN_KEY, PLAYED_KEY].map((k) => [k, localStorage.getItem(k)]));
